@@ -1,19 +1,37 @@
+var up_pressed = false;
+var down_pressed = false;
+var left_pressed = false;
+var right_pressed = false;
+
+function print_instruction(pressed,dir,v) {
+  if(pressed) {
+    console.log("stop " + dir);
+  }
+  else {
+    console.log("start " + dir + " " + v);
+  }
+}
+
 $( document ).ready(function() {
 
   $('#up').click(function() {
-  	console.log("Translate up");
+  	print_instruction(up_pressed,"up",1);
+    up_pressed = !up_pressed;
   });
 
   $('#down').click(function() {
-  	console.log("Translate down");
+  	print_instruction(down_pressed,"down",1);
+    down_pressed = !down_pressed;
   });
 
   $('#left').click(function() {
-  	console.log("Translate left");
+  	print_instruction(left_pressed,"left",1);
+    left_pressed = !left_pressed;
   });
 
   $('#right').click(function() {
-  	console.log("Translate right");
+  	print_instruction(right_pressed,"right",1);
+    right_pressed = !right_pressed;
   });
 
 });
