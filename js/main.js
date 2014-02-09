@@ -3,6 +3,18 @@ var down_pressed = false;
 var left_pressed = false;
 var right_pressed = false;
 
+var connection = new ros.Connection("ws://hostname:9090");
+
+connection.setOnClose(function (e) {
+  console.log('connection closed');
+});
+connection.setOnError(function (e) {
+  console.log('error!');
+});
+connection.setOnOpen(function (e) {
+  console.log('connected to ROS');
+});
+
 function print_instruction(pressed,dir,v) {
   if(pressed) {
     console.log("stop " + dir);
@@ -12,7 +24,7 @@ function print_instruction(pressed,dir,v) {
   }
 }
 
-$( document ).ready(function() {
+$(document).ready(function() {
 
   $('#up').click(function() {
   	print_instruction(up_pressed,"up",1);
