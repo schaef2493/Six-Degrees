@@ -22,9 +22,10 @@ function print_instruction(pressed,dir,v) {
 
   // TODO: This allows us to send an empty movement vector
   // TODO: Figure out how these vectors map to the arm movement
+  // (-0.5, 0.5) is the range of input
 
   if (dir == 'up') {
-      movement_vector = '{"linear":{"x":1.0,"y":0.0,"z":0}, "angular":{"x":0.0,"y":0.0,"z":0.0}}';
+      movement_vector = '{"linear":{"x":0.5,"y":0.0,"z":0}, "angular":{"x":0.0,"y":0.0,"z":0.0}}';
   } 
   else if (dir == 'down') {
 
