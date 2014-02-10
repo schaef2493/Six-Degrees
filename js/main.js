@@ -8,20 +8,44 @@ var connection = new ros.Connection("ws://hostname:9090");
 connection.setOnClose(function (e) {
   console.log('connection closed');
 });
+
 connection.setOnError(function (e) {
   console.log('error!');
 });
+
 connection.setOnOpen(function (e) {
   console.log('connected to ROS');
 });
 
 function print_instruction(pressed,dir,v) {
-  if(pressed) {
+  movement_vector = '';
+
+  // TODO: This allows us to send an empty movement vector
+  // TODO: Figure out how these vectors map to the arm movement
+
+  if (dir == 'up') {
+      movement_vector = '{"linear":{"x":1.0,"y":0.0,"z":0}, "angular":{"x":0.0,"y":0.0,"z":0.0}}';
+  } 
+  else if (dir == 'down') {
+
+  } 
+  else if (dir == 'left') {
+
+  }
+  else if (dir == 'right') {
+
+  }
+
+  if (pressed) {
     console.log("stop " + dir);
+    movement_vector = '{"linear":{"x":0.0,"y":0.0,"z":0}, "angular":{"x":0.0,"y":0.0,"z":0.0}}';
   }
   else {
     console.log("start " + dir + " " + v);
   }
+
+  console.log('movement: ' + movement_vector);
+  connection.publish('/cmd_vel', 'geometry_msgs/Twist', movement_vector);
 }
 
 $(document).ready(function() {
