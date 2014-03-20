@@ -9,45 +9,45 @@ html
   body
     block content
     script.
-    	// State tracking
-		var up_pressed = false;
-		var down_pressed = false;
-		var left_pressed = false;
-		var right_pressed = false;
+        // State tracking
+        var up_pressed = false;
+        var down_pressed = false;
+        var left_pressed = false;
+        var right_pressed = false;
 
 
-		// Connecting to ROS
-		var ros = new ROSLIB.Ros();
+        // Connecting to ROS
+        var ros = new ROSLIB.Ros();
 
-		// If there is an error on the backend, an 'error' emit will be emitted.
-		ros.on('error', function(error) {
-		  console.log(error);
-		});
+        // If there is an error on the backend, an 'error' emit will be emitted.
+        ros.on('error', function(error) {
+          console.log(error);
+        });
 
-		// Find out exactly when we made a connection.
-		ros.on('connection', function() {
-		  console.log('Connection made!');
-		});
+        // Find out exactly when we made a connection.
+        ros.on('connection', function() {
+          console.log('Connection made!');
+        });
 
-		// Create a connection to the rosbridge WebSocket server.
-		ros.connect('ws://localhost:9090');
+        // Create a connection to the rosbridge WebSocket server.
+        ros.connect('ws://localhost:9090');
 
-		// Configure the twist topic
-		var cmdVel = new ROSLIB.Topic({
-		  ros : ros,
-		  name : '/twist',
-		  messageType : 'geometry_msgs/Twist'
-		});
+        // Configure the twist topic
+        var cmdVel = new ROSLIB.Topic({
+          ros : ros,
+          name : '/twist',
+          messageType : 'geometry_msgs/Twist'
+        });
 
-		var message = new ROSLIB.Message({
-		  linear : {
-		    x : 0.0,
-		    y : 0.0,
-		    z : 0.5
-		  },
-		  angular : {
-		    x : 0.0,
-		    y : 0.0,
-		    z : 0.0
-		  }
-		});
+        var message = new ROSLIB.Message({
+            linear : {
+                x : 0.0,
+                y : 0.0,
+                z : 0.5
+        },
+            angular : {
+                x : 0.0,
+                y : 0.0,
+                z : 0.0
+        }
+        });
