@@ -9,6 +9,8 @@
     "express": "3.4.8",
     "jade": "*",
     "socket.io": "~0.9.6",
-    "redis-url": "~0.2.0"
+    "redis-url": "~0.2.0",
+    "redis": "*",
+    "hiredis": "*"
   }
 }
