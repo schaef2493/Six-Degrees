@@ -1,9 +1,10 @@
+var socket = io.connect(window.location.hostname);
+
 // State tracking
 var up_pressed = false;
 var down_pressed = false;
 var left_pressed = false;
 var right_pressed = false;
-
 
 // Connecting to ROS
 var ros = new ROSLIB.Ros();
