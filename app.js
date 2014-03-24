@@ -125,8 +125,6 @@ io.sockets.on('connection', function (socket) {
       var time = 0; // TODO: PARSE THIS DELTA in ms
       movement.push(time);
       redis.rpush(activeTask, JSON.stringify(movement));
-    } else {
-      io.sockets.emit('moveJoystick', { axes: data.axes });
     }
   });
 
