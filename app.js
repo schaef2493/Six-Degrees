@@ -55,9 +55,7 @@ io.sockets.on('connection', function (socket) {
   
   // start playback of recorded task
   socket.on('startPlayback', function (data) {
-    redis.get(data.task, function (err, reply) {
-    	io.sockets.emit('startPlayback', { taskMovements: reply });
-    });
+    io.sockets.emit('startPlayback', { task: data.task });
   });
 
   // pause playback of recorded tasks
@@ -67,13 +65,12 @@ io.sockets.on('connection', function (socket) {
 
   // start recording of task
   socket.on('startRecording', function (data) {
-  	redis.set(data.task, null);
     io.sockets.emit('startRecording', { task: data.task });
   });
 
   // pause recording of task
   socket.on('pauseRecording', function (data) {
-  	redis.set(data.task, data.taskMovements);
+  	io.sockets.emit('pauseRecording');
   });
 
 });
