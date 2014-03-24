@@ -55,22 +55,33 @@ io.sockets.on('connection', function (socket) {
   
   // start playback of recorded task
   socket.on('startPlayback', function (data) {
-    io.sockets.emit('startPlayback', { task: data.task });
+    redis.get(data.task, function (err, reply) {
+      io.sockets.emit('startPlayback', { taskMovements: data.task });
+    });
   });
 
-  // pause playback of recorded tasks
-  socket.on('pausePlayback', function (data) {
-    io.sockets.emit('pausePlayback');
-  });
+  // // pause playback of recorded tasks
+  // socket.on('pausePlayback', function (data) {
+  //   io.sockets.emit('pausePlayback');
+  // });
 
   // start recording of task
   socket.on('startRecording', function (data) {
-    io.sockets.emit('startRecording', { task: data.task });
+    redis.get('tasks', function (err, reply) {
+      redis.set('tasks', reply.append(data.task));
+    });
+
+    io.sockets.emit('startRecording');
   });
 
-  // pause recording of task
-  socket.on('pauseRecording', function (data) {
-  	io.sockets.emit('pauseRecording');
+  // // pause recording of task
+  // socket.on('pauseRecording', function (data) {
+  // 	io.sockets.emit('pauseRecording');
+  // });
+
+  // end recording of task (sent from robot)
+  socket.on('endRecording', function (data) {
+    redis.set(data.task, data.taskMovements);
   });
 
 });
