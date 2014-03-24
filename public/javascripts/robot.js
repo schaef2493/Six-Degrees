@@ -30,8 +30,12 @@ function moveArm(axes) {
   console.log('Moving arm to ' + axes);
 
   var message = new ROSLIB.Message({
-    axes: axes
+    axes: axes,
+    buttons: [0,0]
   });
+
+  // TODO: TRACK BUTTONS
+  // TODO: THROTTLE DATA
 
   joystick.publish(message);
 }
