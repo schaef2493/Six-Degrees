@@ -34,35 +34,12 @@ var joystick = new ROSLIB.Topic({
 //     z : 0.0
 //   }
 // });
-
 //joystick.publish(message);
 
 joystick.subscribe(function(message) {
-  console.log('Received message on ' + listener.name + ': ' + message.data);
+  console.log('Received message on ' + joystick.name + ': ' + message.data);
 });
 
-
-// configure ROS services
-// TODO: How to format this block?
-// var startRecordingService = new ROSLIB.Service({
-//   ros: ros,
-//   name: '/ada/startTeach',
-//   serviceType: 'Laura will give us this'
-// });
-
-// var pauseRecordingService = new ROSLIB.Service({
-//   ros: ros,
-//   name: '/ada/stopTeach',
-//   serviceType: 'Laura will give us this'
-// });
-
-// var startPlaybackService = new ROSLIB.Service({
-//   ros: ros,
-//   name: '/ada/play',
-//   serviceType: 'Laura will give us this'
-// });
-
-// // TODO: How to pass file to this service request?
 // function startRecording(name) {
 //   var request = new ROSLIB.ServiceRequest({
 //     filename: name,
