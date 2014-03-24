@@ -15,83 +15,28 @@ ros.on('connection', function() {
 // create a connection to rosbridge 
 ros.connect('ws://localhost:9090');
 
-// Configure the joystick topic
+// configure the joystick topic
 var joystick = new ROSLIB.Topic({
   ros: ros,
   name: '/joy',
   messageType: 'sensor_msgs/Joy'
 });
 
-// var message = new ROSLIB.Message({
-//   linear : {
-//     x : 0.0,
-//     y : 0.0,
-//     z : 0.5
-//   },
-//   angular : {
-//     x : 0.0,
-//     y : 0.0,
-//     z : 0.0
-//   }
-// });
-//joystick.publish(message);
-
 joystick.subscribe(function(message) {
-  console.log('Received message on ' + joystick.name + ': ' + message.data);
+  socket.emit('movement', { axes: message.axes });
 });
 
-// function startRecording(name) {
-//   var request = new ROSLIB.ServiceRequest({
-//     filename: name,
-//   });
+function moveArm(axes) {
+  console.log('Moving arm to ' + axes);
 
-//   console.log('Starting recording of ' + name);
+  var message = new ROSLIB.Message({
+    axes: axes
+  });
 
-//   startRecordingService.callService(request, function(result) {
-//     console.log(result);
-//   });
-// }
+  //joystick.publish(message);
+}
 
-// function pauseRecording() {
-//   var request = new ROSLIB.ServiceRequest();
-
-//   console.log('Stopping recording');
-  
-//   pauseRecordingService.callService(request, function(result) {
-//     console.log(result);
-//   });
-// }
-
-// function startPlayback(name) {
-//   var request = new ROSLIB.ServiceRequest({
-//     filename: name,
-//   });
-
-//   console.log('Starting playback of ' + name);
-
-//   startPlaybackService.callService(request, function(result) {
-//     console.log(result);
-//   });
-// }
-
-// function pausePlayback() {
-//   // TODO: Implement this ROS service
-//   console.log('Pause playback not implemented');
-// }
-
-// // Socket connections
-// socket.on('startRecording', function (data) {
-//   startRecording(data.task);
-// });
-
-// socket.on('pauseRecording', function (data) {
-//   pauseRecording();
-// });
-
-// socket.on('startPlayback', function (data) {
-//   startPlayback(data.task);
-// });
-
-// socket.on('pausePlayback', function (data) {
-//   pausePlayback();
-// });
+// listen for movement commands
+socket.on('moveJoystick', function (data) {
+  moveArm(data.axes);
+});

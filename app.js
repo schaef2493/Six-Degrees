@@ -46,43 +46,100 @@ if (process.env.REDISTOGO_URL) {
   var redis = require('redis').createClient();
 }
 
+var recordingActive = false;
+var playbackActive = false;
+var activeTask = null;
+
+function playbackTask(step) {
+  if (typeof step == 'undefined') {
+    step = 0;
+  }
+
+  // retry in 100ms if playback is paused
+  if (!playbackActive) {
+    setTimeout('playbackTask(' + step + ')', 100);
+    return;
+  }
+
+  // get total number of movements
+  redis.llen(activeTask, function (err, numSteps) {
+    
+    // fetch step movement
+    redis.lindex(activeTask, step, function (err, reply) {
+      
+      // perform movement
+      var axes = JSON.parse(reply);
+      axes = axes.slice(0,3);
+      io.sockets.emit('moveJoystick', { axes: axes });
+
+      // check for another movement
+      if (step < numSteps-1) {
+        
+        // schedule next movement
+        redis.lindex(activeTask, step+1, function (err, reply) {
+          setTimeout(playbackTask, reply[3], step+1);
+        });
+
+      } else {
+
+        playbackActive = false;
+
+      }
+
+    });
+
+  });
+}
+
 io.sockets.on('connection', function (socket) {
 
-	// send list of recorded tasks
-  redis.get('tasks', function (err, reply) {
+	// send list of recorded tasks on connection
+  redis.lrange('tasks', 0, -1, function (err, reply) {
 		io.sockets.emit('tasks', { tasks: reply });
 	});
-  
-  // start playback of recorded task
-  socket.on('startPlayback', function (data) {
-    redis.get(data.task, function (err, reply) {
-      io.sockets.emit('startPlayback', { taskMovements: data.task });
-    });
-  });
-
-  // pause playback of recorded tasks
-  // socket.on('pausePlayback', function (data) {
-  //   io.sockets.emit('pausePlayback');
-  // });
 
   // start recording of task
   socket.on('startRecording', function (data) {
+    recordingActive = true;
+    activeTask = data.task;
+
     // add task to task list
-    redis.get('tasks', function (err, reply) {
-      redis.set('tasks', reply.push(data.task));
-      io.sockets.emit('startRecording');
+    redis.lrange('tasks', 0, -1, function (err, reply) {
+      redis.rpush('tasks', data.task);
     });
   });
 
-  // pause recording of task
-  socket.on('pauseRecording', function (data) {
-    io.sockets.emit('pauseRecording');
+  // end recording of task
+  socket.on('endRecording', function (data) {  
+    // append stop movement command  
+    var movement = JSON.stringify([0,0,0,0])
+    redis.rpush(activeTask, movement);
+    recordingActive = false;
+    activeTask = null;
   });
 
-  // end recording of task (sent from robot)
-  socket.on('endRecording', function (data) {
-    // update task movements list
-    redis.set(data.task, data.taskMovements);
+  // capture joystick movements
+  socket.on('movement', function(data) {
+    if (recordingActive) {
+      var movement = data.axes;
+      var time = 0; // TODO: PARSE THIS DELTA in ms
+      movement.push(time);
+      redis.rpush(activeTask, JSON.stringify(movement));
+    } else {
+      io.sockets.emit('moveJoystick', { axes: data.axes });
+    }
+  });
+
+  // start playback of recorded task
+  socket.on('startPlayback', function (data) {
+    playbackActive = true;
+    activeTask = data.task;
+    playbackTask();
+  });
+
+  // pause playback of recorded task
+  socket.on('pausePlayback', function (data) {
+    playbackActive = false;
   });
 
 });
