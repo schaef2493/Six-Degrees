@@ -33,7 +33,7 @@ function moveArm(axes) {
     axes: axes
   });
 
-  //joystick.publish(message);
+  joystick.publish(message);
 }
 
 // listen for movement commands
