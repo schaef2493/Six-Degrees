@@ -53,7 +53,6 @@ var recordingActive = false;
 var playbackActive = false;
 var activeTask = null;
 var lastStepPerformed = null;
-var sampleInterval = 20;
 
 function playbackTask(step) {
   if (typeof step == 'undefined') {
@@ -84,7 +83,7 @@ function playbackTask(step) {
         // schedule next movement
         redis.lindex(activeTask, step+1, function (err, reply) {
           var reply = JSON.parse(reply);
-          setTimeout(playbackTask, sampleInterval, step+1);
+          setTimeout(playbackTask, reply[3]*2.25, step+1);
         });
 
       } else {
@@ -100,10 +99,6 @@ function playbackTask(step) {
 }
 
 io.sockets.on('connection', function (socket) {
-
-  socket.on('sampleInterval', function (data) {
-    sampleInterval = data.rate;
-  });
 
 	// send list of recorded tasks on connection
   redis.lrange('tasks', 0, -1, function (err, reply) {
