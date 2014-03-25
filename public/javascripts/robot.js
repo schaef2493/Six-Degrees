@@ -29,6 +29,7 @@ var lastStepPerformed = 0;
 var sampleRate = 10; // ms
 
 function sendMovement(data) {
+  console.log('Recording arm at ' + message.axes);
   socket.emit('movement', { axes: data.axes });
 }
 
@@ -37,8 +38,6 @@ var sendMovementThrottled = _.throttle(sendMovement, sampleRate);
 joystick.subscribe(function(message) {
   if (recordingActive) {
     sendMovementThrottled(message);
-  } else {
-    console.log('Moving arm to ' + message.axes);
   }
 });
 
