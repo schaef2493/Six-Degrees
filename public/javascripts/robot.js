@@ -26,7 +26,7 @@ var recordingActive = false;
 var playbackActive = false;
 var movements = null;
 var lastStepPerformed = 0;
-var sampleRate = 1000; // ms
+var sampleRate = 10; // ms
 var lastMessage = null;
 
 function sendMovement(data) {
@@ -44,7 +44,9 @@ joystick.subscribe(function(message) {
 function updateMovements() {
   console.log('inside update movements');
   if (recordingActive) {
-    sendMovement(lastMessage);
+    if (lastMessage != null) {
+      sendMovement(lastMessage);
+    }
   }
 
   setTimeout(updateMovements, sampleRate);
@@ -92,6 +94,7 @@ socket.on('recordingStarted', function (data) {
 
 socket.on('recordingEnded', function (data) {
   recordingActive = false;
+  lastMessage = null;
 });
 
 socket.on('playbackStarted', function (data) {
