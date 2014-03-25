@@ -59,7 +59,7 @@ function playbackMovement(step) {
     return;
   }
 
-  var axes = movements[step];
+  var axes = JSON.parse(movements[step]);
   moveArm(axes);
   lastStepPerformed = step;
 
