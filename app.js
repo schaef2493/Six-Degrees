@@ -61,7 +61,6 @@ function playbackTask(step) {
   // get total number of movements
   redis.llen(activeTask, function (err, numSteps) {
     
-    console.log('Fetching step ' + step + ' of ' + activeTask);
     // fetch step movement
     redis.lindex(activeTask, step, function (err, reply) {
       
@@ -75,6 +74,7 @@ function playbackTask(step) {
         
         // schedule next movement
         redis.lindex(activeTask, step+1, function (err, reply) {
+          console.log('Scheduling step ' + (step+1) + ' in ' + reply[3] + 'ms');
           setTimeout(playbackTask, reply[3], step+1);
         });
 
