@@ -41,6 +41,8 @@ joystick.subscribe(function(message) {
 });
 
 function moveArm(axes) {
+  console.log('Moving arm to ' + axes);
+  
   var message = new ROSLIB.Message({
     axes: axes,
     buttons: [0,0]
