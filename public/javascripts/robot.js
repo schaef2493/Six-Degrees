@@ -23,13 +23,15 @@ var joystick = new ROSLIB.Topic({
 });
 
 function sendMovement(data) {
+  console.log('DATA: ' + data.axes);
   socket.emit('movement', { axes: data.axes, header: data.header });
 }
 
-var sendMovementThrottled = _.throttle(sendMovement, 25);
+//var sendMovementThrottled = _.throttle(sendMovement, 10);
 
 joystick.subscribe(function(message) {
-  sendMovementThrottled(message);
+  //sendMovementThrottled(message);
+  sendMovement(message);
 });
 
 function moveArm(axes) {
