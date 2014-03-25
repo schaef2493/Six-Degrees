@@ -29,7 +29,7 @@ var lastStepPerformed = 0;
 var sampleRate = 10; // ms
 
 function sendMovement(data) {
-  console.log('Recording arm at ' + message.axes);
+  console.log('Recording arm at ' + data.axes);
   socket.emit('movement', { axes: data.axes });
 }
 
