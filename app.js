@@ -74,6 +74,7 @@ function playbackTask(step) {
         
         // schedule next movement
         redis.lindex(activeTask, step+1, function (err, reply) {
+          var reply = JSON.parse(reply);
           console.log('Scheduling step ' + (step+1) + ' in ' + reply[3] + 'ms');
           setTimeout(playbackTask, reply[3], step+1);
         });
