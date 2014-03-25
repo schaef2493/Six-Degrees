@@ -34,15 +34,15 @@ function sendMovement(data) {
   socket.emit('movement', { axes: data.axes });
 }
 
-joystick.subscribe(function(message) {
+joystick.subscribe(function(data) {
   if (recordingActive) {
     //sendMovement(message);
-    lastMessage = message;
+    lastMessage = data;
+    console.log(lastMessage);
   }
 });
 
 function updateMovements() {
-  console.log('inside update movements');
   if (recordingActive) {
     if (lastMessage != null) {
       sendMovement(lastMessage);
