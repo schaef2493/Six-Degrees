@@ -1,11 +1,6 @@
 // connect socket
 var socket = io.connect(window.location.hostname);
 
-window.onbeforeunload = function() {
-    socket.onclose = function () {}; // disable onclose handler first
-    socket.close()
-};
-
 // connect to ROS
 var ros = new ROSLIB.Ros();
 
@@ -27,8 +22,16 @@ var joystick = new ROSLIB.Topic({
   messageType: 'sensor_msgs/Joy'
 });
 
+function sendMovement(axes) {
+  console.log('hit');
+  socket.emit('movement', { axes: axes });
+}
+
+var sendMovementThrottled = _.throttle(sendMovement, 10);
+
 joystick.subscribe(function(message) {
-  socket.emit('movement', { axes: message.axes });
+  message.axes
+  sendMovementThrottled(message.axes);
 });
 
 function moveArm(axes) {
@@ -42,7 +45,6 @@ function moveArm(axes) {
   // TODO: Track button states
   // TODO: Throttle data sampling
   // TODO: Hold button [1,1] for 5 sec to HOME
-  // TODO: Debug web sockets on heroku
 
   joystick.publish(message);
 }
