@@ -53,7 +53,7 @@ var recordingActive = false;
 var playbackActive = false;
 var activeTask = null;
 var lastStepPerformed = null;
-var sampleMultiplier = 30;
+var sampleMultiplier = 9;
 
 function playbackTask(step) {
   if (typeof step == 'undefined') {
@@ -158,6 +158,7 @@ io.sockets.on('connection', function (socket) {
   // pause playback of recorded task
   socket.on('pausePlayback', function (data) {
     playbackActive = false;
+    io.sockets.emit('moveJoystick', { axes: [0,0,0] });
   });
 
 });
