@@ -22,15 +22,21 @@ var joystick = new ROSLIB.Topic({
   messageType: 'sensor_msgs/Joy'
 });
 
+var recordingActive = false;
+var recordLog = [];
+var playbackLog = [];
+
 function sendMovement(data) {
+  recordLog.push(data.axes.push((new Date).getTime()));
   socket.emit('movement', { axes: data.axes, header: data.header });
 }
 
 var sendMovementThrottled = _.throttle(sendMovement, 10);
 
 joystick.subscribe(function(message) {
-  sendMovementThrottled(message);
-  //sendMovement(message);
+  if (recordingActive) {
+    sendMovementThrottled(message);
+  }
 });
 
 function moveArm(axes) {
@@ -46,5 +52,14 @@ function moveArm(axes) {
 
 // listen for movement commands
 socket.on('moveJoystick', function (data) {
+  playbackLog.push(data.axes.push((new Date).getTime()));
   moveArm(data.axes);
+});
+
+socket.on('recordingStarted', function (data) {
+  recordingActive = true;
+});
+
+socket.on('recordingEnded', function (data) {
+  recordingActive = false;
 });

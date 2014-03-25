@@ -119,6 +119,8 @@ io.sockets.on('connection', function (socket) {
     redis.lrange('tasks', 0, -1, function (err, reply) {
       redis.rpush('tasks', data.task);
     });
+
+    io.sockets.emit('recordingStarted');
   });
 
   // end recording of task
@@ -128,6 +130,8 @@ io.sockets.on('connection', function (socket) {
     redis.rpush(activeTask, movement);
     recordingActive = false;
     activeTask = null;
+
+    io.sockets.emit('recordingEnded');
   });
 
   // capture joystick movements
