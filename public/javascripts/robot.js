@@ -34,8 +34,10 @@ function moveArm(axes) {
     buttons: [0,0]
   });
 
-  // TODO: TRACK BUTTONS
-  // TODO: THROTTLE DATA
+  // TODO: Track button states
+  // TODO: Throttle data sampling
+  // TODO: Hold button [1,1] for 5 sec to HOME
+  // TODO: Debug web sockets on heroku
 
   joystick.publish(message);
 }

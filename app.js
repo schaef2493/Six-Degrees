@@ -122,7 +122,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('movement', function(data) {
     if (recordingActive) {
       var movement = data.axes;
-      var time = 0; // TODO: PARSE THIS DELTA in ms
+      var time = (new Date).getTime() - (data.header.stamp.secs*1000);
       movement.push(time);
       redis.rpush(activeTask, JSON.stringify(movement));
     }
