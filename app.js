@@ -50,60 +50,9 @@ if (process.env.REDISTOGO_URL) {
 // TODO: Hold button [1,1] for 5 sec to HOME
 
 var recordingActive = false;
-var playbackActive = false;
 var activeTask = null;
-var lastStepPerformed = null;
-var sampleMultiplier = 5;
-
-function playbackTask(step) {
-  if (typeof step == 'undefined') {
-    step = 0;
-  }
-
-  // break if playback was paused
-  if (playbackActive == false) {
-    return;
-  }
-
-  lastStepPerformed = step;
-
-  // get total number of movements
-  redis.llen(activeTask, function (err, numSteps) {
-    
-    // fetch step movement
-    redis.lindex(activeTask, step, function (err, reply) {
-      
-      // perform movement
-      var axes = JSON.parse(reply);
-      axes = axes.slice(0,3);
-      io.sockets.emit('moveJoystick', { axes: axes });
-
-      // check for another movement
-      if (step < numSteps-1) {
-        
-        // schedule next movement
-        redis.lindex(activeTask, step+1, function (err, reply) {
-          var reply = JSON.parse(reply);
-          setTimeout(playbackTask, reply[3]*sampleMultiplier, step+1);
-        });
-
-      } else {
-
-        playbackActive = false;
-        io.sockets.emit('playbackEnded');
-
-      }
-
-    });
-
-  });
-}
 
 io.sockets.on('connection', function (socket) {
-
-  socket.on('sampleMultiplier', function (data) {
-    sampleMultiplier = data.rate;
-  });
 
 	// send list of recorded tasks on connection
   redis.lrange('tasks', 0, -1, function (err, reply) {
@@ -125,9 +74,6 @@ io.sockets.on('connection', function (socket) {
 
   // end recording of task
   socket.on('endRecording', function (data) {  
-    // append stop movement command  
-    var movement = JSON.stringify([0,0,0,0])
-    redis.rpush(activeTask, movement);
     recordingActive = false;
     activeTask = null;
 
@@ -138,31 +84,31 @@ io.sockets.on('connection', function (socket) {
   socket.on('movement', function(data) {
     if (recordingActive) {
       var movement = data.axes;
-      var time = (new Date).getTime() - ((data.header.stamp.secs*1000) + (data.header.stamp.nsecs/1000000));
-      movement.push(time);
       redis.rpush(activeTask, JSON.stringify(movement));
     }
   });
 
   // start playback of recorded task
   socket.on('startPlayback', function (data) {
-    playbackActive = true;
     activeTask = data.task;
     lastStepPerformed = null;
-    playbackTask();
+    
+    redis.lrange(activeTask, 0, -1, function (err, reply) {
+      io.sockets.emit('playbackStarted', { movements: reply });
+    });
+
   });
 
   // resume playback of recorded task
   socket.on('resumePlayback', function (data) {
-    playbackActive = true;
     activeTask = data.task;
-    playbackTask(lastStepPerformed + 1);
+
+    io.sockets.emit('playbackResumed');
   });
 
   // pause playback of recorded task
   socket.on('pausePlayback', function (data) {
-    playbackActive = false;
-    io.sockets.emit('moveJoystick', { axes: [0,0,0] });
+    io.sockets.emit('playbackPaused');
   });
 
 });
