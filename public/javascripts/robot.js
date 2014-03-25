@@ -27,10 +27,9 @@ function sendMovement(axes) {
   socket.emit('movement', { axes: axes });
 }
 
-var sendMovementThrottled = _.throttle(sendMovement, 500);
+var sendMovementThrottled = _.throttle(sendMovement, 25);
 
 joystick.subscribe(function(message) {
-  message.axes
   sendMovementThrottled(message.axes);
 });
 
@@ -43,7 +42,6 @@ function moveArm(axes) {
   });
 
   // TODO: Track button states
-  // TODO: Throttle data sampling
   // TODO: Hold button [1,1] for 5 sec to HOME
 
   joystick.publish(message);
