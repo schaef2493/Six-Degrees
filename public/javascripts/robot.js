@@ -22,14 +22,14 @@ var joystick = new ROSLIB.Topic({
   messageType: 'sensor_msgs/Joy'
 });
 
-function sendMovement(axes) {
-  socket.emit('movement', { axes: axes });
+function sendMovement(data) {
+  socket.emit('movement', { axes: data.axes, header: data.header });
 }
 
 var sendMovementThrottled = _.throttle(sendMovement, 25);
 
 joystick.subscribe(function(message) {
-  sendMovementThrottled(message.axes);
+  sendMovementThrottled(message);
 });
 
 function moveArm(axes) {
