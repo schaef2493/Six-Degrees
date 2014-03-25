@@ -46,6 +46,9 @@ if (process.env.REDISTOGO_URL) {
   var redis = require('redis').createClient();
 }
 
+// TODO: Track/playback button states
+// TODO: Hold button [1,1] for 5 sec to HOME
+
 var recordingActive = false;
 var playbackActive = false;
 var activeTask = null;

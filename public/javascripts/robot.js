@@ -41,9 +41,6 @@ function moveArm(axes) {
     buttons: [0,0]
   });
 
-  // TODO: Track button states
-  // TODO: Hold button [1,1] for 5 sec to HOME
-
   joystick.publish(message);
 }
 
