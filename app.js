@@ -53,7 +53,7 @@ var recordingActive = false;
 var playbackActive = false;
 var activeTask = null;
 var lastStepPerformed = null;
-var sampleMultiplier = 9;
+var sampleMultiplier = 5;
 
 function playbackTask(step) {
   if (typeof step == 'undefined') {
