@@ -2,6 +2,11 @@ var socket = io.connect(window.location.hostname);
 
 var activeTask = null;
 var playbackPaused = false;
+var playbackEnded = false;
+
+socket.on('playbackEnded', function (data) {
+	playbackEnded = true;
+});
 
 $(document).ready(function() {
 
@@ -37,6 +42,7 @@ $(document).ready(function() {
 		e.stopPropagation();
 		activeTask = null;
 		playbackPaused = false;
+		playbackEnded = false;
 	});
 
 	$('#playbackBack').on('touchstart', function(e) {
@@ -44,6 +50,11 @@ $(document).ready(function() {
 	});
 
 	$('#playback').on('touchstart', function(e) {
+		if (playbackEnded && playbackPaused) {
+			playbackPaused = false;
+			playbackEnded = false;
+		}
+
 		if (playbackPaused) {
 			socket.emit('resumePlayback', { task: activeTask });
 		} else {

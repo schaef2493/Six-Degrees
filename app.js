@@ -81,6 +81,7 @@ function playbackTask(step) {
       } else {
 
         playbackActive = false;
+        io.sockets.emit('playbackEnded');
 
       }
 
