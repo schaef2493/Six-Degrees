@@ -36,9 +36,7 @@ function sendMovement(data) {
 
 joystick.subscribe(function(data) {
   if (recordingActive) {
-    //sendMovement(message);
     lastMessage = data;
-    console.log(lastMessage);
   }
 });
 
@@ -57,6 +55,8 @@ updateMovements();
 
 function moveArm(axes) {
   if (playbackActive) {
+    console.log('Moving arm to ' + axes);
+
     var message = new ROSLIB.Message({
       axes: axes,
       buttons: [0,0]
