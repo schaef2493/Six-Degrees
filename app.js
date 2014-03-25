@@ -83,7 +83,8 @@ function playbackTask(step) {
         // schedule next movement
         redis.lindex(activeTask, step+1, function (err, reply) {
           var reply = JSON.parse(reply);
-          setTimeout(playbackTask, reply[3]*2.25, step+1);
+          // 2.25
+          setTimeout(playbackTask, 15, step+1);
         });
 
       } else {

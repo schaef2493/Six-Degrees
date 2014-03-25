@@ -26,8 +26,11 @@ function sendMovement(data) {
   socket.emit('movement', { axes: data.axes, header: data.header });
 }
 
+var sendMovementThrottled = _.throttle(sendMovement, 15);
+
 joystick.subscribe(function(message) {
-  sendMovement(message);
+  sendMovementThrottled(message);
+  //sendMovement(message);
 });
 
 function moveArm(axes) {
