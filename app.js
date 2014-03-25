@@ -58,11 +58,10 @@ function playbackTask(step) {
 
   lastStepPerformed = step;
 
-  console.log('Playing back step ' + step);
-
   // get total number of movements
   redis.llen(activeTask, function (err, numSteps) {
     
+    console.log('Fetching step ' + step + ' of ' + activeTask);
     // fetch step movement
     redis.lindex(activeTask, step, function (err, reply) {
       
