@@ -26,7 +26,7 @@ var recordingActive = false;
 var playbackActive = false;
 var movements = null;
 var lastStepPerformed = 0;
-var sampleRate = 10; // ms
+var sampleRate = 1000; // ms
 var lastMessage = null;
 
 function sendMovement(data) {
