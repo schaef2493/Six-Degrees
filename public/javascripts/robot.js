@@ -37,6 +37,8 @@ var sendMovementThrottled = _.throttle(sendMovement, sampleRate);
 joystick.subscribe(function(message) {
   if (recordingActive) {
     sendMovementThrottled(message);
+  } else {
+    console.log('Moving arm to ' + message.axes);
   }
 });
 
@@ -66,7 +68,7 @@ function playbackMovement(step) {
   lastStepPerformed = step;
 
   if (step < movements.length-1) {
-    setTimeout(playbackMovement, sampleRate, step+1);
+    setTimeout(playbackMovement, 15, step+1);
   } else {
     lastStepPerformed = -1;
     moveArm([0,0,0]);
