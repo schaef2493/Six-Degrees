@@ -130,11 +130,11 @@ div {
 }
 
 #record_name #name {
-    margin-top: 300px;
+    margin-top: 250px;
     padding: 10px;
     border-radius: 5px;
     font-size: 14pt;
-    width: 60%;
+    width: 50%;
 }
 
 #record_movements {
