@@ -23,7 +23,6 @@ var joystick = new ROSLIB.Topic({
 });
 
 function sendMovement(axes) {
-  console.log('hit');
   socket.emit('movement', { axes: axes });
 }
 

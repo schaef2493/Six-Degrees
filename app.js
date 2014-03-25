@@ -127,6 +127,7 @@ io.sockets.on('connection', function (socket) {
 
   // capture joystick movements
   socket.on('movement', function(data) {
+    console.log('Movement: ' + data.axes);
     if (recordingActive) {
       var movement = data.axes;
       var time = (new Date).getTime() - ((data.header.stamp.secs*1000) + (data.header.stamp.nsecs/1000000));
