@@ -30,7 +30,7 @@ var sampleRate = 10; // ms
 var lastMessage = null;
 
 function sendMovement(data) {
-  console.log('Recording arm at ' + data.axes);
+  console.log('Recording arm at ' + data.axes + ' at ' + ((data.header.stamp.secs*1000000000) + (data.header.stamp.nsecs)));
   socket.emit('movement', { axes: data.axes });
 }
 
