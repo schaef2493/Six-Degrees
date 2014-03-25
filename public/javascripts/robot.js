@@ -27,22 +27,33 @@ var playbackActive = false;
 var movements = null;
 var lastStepPerformed = 0;
 var sampleRate = 10; // ms
+var lastMessage = null;
 
 function sendMovement(data) {
   console.log('Recording arm at ' + data.axes);
   socket.emit('movement', { axes: data.axes });
 }
 
-//var sendMovementThrottled = _.throttle(sendMovement, sampleRate);
-
 joystick.subscribe(function(message) {
   if (recordingActive) {
-    sendMovement(message);
+    //sendMovement(message);
+    lastMessage = message;
   }
 });
 
+function updateMovements() {
+  if (recordingActive) {
+    sendMovement(lastMessage);
+  }
+
+  setTimeout(updateMovements, sampleRate);
+}
+
+// Start update loop
+updateMovements();
+
 function moveArm(axes) {
-  console.log('Moving arm to ' + axes);
+  console.log((axes.header.stamp.secs*1000000000) + (axes.header.stamp.nsecs) + ' Moving arm to ' + axes);
 
   var message = new ROSLIB.Message({
     axes: axes,
@@ -67,7 +78,7 @@ function playbackMovement(step) {
   lastStepPerformed = step;
 
   if (step < movements.length-1) {
-    setTimeout(playbackMovement, 15, step+1);
+    setTimeout(playbackMovement, sampleRate, step+1);
   } else {
     lastStepPerformed = -1;
     moveArm([0,0,0]);
