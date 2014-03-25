@@ -69,6 +69,7 @@ function playbackMovement(step) {
     setTimeout(playbackMovement, sampleRate, step+1);
   } else {
     lastStepPerformed = -1;
+    moveArm([0,0,0]);
   }
 }
 
