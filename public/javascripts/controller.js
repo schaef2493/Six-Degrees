@@ -1,11 +1,14 @@
 var socket = io.connect(window.location.hostname);
 
 var activeTask = null;
+var playbackPaused = false;
 
 $(document).ready(function() {
 
 	socket.on('tasks', function (data) {
 		var tasks = data.tasks;
+
+		$('#taskList').html('');
 
 		for (var i=0; i<tasks.length; i++) {
 			$('#taskList').append('<div class="task">' + tasks[i] + '</div>');
@@ -33,6 +36,7 @@ $(document).ready(function() {
 		$('#home').removeClass('hidden');
 		e.stopPropagation();
 		activeTask = null;
+		playbackPaused = false;
 	});
 
 	$('#playbackBack').on('touchstart', function(e) {
@@ -40,10 +44,15 @@ $(document).ready(function() {
 	});
 
 	$('#playback').on('touchstart', function(e) {
-		socket.emit('startPlayback', { task: activeTask });
+		if (playbackPaused) {
+			socket.emit('resumePlayback', { task: activeTask });
+		} else {
+			socket.emit('startPlayback', { task: activeTask });
+		}
 	});
 
 	$('#playback').on('touchend', function(e) {
+		playbackPaused = true;
 		socket.emit('pausePlayback');
 	});
 

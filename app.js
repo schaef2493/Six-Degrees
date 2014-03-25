@@ -49,17 +49,16 @@ if (process.env.REDISTOGO_URL) {
 var recordingActive = false;
 var playbackActive = false;
 var activeTask = null;
+var lastStepPerformed = null;
 
 function playbackTask(step) {
   if (typeof step == 'undefined') {
     step = 0;
   }
 
-  // retry in 100ms if playback is paused
-  if (!playbackActive) {
-    setTimeout('playbackTask(' + step + ')', 100);
-    return;
-  }
+  lastStepPerformed = step;
+
+  console.log('Playing back step ' + step);
 
   // get total number of movements
   redis.llen(activeTask, function (err, numSteps) {
@@ -132,7 +131,15 @@ io.sockets.on('connection', function (socket) {
   socket.on('startPlayback', function (data) {
     playbackActive = true;
     activeTask = data.task;
+    lastStepPerformed = null;
     playbackTask();
+  });
+
+  // resume playback of recorded task
+  socket.on('resumePlayback', function (data) {
+    playbackActive = true;
+    activeTask = data.task;
+    playbackTask(lastStepPerformed + 1);
   });
 
   // pause playback of recorded task
