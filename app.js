@@ -83,7 +83,7 @@ function playbackTask(step) {
         // schedule next movement
         redis.lindex(activeTask, step+1, function (err, reply) {
           var reply = JSON.parse(reply);
-          setTimeout(playbackTask, reply[3], step+1);
+          setTimeout(playbackTask, 10, step+1);
         });
 
       } else {
@@ -130,8 +130,6 @@ io.sockets.on('connection', function (socket) {
     if (recordingActive) {
       var movement = data.axes;
       var time = (new Date).getTime() - ((data.header.stamp.secs*1000) + (data.header.stamp.nsecs/1000000));
-      // Slow constant
-      time = time * 2;
       movement.push(time);
       redis.rpush(activeTask, JSON.stringify(movement));
     }
