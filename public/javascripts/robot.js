@@ -42,7 +42,7 @@ joystick.subscribe(function(message) {
 
 function moveArm(axes) {
   console.log('Moving arm to ' + axes);
-  
+
   var message = new ROSLIB.Message({
     axes: axes,
     buttons: [0,0]
@@ -67,6 +67,8 @@ function playbackMovement(step) {
 
   if (step < movements.length-1) {
     setTimeout(playbackMovement, sampleRate, step+1);
+  } else {
+    lastStepPerformed = -1;
   }
 }
 
