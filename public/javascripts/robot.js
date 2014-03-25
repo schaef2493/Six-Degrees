@@ -42,6 +42,7 @@ joystick.subscribe(function(message) {
 });
 
 function updateMovements() {
+  console.log('inside update movements');
   if (recordingActive) {
     sendMovement(lastMessage);
   }
@@ -53,14 +54,14 @@ function updateMovements() {
 updateMovements();
 
 function moveArm(axes) {
-  console.log((axes.header.stamp.secs*1000000000) + (axes.header.stamp.nsecs) + ' Moving arm to ' + axes);
+  if (playbackActive) {
+    var message = new ROSLIB.Message({
+      axes: axes,
+      buttons: [0,0]
+    });
 
-  var message = new ROSLIB.Message({
-    axes: axes,
-    buttons: [0,0]
-  });
-
-  joystick.publish(message);
+    joystick.publish(message);
+  }
 }
 
 function playbackMovement(step) {
