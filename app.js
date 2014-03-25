@@ -82,6 +82,7 @@ io.sockets.on('connection', function (socket) {
 
   // capture joystick movements
   socket.on('movement', function(data) {
+    console.log(data.axes);
     if (recordingActive) {
       var movement = data.axes;
       redis.rpush(activeTask, JSON.stringify(movement));
