@@ -31,7 +31,7 @@ var lastMessage = null;
 
 function sendMovement(data) {
   console.log('Recording arm at ' + data.axes);
-  socket.emit('movement', { axes: data.axes });
+  socket.emit('movement', { axes: data.axes, buttons: data.buttons });
 }
 
 joystick.subscribe(function(data) {
@@ -53,13 +53,13 @@ function updateMovements() {
 // Start update loop
 updateMovements();
 
-function moveArm(axes) {
+function moveArm(axes, buttons) {
   if (playbackActive) {
     console.log('Moving arm to ' + axes);
 
     var message = new ROSLIB.Message({
       axes: axes,
-      buttons: [0,0]
+      buttons: buttons
     });
 
     joystick.publish(message);
@@ -76,15 +76,16 @@ function playbackMovement(step) {
     return;
   }
 
-  var axes = JSON.parse(movements[step]);
-  moveArm(axes);
+  var axes = (JSON.parse(movements[step])).slice(0,3);
+  var buttons = JSON.parse(movements[step])[3];
+  moveArm(axes, buttons);
   lastStepPerformed = step;
 
   if (step < movements.length-1) {
     setTimeout(playbackMovement, sampleRate, step+1);
   } else {
     lastStepPerformed = -1;
-    moveArm([0,0,0]);
+    moveArm([0,0,0], [0,0]);
   }
 }
 
@@ -110,5 +111,5 @@ socket.on('playbackResumed', function (data) {
 
 socket.on('playbackPaused', function (data) {
   playbackActive = false;
-  moveArm([0,0,0]);
+  moveArm([0,0,0], [0,0]);
 });

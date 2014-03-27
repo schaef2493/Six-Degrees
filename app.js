@@ -85,6 +85,7 @@ io.sockets.on('connection', function (socket) {
     console.log(data.axes);
     if (recordingActive) {
       var movement = data.axes;
+      movement.push(data.buttons);
       redis.rpush(activeTask, JSON.stringify(movement));
     }
   });
