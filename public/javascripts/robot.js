@@ -28,6 +28,21 @@ var movements = null;
 var lastStepPerformed = 0;
 var sampleRate = 10; // ms
 var lastMessage = null;
+var homeMovement = []; // path to go home
+
+function generateHomeMovement() {
+  var homeCommand = [[0,0,0,[1,1]];
+  var homeMovementWait = [0,0,0,[0,0]];
+
+  for (var i=0; i<500; i++) {
+    homeMovement.push(homeCommand);
+  }
+
+  for (var i=0; i<500; i++) {
+    homeMovement.push(homeMovementWait);
+  }
+
+}
 
 function sendMovement(data) {
   console.log('Recording arm at ' + data.axes);
@@ -100,7 +115,7 @@ socket.on('recordingEnded', function (data) {
 
 socket.on('playbackStarted', function (data) {
   playbackActive = true;
-  movements = data.movements;
+  movements = homeMovement.concat(data.movements);
   playbackMovement();
 });
 
@@ -113,3 +128,5 @@ socket.on('playbackPaused', function (data) {
   playbackActive = false;
   moveArm([0,0,0], [0,0]);
 });
+
+generateHomeMovement();
