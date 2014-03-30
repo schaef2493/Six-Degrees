@@ -21,21 +21,18 @@
         </div>
 
         <div id="playback" class="screen hidden">
-            <div class="button left" id="playbackBack"></div>
             <div class="instructions">Hold to begin</div>
+            <div class="button bottom" id="playbackBack"></div>
         </div>
 
         <div id="record_name" class="screen hidden">
-            <div class="button left" id="recordBack"></div>
-            <div class="button right" id="advanceToRecord"></div>
-
             <input type="text" id="name" placeholder="Task Name">
+            <div class="button bottom" id="advanceToRecord"></div>
         </div>
 
         <div id="record_movements" class="screen hidden">
-            <!--<div class="button left" id="backToName"></div>-->
-            <div class="button right" id="finishRecording"></div>
             <div class="instructions">Now Recording</div>
+            <div class="button bottom" id="finishRecording"></div>
         </div>
 
         <script src="/socket.io/socket.io.js"></script>

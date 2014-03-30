@@ -83,11 +83,11 @@ div {
 
 .button {
     position: absolute;
-    width: 60px;
-    height: 100%;
+    width: 100%;
+    height: 50%%;
 }
 
-.left {
+.top {
     left: 0px;
     top: 0px;
     border-right: 1px solid rgba(255,255,255,0.25);
@@ -97,10 +97,11 @@ div {
     background-repeat: no-repeat;
 }
 
-.right {
-    right: 0px;
-    top: 0px;
+.bottom {
+    left: 0px;
+    bottom: 0px;
     border-left: 1px solid rgba(255,255,255,0.25);
+    background-color: #27ae60;
     background-image: url(../images/right_arrow.png);
     background-size: 20px;
     background-position: center center;
