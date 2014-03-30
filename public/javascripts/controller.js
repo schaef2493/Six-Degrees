@@ -7,6 +7,10 @@ var deletePending = null;
 var tap = new Audio('../sounds/tap.mp3');
 var beep = new Audio('../sounds/playback.mp3');
 
+// Preload
+tap.load();
+beep.load();
+
 socket.on('playbackEnded', function (data) {
 	playbackEnded = true;
 });
@@ -43,6 +47,10 @@ $(document).ready(function() {
 			deletePending = null;
 		}
 	}
+
+	$('#taskList').scroll(function() {
+	  deletePending = null;
+	});
 
 	$('body').hammer().on('tap', '.task', function(e) {
 	  deletePending = null;
