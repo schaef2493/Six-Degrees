@@ -94,14 +94,14 @@ div {
     top: 0px;
     border-right: 1px solid rgba(255,255,255,0.25);
     font-size: 17pt;
-    padding-top: 200px;
+    padding-top: 100px;
 }
 
 .bottom {
     left: 0px;
     bottom: 0px;
     border-left: 1px solid rgba(255,255,255,0.25);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#27ae60), color-stop(100%,#1C763A));
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9dd53a), color-stop(50%,#a1d54f), color-stop(51%,#80c217), color-stop(100%,#7cbc0a));
     font-weight: bold;
 }
 
@@ -122,10 +122,6 @@ div {
 #playback {
     padding: 0px 60px 0px 90px;
     text-align: center;
-}
-
-#playback .instructions {
-    margin-top: 120px;
 }
 
 #record_name {
