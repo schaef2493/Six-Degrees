@@ -49,6 +49,7 @@ $(document).ready(function() {
 	  	// record new task
 	  	$('#home').toggleClass('hidden');
 	  	$('#record_name').toggleClass('hidden');
+	  	$('#name').focus();
 	  } else {
 	  	activeTask = e.target.innerText;
 	  
@@ -71,7 +72,7 @@ $(document).ready(function() {
 		e.stopPropagation();
 	});
 
-	$('#playback').hammer().on('tap', function(e) {
+	$('#playback').hammer().on('touchstart', function(e) {
 		if (playbackEnded && playbackPaused) {
 			playbackPaused = false;
 			playbackEnded = false;
@@ -84,7 +85,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#playback').hammer().on('tap', function(e) {
+	$('#playback').hammer().on('touchend', function(e) {
 		playbackPaused = true;
 		socket.emit('pausePlayback');
 	});
@@ -97,6 +98,7 @@ $(document).ready(function() {
 
 	$('#advanceToRecord').hammer().on('tap', function(e) {
 		activeTask = $('#name').val();
+		$('#name').blur();
 
 		$('.screen').addClass('hidden');
 		$('#record_movements').removeClass('hidden');
