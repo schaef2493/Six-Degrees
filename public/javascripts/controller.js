@@ -75,7 +75,7 @@ $(document).ready(function() {
 		return false;
 	});
 
-	$('#playback').hammer().on('touchstart', function(e) {
+	$('#playbackButton').hammer().on('touchstart', function(e) {
 		beep.play();
 
 		if (playbackEnded && playbackPaused) {
@@ -90,7 +90,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#playback').hammer().on('touchend', function(e) {
+	$('#playbackButton').hammer().on('touchend', function(e) {
 		beep.play();
 
 		playbackPaused = true;
@@ -110,6 +110,7 @@ $(document).ready(function() {
 
 		activeTask = $('#name').val();
 		$('#name').blur();
+		$($('#record_movements .instructions')[0]).html('Recording ' + activeTask);
 
 		$('.screen').addClass('hidden');
 		$('#record_movements').removeClass('hidden');
