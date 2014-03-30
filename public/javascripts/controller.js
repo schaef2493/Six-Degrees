@@ -71,10 +71,8 @@ $(document).ready(function() {
 		activeTask = null;
 		playbackPaused = false;
 		playbackEnded = false;
-	});
-
-	$('#playbackBack').hammer().on('tap', function(e) {
 		e.stopPropagation();
+		return false;
 	});
 
 	$('#playback').hammer().on('touchstart', function(e) {
