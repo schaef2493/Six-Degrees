@@ -5,7 +5,7 @@ var playbackPaused = false;
 var playbackEnded = false;
 var deletePending = null;
 var typingTimer;
-var doneTypingInterval = 2000; // ms
+var doneTypingInterval = 1000; // ms
 var tap = new Audio('../sounds/tap.mp3');
 var beep = new Audio('../sounds/playback.mp3');
 
