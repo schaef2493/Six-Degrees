@@ -42,7 +42,7 @@ $(document).ready(function() {
 		}
 	}
 
-	$('body').on('touchend', '.task', function(e) {
+	$('body').hammer().on('tap', '.task', function(e) {
 	  deletePending = null;
 
 	  if (e.target.innerText == '+ New Task') {
@@ -58,7 +58,7 @@ $(document).ready(function() {
 	  }
 	});
 
-	$('#playbackBack').on('touchend', function(e) {
+	$('#playbackBack').hammer().on('tap', function(e) {
 		$('.screen').addClass('hidden');
 		$('#home').removeClass('hidden');
 		e.stopPropagation();
@@ -67,11 +67,11 @@ $(document).ready(function() {
 		playbackEnded = false;
 	});
 
-	$('#playbackBack').on('touchstart', function(e) {
+	$('#playbackBack').hammer().on('tap', function(e) {
 		e.stopPropagation();
 	});
 
-	$('#playback').on('touchstart', function(e) {
+	$('#playback').hammer().on('tap', function(e) {
 		if (playbackEnded && playbackPaused) {
 			playbackPaused = false;
 			playbackEnded = false;
@@ -84,18 +84,18 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#playback').on('touchend', function(e) {
+	$('#playback').hammer().on('tap', function(e) {
 		playbackPaused = true;
 		socket.emit('pausePlayback');
 	});
 
-	$('#recordBack').on('touchend', function(e) {
+	$('#recordBack').hammer().on('tap', function(e) {
 		$('.screen').addClass('hidden');
 		$('#home').removeClass('hidden');
 		activeTask = null;
 	});
 
-	$('#advanceToRecord').on('touchend', function(e) {
+	$('#advanceToRecord').hammer().on('tap', function(e) {
 		activeTask = $('#name').val();
 
 		$('.screen').addClass('hidden');
@@ -104,14 +104,14 @@ $(document).ready(function() {
 		socket.emit('startRecording', { task: activeTask });
 	});
 
-	$('#backToName').on('touchend', function(e) {
+	$('#backToName').hammer().on('tap', function(e) {
 		socket.emit('endRecording');
 
 		$('.screen').addClass('hidden');
 		$('#record_name').removeClass('hidden');
 	});
 
-	$('#finishRecording').on('touchend', function(e) {
+	$('#finishRecording').hammer().on('tap', function(e) {
 		$('#name').val('');
 		$('#taskList').prepend('<div class="task">' + activeTask + '</div>');
 
