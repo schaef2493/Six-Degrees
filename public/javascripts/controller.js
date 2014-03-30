@@ -4,6 +4,8 @@ var activeTask = null;
 var playbackPaused = false;
 var playbackEnded = false;
 var deletePending = null;
+var tap = new Audio('../sounds/tap.aif');
+var beep = new Audio('../sounds/playback.aif');
 
 socket.on('playbackEnded', function (data) {
 	playbackEnded = true;
@@ -45,6 +47,8 @@ $(document).ready(function() {
 	$('body').hammer().on('tap', '.task', function(e) {
 	  deletePending = null;
 
+	  tap.play();
+
 	  if (e.target.innerText == '+ New Task') {
 	  	// record new task
 	  	$('#home').toggleClass('hidden');
@@ -60,6 +64,7 @@ $(document).ready(function() {
 	});
 
 	$('#playbackBack').hammer().on('tap', function(e) {
+		tap.play();
 		$('.screen').addClass('hidden');
 		$('#home').removeClass('hidden');
 		e.stopPropagation();
@@ -73,6 +78,8 @@ $(document).ready(function() {
 	});
 
 	$('#playback').hammer().on('touchstart', function(e) {
+		beep.play();
+
 		if (playbackEnded && playbackPaused) {
 			playbackPaused = false;
 			playbackEnded = false;
@@ -86,17 +93,23 @@ $(document).ready(function() {
 	});
 
 	$('#playback').hammer().on('touchend', function(e) {
+		beep.play();
+
 		playbackPaused = true;
 		socket.emit('pausePlayback');
 	});
 
 	$('#recordBack').hammer().on('tap', function(e) {
+		tap.play();
+
 		$('.screen').addClass('hidden');
 		$('#home').removeClass('hidden');
 		activeTask = null;
 	});
 
 	$('#advanceToRecord').hammer().on('tap', function(e) {
+		tap.play();
+
 		activeTask = $('#name').val();
 		$('#name').blur();
 
@@ -107,6 +120,8 @@ $(document).ready(function() {
 	});
 
 	$('#backToName').hammer().on('tap', function(e) {
+		tap.play();
+
 		socket.emit('endRecording');
 
 		$('.screen').addClass('hidden');
@@ -114,6 +129,8 @@ $(document).ready(function() {
 	});
 
 	$('#finishRecording').hammer().on('tap', function(e) {
+		tap.play();
+		
 		$('#name').val('');
 		$('#taskList').prepend('<div class="task">' + activeTask + '</div>');
 

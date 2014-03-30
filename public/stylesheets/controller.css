@@ -116,7 +116,7 @@ div {
 
 #taskList .task {
     height: 110px;
-    padding: 35px 20px 10px 20px;
+    padding: 38px 20px 10px 20px;
     border-bottom: 1px solid rgba(255,255,255,0.25);
     font-size: 20pt;
 }
