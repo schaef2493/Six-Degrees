@@ -113,4 +113,15 @@ io.sockets.on('connection', function (socket) {
     io.sockets.emit('playbackPaused');
   });
 
+  // delete a recorded task
+  socket.on('delete', function (data) {
+    redis.del(data.task, function(err, reply) {
+      redis.lrem('tasks', data.task, function(err, reply) {
+        redis.lrange('tasks', 0, -1, function (err, newTasks) {
+          io.sockets.emit('tasks', { tasks: newTasks });
+        });
+      });
+    });
+  });
+
 });

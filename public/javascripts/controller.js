@@ -3,6 +3,7 @@ var socket = io.connect(window.location.hostname);
 var activeTask = null;
 var playbackPaused = false;
 var playbackEnded = false;
+var deletePending = null;
 
 socket.on('playbackEnded', function (data) {
 	playbackEnded = true;
@@ -22,7 +23,28 @@ $(document).ready(function() {
 		$('#taskList').append('<div class="task">+ New Task</div>');
 	});
 
+	$('body').on('touchstart', '.task', function(e) {
+	  if (e.target.innerText != '+ New Task') {
+	  	pressTimer = Date.now();
+	  	deletePending = e.target.innerText;
+	  	setTimeout(performDelete, 1000);
+	  }
+	});
+
+	function performDelete() {
+		if (deletePending != null) {
+			var c = confirm("Are you want to delete " + deletePending + '?');
+			if (c) {
+				socket.emit('delete', { task: deletePending });
+			}
+
+			deletePending = null;
+		}
+	}
+
 	$('body').on('touchend', '.task', function(e) {
+	  deletePending = null;
+
 	  if (e.target.innerText == '+ New Task') {
 	  	// record new task
 	  	$('#home').toggleClass('hidden');
