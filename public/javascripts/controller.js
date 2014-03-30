@@ -8,8 +8,8 @@ var tap = new Audio('../sounds/tap.mp3');
 var beep = new Audio('../sounds/playback.mp3');
 
 // Preload
-tap.load();
-beep.load();
+tap.play();
+beep.play();
 
 socket.on('playbackEnded', function (data) {
 	playbackEnded = true;
@@ -86,6 +86,8 @@ $(document).ready(function() {
 	$('#playbackButton').hammer().on('touchstart', function(e) {
 		beep.play();
 
+		$('#playbackButton').toggleClass('active');
+
 		if (playbackEnded && playbackPaused) {
 			playbackPaused = false;
 			playbackEnded = false;
@@ -100,6 +102,8 @@ $(document).ready(function() {
 
 	$('#playbackButton').hammer().on('touchend', function(e) {
 		beep.play();
+
+		$('#playbackButton').toggleClass('active');
 
 		playbackPaused = true;
 		socket.emit('pausePlayback');
