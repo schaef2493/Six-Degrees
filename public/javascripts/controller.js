@@ -4,8 +4,8 @@ var activeTask = null;
 var playbackPaused = false;
 var playbackEnded = false;
 var deletePending = null;
-var tap = new Audio('../sounds/tap.aif');
-var beep = new Audio('../sounds/playback.aif');
+var tap = new Audio('../sounds/tap.mp3');
+var beep = new Audio('../sounds/playback.mp3');
 
 socket.on('playbackEnded', function (data) {
 	playbackEnded = true;
@@ -119,18 +119,18 @@ $(document).ready(function() {
 		socket.emit('startRecording', { task: activeTask });
 	});
 
-	$('#backToName').hammer().on('tap', function(e) {
-		tap.play();
+	// $('#backToName').hammer().on('tap', function(e) {
+	// 	tap.play();
 
-		socket.emit('endRecording');
+	// 	socket.emit('endRecording');
 
-		$('.screen').addClass('hidden');
-		$('#record_name').removeClass('hidden');
-	});
+	// 	$('.screen').addClass('hidden');
+	// 	$('#record_name').removeClass('hidden');
+	// });
 
 	$('#finishRecording').hammer().on('tap', function(e) {
 		tap.play();
-		
+
 		$('#name').val('');
 		$('#taskList').prepend('<div class="task">' + activeTask + '</div>');
 
