@@ -86,20 +86,23 @@ div {
     width: 100%;
     height: 50%%;
     font-size: 22pt;
-    padding: 110px 15px 10px 15px;
+    padding: 100px 15px 10px 15px;
 }
 
 .top {
     left: 0px;
     top: 0px;
+    right: 0px;
     border-right: 1px solid rgba(255,255,255,0.25);
     font-size: 17pt;
-    padding-top: 110px;
+    padding-top: 120px;
+    color: #6E9CCA;
 }
 
 .bottom {
     left: 0px;
     bottom: 0px;
+    right: 0px;
     border-left: 1px solid rgba(255,255,255,0.25);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bfd255), color-stop(50%,#8eb92a), color-stop(51%,#72aa00), color-stop(100%,#9ecb2d));
     font-weight: bold;

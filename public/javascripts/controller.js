@@ -4,6 +4,8 @@ var activeTask = null;
 var playbackPaused = false;
 var playbackEnded = false;
 var deletePending = null;
+var typingTimer;
+var doneTypingInterval = 2000; // ms
 var tap = new Audio('../sounds/tap.mp3');
 var beep = new Audio('../sounds/playback.mp3');
 
@@ -117,12 +119,31 @@ $(document).ready(function() {
 		activeTask = null;
 	});
 
+	$('#name').keyup(function(){
+	    clearTimeout(typingTimer);
+	    typingTimer = setTimeout(doneTyping, doneTypingInterval);
+	});
+
+	$('#name').keydown(function(){
+	    clearTimeout(typingTimer);
+	});
+
+	function doneTyping () {
+	    $('#name').blur();
+	}
+
 	$('#advanceToRecord').hammer().on('tap', function(e) {
 		tap.play();
 
 		activeTask = $('#name').val();
+
+		if (activeTask == '') {
+			alert("Task name cannot be empty");
+			return false;
+		}
+
 		$('#name').blur();
-		$($('#record_movements .instructions')[0]).html('Recording ' + activeTask);
+		$($('#record_movements .instructions')[0]).html('Now recording ' + activeTask);
 
 		$('.screen').addClass('hidden');
 		$('#record_movements').removeClass('hidden');
