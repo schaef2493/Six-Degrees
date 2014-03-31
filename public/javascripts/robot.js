@@ -34,7 +34,7 @@ function generateHomeMovement() {
   var homeCommand = "[0,0,0,[1,1]]";
   var homeMovementWait = "[0,0,0,[0,0]]";
 
-  for (var i=0; i<500; i++) {
+  for (var i=0; i<300; i++) {
     homeMovement.push(homeCommand);
   }
 
@@ -90,6 +90,7 @@ function playbackMovement(step) {
 
   // break if playback was paused
   if (playbackActive == false) {
+    moveArm([0,0,0], [0,0]);
     return;
   }
 
