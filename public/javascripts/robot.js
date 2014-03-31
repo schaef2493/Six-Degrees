@@ -42,6 +42,8 @@ function generateHomeMovement() {
     homeMovement.push(homeMovementWait);
   }
 
+  homeMovement.push("[0,0,0,[1,0]]");
+
 }
 
 function sendMovement(data) {
