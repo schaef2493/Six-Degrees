@@ -35,10 +35,10 @@ function generateHomeMovement() {
   var homeMovementWait = "[0,0,0,[0,0]]";
 
   for (var i=0; i<300; i++) {
-    homeMovement.push(homeCommand);
+    //homeMovement.push(homeCommand);
   }
 
-  for (var i=0; i<500; i++) {
+  for (var i=0; i<50; i++) {
     homeMovement.push(homeMovementWait);
   }
 
