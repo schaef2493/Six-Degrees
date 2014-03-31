@@ -91,6 +91,7 @@ function playbackMovement(step) {
     return;
   }
 
+  console.log(movements[step]);
   var axes = (JSON.parse(movements[step])).slice(0,3);
   var buttons = JSON.parse(movements[step])[3];
   moveArm(axes, buttons);
