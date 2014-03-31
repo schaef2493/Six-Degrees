@@ -31,10 +31,10 @@ var lastMessage = null;
 var homeMovement = []; // path to go home
 
 function generateHomeMovement() {
-  var homeCommand = [0,0,0,[1,1]];
-  var homeMovementWait = [0,0,0,[0,0]];
+  var homeCommand = "[0,0,0,[1,1]]";
+  var homeMovementWait = "[0,0,0,[0,0]]";
 
-  for (var i=0; i<200; i++) {
+  for (var i=0; i<500; i++) {
     homeMovement.push(homeCommand);
   }
 
@@ -71,8 +71,6 @@ updateMovements();
 function moveArm(axes, buttons) {
   if (playbackActive) {
     console.log('Moving arm to ' + axes + ' - ' + buttons);
-    console.log(axes);
-    console.log(buttons);
 
     var message = new ROSLIB.Message({
       axes: axes,
@@ -93,8 +91,8 @@ function playbackMovement(step) {
     return;
   }
 
-  var axes = (movements[step]).slice(0,3);
-  var buttons = (movements[step])[3];
+  var axes = (JSON.parse(movements[step])).slice(0,3);
+  var buttons = JSON.parse(movements[step])[3];
   moveArm(axes, buttons);
   lastStepPerformed = step;
 
