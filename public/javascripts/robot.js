@@ -71,6 +71,8 @@ updateMovements();
 function moveArm(axes, buttons) {
   if (playbackActive) {
     console.log('Moving arm to ' + axes + ' - ' + buttons);
+    console.log(axes);
+    console.log(buttons);
 
     var message = new ROSLIB.Message({
       axes: axes,
