@@ -34,7 +34,7 @@ function generateHomeMovement() {
   var homeCommand = [0,0,0,[1,1]];
   var homeMovementWait = [0,0,0,[0,0]];
 
-  for (var i=0; i<500; i++) {
+  for (var i=0; i<200; i++) {
     homeMovement.push(homeCommand);
   }
 
@@ -45,7 +45,7 @@ function generateHomeMovement() {
 }
 
 function sendMovement(data) {
-  console.log('Recording arm at ' + data.axes);
+  console.log('Recording arm at ' + data.axes + ' - ' + data.buttons);
   socket.emit('movement', { axes: data.axes, buttons: data.buttons });
 }
 
@@ -70,7 +70,7 @@ updateMovements();
 
 function moveArm(axes, buttons) {
   if (playbackActive) {
-    console.log('Moving arm to ' + axes);
+    console.log('Moving arm to ' + axes + ' - ' + buttons);
 
     var message = new ROSLIB.Message({
       axes: axes,
