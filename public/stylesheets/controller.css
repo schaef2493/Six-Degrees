@@ -98,8 +98,8 @@ div {
 }
 
 .outline {
-    width: 320px;
-    padding: 32px;
+    width: 200px;
+    padding: 10px;
     border: 1px solid rgba(255,255,255,0.5);
     margin: auto;
     border-radius: 13px;
@@ -115,7 +115,7 @@ div {
     text-shadow: 0px -1px 0px #374683;
     border-radius: 10px;
     -webkit-box-shadow: inset 0px 1px 10px 0px rgba(0,0,0,.5);
-    padding: 25px;
+    padding: 15px;
 }
 
 .bottomInner {
@@ -124,10 +124,19 @@ div {
     border-radius: 10px;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E8FFCA), color-stop(0.5%,#75DB00), color-stop(100%,#589F00));
     -webkit-box-shadow: 0px 0px 13px 0px rgba(50, 50, 50, 0.97);
+    opacity: 1;
 }
 
 .bottomInner.active {
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E8FFCA), color-stop(0.5%,#589F00), color-stop(100%,#75DB00));
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#CA6F00), color-stop(100%,#F68700));
+    -webkit-animation: pulsate 1.2s ease-out;
+    -webkit-animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes pulsate {
+    0% {opacity: 1.0;}
+    50% {opacity: 0.1;}
+    100% {opacity: 1.0;}
 }
 
 #taskList {
@@ -138,14 +147,15 @@ div {
 }
 
 #taskList .task {
-    height: 105px;
-    padding: 33px 20px 10px 20px;
+    height: 90px;
+    padding: 25px 20px 10px 20px;
     font-size: 20pt;
-    margin: 17px;
+    margin: 10px;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FCD7FF), color-stop(2%,#C006DB), color-stop(100%,#8302AF));
     border-radius: 6px;
     -webkit-box-shadow: 0px 0px 13px 0px rgba(50, 50, 50, 0.97);
     text-shadow: 0px -1px 0px #374683;
+    font-weight: bold;
 }
 
 #playback {
@@ -172,6 +182,9 @@ div {
 
 #record_movements .instructions {
     margin-top: 130px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
     font-size: 16pt;
     opacity: .3;
 }

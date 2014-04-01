@@ -86,6 +86,7 @@ $(document).ready(function() {
 		beep.play();
 
 		$('#playbackButton .bottomInner').toggleClass('active');
+		$('#playbackInner').html('Release to pause playback');
 
 		if (playbackEnded && playbackPaused) {
 			playbackPaused = false;
@@ -103,6 +104,7 @@ $(document).ready(function() {
 		beep.play();
 
 		$('#playbackButton .bottomInner').toggleClass('active');
+		$('#playbackInner').html('Hold to begin playback');
 
 		playbackPaused = true;
 		socket.emit('pausePlayback');
