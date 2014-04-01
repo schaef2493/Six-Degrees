@@ -48,14 +48,32 @@ function generateHomeMovement() {
   var homeCommand = "[0,0,0,[1,1]]";
   var homeMovementWait = "[0,0,0,[0,0]]";
 
+  // Put into gripper mode
+  for (var i=0; i<50; i++) {
+    homeMovement.push("[0,0,0,[1,1]]");
+  }
+
+  // Open gripper
+  for (var i=0; i<200; i++) {
+    homeMovement.push("[1,0,0,[0,0]]");
+  }
+
+  // Put into cartesian mode
+  for (var i=0; i<50; i++) {
+    homeMovement.push("[0,0,0,[1,0]]");
+  }
+
+  // Move to home
   for (var i=0; i<300; i++) {
     homeMovement.push(homeCommand);
   }
 
+  // Wait
   for (var i=0; i<150; i++) {
     homeMovement.push(homeMovementWait);
   }
 
+  // Put into cartesian mode
   for (var i=0; i<50; i++) {
     homeMovement.push("[0,0,0,[1,0]]");
   }
