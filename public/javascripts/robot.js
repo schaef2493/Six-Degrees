@@ -55,7 +55,7 @@ function generateHomeMovement() {
 
   // Open gripper
   for (var i=0; i<200; i++) {
-    homeMovement.push("[1,0,0,[0,0]]");
+    homeMovement.push("[-1,0,0,[0,0]]");
   }
 
   // Put into cartesian mode
