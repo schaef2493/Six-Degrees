@@ -31,7 +31,7 @@ $(document).ready(function() {
 		$('#taskList').append('<div class="task">+ New Task</div>');
 	});
 
-	sockets.on('finishedMovingHome', function(data) {
+	socket.on('finishedMovingHome', function(data) {
 		beep.play();
 		movingHome = false;
 		$('#advanceToRecord').removeClass('dim');
