@@ -140,7 +140,6 @@ socket.on('playbackResumed', function (data) {
 });
 
 socket.on('playbackPaused', function (data) {
-  console.log('PLAYBACK PAUSED');
   playbackActive = false;
   moveArm([0,0,0], [0,0]);
 });
