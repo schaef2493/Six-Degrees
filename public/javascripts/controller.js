@@ -55,8 +55,9 @@ $(document).ready(function() {
 
 	$('body').hammer().on('tap', '.task', function(e) {
 	  deletePending = null;
-
 	  tap.play();
+
+	  $('#playbackInner').html('Hold to begin playback');
 
 	  if (e.target.innerText == '+ New Task') {
 	  	// record new task
@@ -106,7 +107,7 @@ $(document).ready(function() {
 		beep.play();
 
 		$('#playbackButton .bottomInner').removeClass('active');
-		$('#playbackInner').html('Hold to begin playback');
+		$('#playbackInner').html('Hold to resume playback');
 
 		playbackPaused = true;
 		socket.emit('pausePlayback');
