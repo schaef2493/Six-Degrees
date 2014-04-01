@@ -30,6 +30,17 @@ var sampleRate = 10; // ms
 var lastMessage = null;
 var homeMovement = []; // path to go home
 
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length != b.length) return false;
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
 function generateHomeMovement() {
   var homeCommand = "[0,0,0,[1,1]]";
   var homeMovementWait = "[0,0,0,[0,0]]";
@@ -47,12 +58,8 @@ function generateHomeMovement() {
 }
 
 function sendMovement(data) {
-  if (playbackActive == true) {
-    console.log('Recording arm at ' + data.axes + ' - ' + data.buttons);
-    socket.emit('movement', { axes: data.axes, buttons: data.buttons });
-  } else {
-    moveArm([0,0,0], [0,0]);
-  }
+  console.log('Recording arm at ' + data.axes + ' - ' + data.buttons);
+  socket.emit('movement', { axes: data.axes, buttons: data.buttons });
 }
 
 joystick.subscribe(function(data) {
@@ -75,7 +82,7 @@ function updateMovements() {
 updateMovements();
 
 function moveArm(axes, buttons) {
-  if (playbackActive == true) {
+  if ((playbackActive == true) || (arraysEqual(axes,[0,0,0]) && arraysEqual(buttons,[0,0]))) {
     console.log('Moving arm to ' + axes + ' - ' + buttons);
 
     var message = new ROSLIB.Message({
@@ -84,8 +91,6 @@ function moveArm(axes, buttons) {
     });
 
     joystick.publish(message);
-  } else {
-    moveArm([0,0,0], [0,0]);
   }
 }
 
@@ -135,6 +140,7 @@ socket.on('playbackResumed', function (data) {
 });
 
 socket.on('playbackPaused', function (data) {
+  console.log('PLAYBACK PAUSED');
   playbackActive = false;
   moveArm([0,0,0], [0,0]);
 });
