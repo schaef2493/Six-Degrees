@@ -12,6 +12,8 @@ var beep = new Audio('../sounds/playback.mp3');
 socket.on('playbackFinished', function (data) {
 	beep.play();
 	playbackEnded = true;
+	playbackPaused = true;
+	$('#playbackButton .bottomInner').removeClass('active');
 });
 
 $(document).ready(function() {
@@ -85,7 +87,7 @@ $(document).ready(function() {
 	$('#playbackButton').hammer().on('touchstart', function(e) {
 		beep.play();
 
-		$('#playbackButton .bottomInner').toggleClass('active');
+		$('#playbackButton .bottomInner').addClass('active');
 		$('#playbackInner').html('Release to pause playback');
 
 		if (playbackEnded && playbackPaused) {
@@ -103,7 +105,7 @@ $(document).ready(function() {
 	$('#playbackButton').hammer().on('touchend', function(e) {
 		beep.play();
 
-		$('#playbackButton .bottomInner').toggleClass('active');
+		$('#playbackButton .bottomInner').removeClass('active');
 		$('#playbackInner').html('Hold to begin playback');
 
 		playbackPaused = true;
