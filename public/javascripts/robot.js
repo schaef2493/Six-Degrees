@@ -56,7 +56,9 @@ function generateHomeMovement() {
     homeMovement.push(homeMovementWait);
   }
 
-  homeMovement.push("[0,0,0,[1,0]]");
+  for (var i=0; i<50; i++) {
+    homeMovement.push("[0,0,0,[1,0]]");
+  }
 
 }
 
