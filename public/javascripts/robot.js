@@ -47,8 +47,12 @@ function generateHomeMovement() {
 }
 
 function sendMovement(data) {
-  console.log('Recording arm at ' + data.axes + ' - ' + data.buttons);
-  socket.emit('movement', { axes: data.axes, buttons: data.buttons });
+  if (playbackActive == true) {
+    console.log('Recording arm at ' + data.axes + ' - ' + data.buttons);
+    socket.emit('movement', { axes: data.axes, buttons: data.buttons });
+  } else {
+    moveArm([0,0,0], [0,0]);
+  }
 }
 
 joystick.subscribe(function(data) {
@@ -71,7 +75,7 @@ function updateMovements() {
 updateMovements();
 
 function moveArm(axes, buttons) {
-  if (playbackActive) {
+  if (playbackActive == true) {
     console.log('Moving arm to ' + axes + ' - ' + buttons);
 
     var message = new ROSLIB.Message({
@@ -80,6 +84,8 @@ function moveArm(axes, buttons) {
     });
 
     joystick.publish(message);
+  } else {
+    moveArm([0,0,0], [0,0]);
   }
 }
 
