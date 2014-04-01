@@ -9,10 +9,6 @@ var doneTypingInterval = 1000; // ms
 var tap = new Audio('../sounds/tap.mp3');
 var beep = new Audio('../sounds/playback.mp3');
 
-// Preload
-tap.play();
-beep.play();
-
 socket.on('playbackEnded', function (data) {
 	playbackEnded = true;
 });
