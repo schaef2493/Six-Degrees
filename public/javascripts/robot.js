@@ -139,6 +139,7 @@ function playbackMovement(step) {
     if (arraysEqual(movements, homeMovement)) {
       playbackActive = false;
       socket.emit('movedHome');
+      movements = [];
     } else {
       socket.emit('playbackEnded');
     }

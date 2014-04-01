@@ -32,7 +32,6 @@ $(document).ready(function() {
 	});
 
 	socket.on('finishedMovingHome', function(data) {
-		alert('finished moving home');
 		beep.play();
 		movingHome = false;
 		$('#advanceToRecord').removeClass('dim');
