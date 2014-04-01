@@ -30,6 +30,9 @@ var sampleRate = 10; // ms
 var lastMessage = null;
 var homeMovement = []; // path to go home
 
+// todo: start in open gripper
+// make go home before recording
+
 function arraysEqual(a, b) {
   if (a === b) return true;
   if (a == null || b == null) return false;
@@ -49,7 +52,7 @@ function generateHomeMovement() {
     homeMovement.push(homeCommand);
   }
 
-  for (var i=0; i<25; i++) {
+  for (var i=0; i<150; i++) {
     homeMovement.push(homeMovementWait);
   }
 
