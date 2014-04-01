@@ -31,6 +31,7 @@ var lastMessage = null;
 var homeMovement = []; // path to go home
 
 // TODO: make go home before recording
+// make finish recording button red
 
 function arraysEqual(a, b) {
   if (a === b) return true;
@@ -80,7 +81,7 @@ function generateHomeMovement() {
 }
 
 function sendMovement(data) {
-  console.log('Recording arm at ' + data.axes + ' - ' + data.buttons);
+  //console.log('Recording arm at ' + data.axes + ' - ' + data.buttons);
   socket.emit('movement', { axes: data.axes, buttons: data.buttons });
 }
 
@@ -105,7 +106,7 @@ updateMovements();
 
 function moveArm(axes, buttons) {
   if ((playbackActive == true) || (arraysEqual(axes,[0,0,0]) && arraysEqual(buttons,[0,0]))) {
-    console.log('Moving arm to ' + axes + ' - ' + buttons);
+    //console.log('Moving arm to ' + axes + ' - ' + buttons);
 
     var message = new ROSLIB.Message({
       axes: axes,
