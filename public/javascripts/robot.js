@@ -30,8 +30,7 @@ var sampleRate = 10; // ms
 var lastMessage = null;
 var homeMovement = []; // path to go home
 
-// todo: start in open gripper
-// make go home before recording
+// TODO: make go home before recording
 
 function arraysEqual(a, b) {
   if (a === b) return true;
@@ -48,16 +47,6 @@ function generateHomeMovement() {
   var homeCommand = "[0,0,0,[1,1]]";
   var homeMovementWait = "[0,0,0,[0,0]]";
 
-  // Put into gripper mode
-  for (var i=0; i<50; i++) {
-    homeMovement.push("[0,0,0,[1,1]]");
-  }
-
-  // Open gripper
-  for (var i=0; i<200; i++) {
-    homeMovement.push("[-1,0,0,[0,0]]");
-  }
-
   // Put into cartesian mode
   for (var i=0; i<50; i++) {
     homeMovement.push("[0,0,0,[1,0]]");
@@ -71,6 +60,16 @@ function generateHomeMovement() {
   // Wait
   for (var i=0; i<150; i++) {
     homeMovement.push(homeMovementWait);
+  }
+
+  // Put into gripper mode
+  for (var i=0; i<50; i++) {
+    homeMovement.push("[0,0,0,[1,1]]");
+  }
+
+  // Open gripper
+  for (var i=0; i<200; i++) {
+    homeMovement.push("[-1,0,0,[0,0]]");
   }
 
   // Put into cartesian mode
