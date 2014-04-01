@@ -119,6 +119,8 @@ function playbackMovement(step) {
     step = 0;
   }
 
+  console.log('playing back');
+
   // break if playback was paused
   if (playbackActive == false) {
     moveArm([0,0,0], [0,0]);
@@ -139,6 +141,8 @@ function playbackMovement(step) {
     if (arraysEqual(movements, homeMovement)) {
       playbackActive = false;
       socket.emit('movedHome');
+      console.log('Move home finished');
+      // TODO: BUG HERE! WHY IS THIS RUNNING FUCK
       movements = [];
     } else {
       socket.emit('playbackEnded');
