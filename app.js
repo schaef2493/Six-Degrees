@@ -117,6 +117,14 @@ io.sockets.on('connection', function (socket) {
     io.sockets.emit('playbackFinished');
   });
 
+  socket.on('moveHome', function (data) {
+    io.sockets.emit('moveToHomePosition');
+  });
+
+  socket.on('movedHome', function (data) {
+    io.sockets.emit('finishedMovingHome');
+  });
+
   // delete a recorded task
   socket.on('delete', function (data) {
     redis.del(data.task, function(err, reply) {

@@ -8,6 +8,7 @@ var typingTimer;
 var doneTypingInterval = 1000; // ms
 var tap = new Audio('../sounds/tap.mp3');
 var beep = new Audio('../sounds/playback.mp3');
+var movingHome = false;
 
 socket.on('playbackFinished', function (data) {
 	beep.play();
@@ -28,6 +29,12 @@ $(document).ready(function() {
 		}
 
 		$('#taskList').append('<div class="task">+ New Task</div>');
+	});
+
+	sockets.on('finishedMovingHome', function(data) {
+		beep.play();
+		movingHome = false;
+		$('#advanceToRecord').removeClass('dim');
 	});
 
 	$('body').on('touchstart', '.task', function(e) {
@@ -64,6 +71,9 @@ $(document).ready(function() {
 	  	$('#home').toggleClass('hidden');
 	  	$('#record_name').toggleClass('hidden');
 	  	$('#name').focus();
+	  	socket.emit('moveHome');
+	  	movingHome = true;
+	  	$('#advanceToRecord').addClass('dim');
 	  } else {
 	  	activeTask = e.target.innerText;
 	  
@@ -135,6 +145,10 @@ $(document).ready(function() {
 	}
 
 	$('#advanceToRecord').hammer().on('tap', function(e) {
+		if (movingHome) {
+			return;
+		}
+
 		tap.play();
 
 		activeTask = $('#name').val();

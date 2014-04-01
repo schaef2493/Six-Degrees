@@ -30,9 +30,6 @@ var sampleRate = 10; // ms
 var lastMessage = null;
 var homeMovement = []; // path to go home
 
-// TODO: make go home before recording
-// make finish recording button red
-
 function arraysEqual(a, b) {
   if (a === b) return true;
   if (a == null || b == null) return false;
@@ -138,7 +135,13 @@ function playbackMovement(step) {
   } else {
     lastStepPerformed = -1;
     moveArm([0,0,0], [0,0]);
-    socket.emit('playbackEnded');
+
+    if (arraysEqual(movements, homeMovement)) {
+      playbackActive = false;
+      socket.emit('movedHome');
+    } else {
+      socket.emit('playbackEnded');
+    }
   }
 }
 
@@ -165,6 +168,12 @@ socket.on('playbackResumed', function (data) {
 socket.on('playbackPaused', function (data) {
   playbackActive = false;
   moveArm([0,0,0], [0,0]);
+});
+
+socket.on('moveToHomePosition', function (data) {
+  playbackActive = true;
+  movements = homeMovement;
+  playbackMovement();
 });
 
 generateHomeMovement();
