@@ -113,6 +113,10 @@ io.sockets.on('connection', function (socket) {
     io.sockets.emit('playbackPaused');
   });
 
+  socket.on('playbackEnded', function (data) {
+    io.sockets.emit('playbackFinished');
+  });
+
   // delete a recorded task
   socket.on('delete', function (data) {
     redis.del(data.task, function(err, reply) {

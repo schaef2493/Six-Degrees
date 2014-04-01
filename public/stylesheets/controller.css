@@ -15,7 +15,7 @@ html, body {
     line-height: 1.4;
     height: 100%;
     color: #FFF;
-    background: #2c3e50;
+    background: #262C31;
     overflow: hidden;
 }
 
@@ -93,23 +93,41 @@ div {
     left: 0px;
     top: 0px;
     right: 0px;
-    border-right: 1px solid rgba(255,255,255,0.25);
     font-size: 17pt;
     padding-top: 120px;
 }
 
-.bottom {
-    left: 0px;
-    bottom: 0px;
-    right: 0px;
-    border-left: 1px solid rgba(255,255,255,0.25);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bfd255), color-stop(50%,#8eb92a), color-stop(51%,#72aa00), color-stop(100%,#9ecb2d));
-    font-weight: bold;
-    text-shadow: -1px -1px 12px rgba(150, 150, 150, 1);
+.outline {
+    width: 320px;
+    padding: 32px;
+    border: 1px solid rgba(255,255,255,0.5);
+    margin: auto;
+    border-radius: 13px;
 }
 
-.bottom.active {
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9ecb2d), color-stop(49%,#72aa00), color-stop(50%,#8eb92a), color-stop(100%,#bfd255));
+.bottom {
+    left: 10px;
+    bottom: 10px;
+    right: 10px;
+    background: #21262A;
+    font-weight: bold;
+    text-shadow: -1px -1px 12px rgba(150, 150, 150, 1);
+    text-shadow: 0px -1px 0px #374683;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0px 1px 10px 0px rgba(0,0,0,.5);
+    padding: 25px;
+}
+
+.bottomInner {
+    height: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E8FFCA), color-stop(0.5%,#75DB00), color-stop(100%,#589F00));
+    -webkit-box-shadow: 0px 0px 13px 0px rgba(50, 50, 50, 0.97);
+}
+
+.bottomInner.active {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E8FFCA), color-stop(0.5%,#589F00), color-stop(100%,#75DB00));
 }
 
 #taskList {
@@ -120,10 +138,14 @@ div {
 }
 
 #taskList .task {
-    height: 110px;
-    padding: 38px 20px 10px 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.25);
+    height: 105px;
+    padding: 33px 20px 10px 20px;
     font-size: 20pt;
+    margin: 17px;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FCD7FF), color-stop(2%,#C006DB), color-stop(100%,#8302AF));
+    border-radius: 6px;
+    -webkit-box-shadow: 0px 0px 13px 0px rgba(50, 50, 50, 0.97);
+    text-shadow: 0px -1px 0px #374683;
 }
 
 #playback {

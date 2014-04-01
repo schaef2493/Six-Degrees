@@ -9,7 +9,8 @@ var doneTypingInterval = 1000; // ms
 var tap = new Audio('../sounds/tap.mp3');
 var beep = new Audio('../sounds/playback.mp3');
 
-socket.on('playbackEnded', function (data) {
+socket.on('playbackFinished', function (data) {
+	beep.play();
 	playbackEnded = true;
 });
 
@@ -84,7 +85,7 @@ $(document).ready(function() {
 	$('#playbackButton').hammer().on('touchstart', function(e) {
 		beep.play();
 
-		$('#playbackButton').toggleClass('active');
+		$('#playbackButton .bottomInner').toggleClass('active');
 
 		if (playbackEnded && playbackPaused) {
 			playbackPaused = false;
@@ -101,7 +102,7 @@ $(document).ready(function() {
 	$('#playbackButton').hammer().on('touchend', function(e) {
 		beep.play();
 
-		$('#playbackButton').toggleClass('active');
+		$('#playbackButton .bottomInner').toggleClass('active');
 
 		playbackPaused = true;
 		socket.emit('pausePlayback');
@@ -139,22 +140,13 @@ $(document).ready(function() {
 		}
 
 		$('#name').blur();
-		$($('#record_movements .instructions')[0]).html('Now recording ' + activeTask);
+		$($('#record_movements .instructions')[0]).html('Use the joystick to demonstrate the task');
 
 		$('.screen').addClass('hidden');
 		$('#record_movements').removeClass('hidden');
 
 		socket.emit('startRecording', { task: activeTask });
 	});
-
-	// $('#backToName').hammer().on('tap', function(e) {
-	// 	tap.play();
-
-	// 	socket.emit('endRecording');
-
-	// 	$('.screen').addClass('hidden');
-	// 	$('#record_name').removeClass('hidden');
-	// });
 
 	$('#finishRecording').hammer().on('tap', function(e) {
 		tap.play();

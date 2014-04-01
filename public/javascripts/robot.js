@@ -104,6 +104,7 @@ function playbackMovement(step) {
   } else {
     lastStepPerformed = -1;
     moveArm([0,0,0], [0,0]);
+    socket.emit('playbackEnded');
   }
 }
 
