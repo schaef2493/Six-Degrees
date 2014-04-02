@@ -141,6 +141,7 @@ function playbackMovement(step) {
       socket.emit('movedHome');
       movements = [];
     } else {
+      console.log("Finishing playback!!!");
       socket.emit('playbackEnded');
     }
   }
