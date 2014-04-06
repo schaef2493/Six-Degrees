@@ -1,23 +1,20 @@
 var socket = io.connect(window.location.hostname);
 
 var activeTask = null;
-var playbackPaused = false;
-var playbackEnded = false;
 var deletePending = null;
-var typingTimer;
-var doneTypingInterval = 1000; // ms
 var tap = new Audio('../sounds/tap.mp3');
 var beep = new Audio('../sounds/playback.mp3');
 var movingHome = false;
 
-socket.on('playbackFinished', function (data) {
-	beep.play();
-	playbackEnded = true;
-	playbackPaused = true;
-	$('#playbackButton .bottomInner').removeClass('active');
+socket.on('finishedMovingHome', function(data) {
+	movingHome = false;
+	$('#beginRecording').html('Begin Recording');
+	$('#beginRecording').addClass('active');
 });
 
 $(document).ready(function() {
+
+	// Generate task list
 
 	socket.on('tasks', function (data) {
 		var tasks = data.tasks;
@@ -31,127 +28,91 @@ $(document).ready(function() {
 		$('#taskList').append('<div class="task">+ New Task</div>');
 	});
 
-	socket.on('finishedMovingHome', function(data) {
-		beep.play();
-		movingHome = false;
-		$('#advanceToRecord').removeClass('dim');
-		$('#beginRecordingBtn').html('Begin Recording');
+	// Control mode toggling
+
+	$('#normal').hammer().on('tap', function() {
+		$('.task').removeClass('active');
+		$("#buttonGrid .button").removeClass('active');
+		$('#normal').addClass('active');
+		tap.play();
+		socket.emit('cartesianMode');
 	});
 
-	$('body').on('touchstart', '.task', function(e) {
-	  if (e.target.innerText != '+ New Task') {
-	  	pressTimer = Date.now();
-	  	deletePending = e.target.innerText;
-	  	setTimeout(performDelete, 1000);
-	  }
+	$('#normalRec').hammer().on('tap', function() {
+		$('.task').removeClass('active');
+		$("#buttonGrid .button").removeClass('active');
+		$('#normalRec').addClass('active');
+		tap.play();
+		socket.emit('cartesianMode');
 	});
 
-	function performDelete() {
-		if (deletePending != null) {
-			var c = confirm("Are you want to delete " + deletePending + '?');
-			if (c) {
-				socket.emit('delete', { task: deletePending });
-			}
-
-			deletePending = null;
-		}
-	}
-
-	$('#taskList').scroll(function() {
-	  deletePending = null;
+	$('#gripper').hammer().on('tap', function() {
+		$('.task').removeClass('active');
+		$("#buttonGrid .button").removeClass('active');
+		$('#gripper').addClass('active');
+		tap.play();
+		socket.emit('gripperMode');
 	});
+
+	$('#gripperRec').hammer().on('tap', function() {
+		$('.task').removeClass('active');
+		$("#buttonGrid .button").removeClass('active');
+		$('#gripperRec').addClass('active');
+		tap.play();
+		socket.emit('gripperMode');
+	});
+
+	$('#wrist').hammer().on('tap', function() {
+		$('.task').removeClass('active');
+		$("#buttonGrid .button").removeClass('active');
+		$('#wrist').addClass('active');
+		tap.play();
+		socket.emit('wristMode');
+	});
+
+	$('#wristRec').hammer().on('tap', function() {
+		$('.task').removeClass('active');
+		$("#buttonGrid .button").removeClass('active');
+		$('#wristRec').addClass('active');
+		tap.play();
+		socket.emit('wristMode');
+	});
+
+	// Handle taps on the task list
 
 	$('body').hammer().on('tap', '.task', function(e) {
 	  deletePending = null;
 	  tap.play();
 
-	  $('#playbackInner').html('Hold to begin playback');
-
 	  if (e.target.innerText == '+ New Task') {
-	  	// record new task
+	  	// Record new task
 	  	$('#home').toggleClass('hidden');
 	  	$('#record_name').toggleClass('hidden');
+	  	$('#beginRecording').removeClass('active');
 	  	$('#name').focus();
-	  	socket.emit('moveHome');
 	  	movingHome = true;
-	  	$('#advanceToRecord').addClass('dim');
+	  	socket.emit('moveHome');
 	  } else {
+	  	if (e.target.innerText != activeTask) {
+	  		socket.emit('startPlayback', { task: activeTask });
+	  	}
+
 	  	activeTask = e.target.innerText;
-	  
-	  	// playback task
-	  	$('#home').toggleClass('hidden');
-	  	$('#playback').toggleClass('hidden');
+	  	$('.task').removeClass('active');
+	  	$('#buttonGrid .button').removeClass('active');
+	 	$(e.target).addClass('active');
 	  }
 	});
 
-	$('#playbackBack').hammer().on('tap', function(e) {
-		tap.play();
-		$('.screen').addClass('hidden');
-		$('#home').removeClass('hidden');
-		e.stopPropagation();
-		activeTask = null;
-		playbackPaused = false;
-		playbackEnded = false;
-		e.stopPropagation();
-		return false;
-	});
+	// Recording flow
 
-	$('#playbackButton').hammer().on('touchstart', function(e) {
-		beep.play();
-
-		$('#playbackButton .bottomInner').addClass('active');
-		$('#playbackInner').html('Release to pause playback');
-
-		if (playbackEnded && playbackPaused) {
-			playbackPaused = false;
-			playbackEnded = false;
-		}
-
-		if (playbackPaused) {
-			socket.emit('resumePlayback', { task: activeTask });
-		} else {
-			socket.emit('startPlayback', { task: activeTask });
-		}
-	});
-
-	$('#playbackButton').hammer().on('touchend', function(e) {
-		beep.play();
-
-		$('#playbackButton .bottomInner').removeClass('active');
-		$('#playbackInner').html('Hold to resume playback');
-
-		playbackPaused = true;
-		socket.emit('pausePlayback');
-	});
-
-	$('#recordBack').hammer().on('tap', function(e) {
-		tap.play();
-
-		$('.screen').addClass('hidden');
-		$('#home').removeClass('hidden');
-		activeTask = null;
-	});
-
-	$('#name').keyup(function(){
-	    clearTimeout(typingTimer);
-	    typingTimer = setTimeout(doneTyping, doneTypingInterval);
-	});
-
-	$('#name').keydown(function(){
-	    clearTimeout(typingTimer);
-	});
-
-	function doneTyping () {
-	    $('#name').blur();
-	}
-
-	$('#advanceToRecord').hammer().on('tap', function(e) {
+	$('#beginRecording').hammer().on('tap', function(e) {
 		if (movingHome) {
+			alert('Please wait until arm has finished moving.');
 			return;
 		}
 
 		tap.play();
-
 		activeTask = $('#name').val();
 
 		if (activeTask == '') {
@@ -161,7 +122,6 @@ $(document).ready(function() {
 
 		$('#name').blur();
 		$($('#record_movements .instructions')[0]).html('Use the joystick to demonstrate the task');
-
 		$('.screen').addClass('hidden');
 		$('#record_movements').removeClass('hidden');
 
@@ -179,6 +139,32 @@ $(document).ready(function() {
 
 		activeTask = null;
 		socket.emit('endRecording');
+		socket.emit('cartesianMode');
+	});
+
+	// Task deletions
+
+	$('body').on('touchstart', '.task', function(e) {
+	  if (e.target.innerText != '+ New Task') {
+	  	pressTimer = Date.now();
+	  	deletePending = e.target.innerText;
+	  	setTimeout(performDelete, 2000);
+	  }
+	});
+
+	function performDelete() {
+		if (deletePending != null) {
+			var c = confirm("Are you want to delete " + deletePending + '?');
+			if (c) {
+				socket.emit('delete', { task: deletePending });
+			}
+
+			deletePending = null;
+		}
+	}
+
+	$('#taskList').scroll(function() {
+	  deletePending = null;
 	});
 
 });
