@@ -137,6 +137,7 @@ $(document).ready(function() {
 
 		$('.screen').addClass('hidden');
 		$('#home').removeClass('hidden');
+		$('#normal').addClass('active');
 
 		activeTask = null;
 		socket.emit('endRecording');
