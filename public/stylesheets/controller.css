@@ -93,6 +93,8 @@ div {
 #taskList {
     -webkit-box-shadow: inset 0px 1px 10px 0px rgba(0,0,0,.5);
     border-radius: 10px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
     height: 100%;
     width: 100%;
     border: 1px solid rgba(0,0,0,0.5);
@@ -117,13 +119,14 @@ div {
     bottom: 0px;
     right: 0px;
     height: 40%;
-    padding: 10px;
+    padding: 0px 10px 10px 10px;
     z-index: 50000;
 }
 
 #buttonGrid .buttonGridInner {
-    -webkit-box-shadow: inset 0px 1px 10px 0px rgba(0,0,0,.5);
     border-radius: 10px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
     height: 100%;
     overflow: hidden;
     border: 1px solid rgba(0,0,0,0.5);
@@ -136,7 +139,7 @@ div {
     float: left;
     text-transform: uppercase;
     text-align: center;
-    padding-top: 40px;
+    padding-top: 35px;
     font-weight: bold;
     text-shadow: 0px -1px 0px #374683;
 }
