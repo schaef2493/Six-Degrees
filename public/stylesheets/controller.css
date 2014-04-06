@@ -87,7 +87,6 @@ div {
     top: 0px;
     right: 0px;
     height: 60%;
-    padding: 10px 10px 0px 10px;
 }
 
 #taskList {
@@ -99,13 +98,14 @@ div {
     border: 1px solid rgba(0,0,0,0.5);
     border-bottom: 0px;
     overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
 .task {
     height: 80px;
-    padding: 22px;
-    font-size: 20pt;
-    border-bottom: 1px solid #000;
+    padding: 25px;
+    font-size: 18pt;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
     font-weight: lighter;
 }
 
@@ -119,17 +119,19 @@ div {
     bottom: 0px;
     right: 0px;
     height: 40%;
-    padding: 0px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
     z-index: 50000;
+    border: 1px solid rgba(0,0,0,1);
+    background: #14171A;
+    -webkit-box-shadow: 0px -10px 17px 0px rgba(0, 0, 0, 0.15);
 }
 
 #buttonGrid .buttonGridInner {
     border-radius: 10px;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
     height: 100%;
     overflow: hidden;
     border: 1px solid rgba(0,0,0,0.5);
+    background: #21262A;
 }
 
 .button {
@@ -142,6 +144,7 @@ div {
     padding-top: 35px;
     font-weight: bold;
     text-shadow: 0px -1px 0px #374683;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #2E353B), color-stop(100%,#21262A));
 }
 
 .button.big {
@@ -200,7 +203,7 @@ div {
 
 #buttonGridSmall .button {
     height: 100%;
-    padding-top: 10px;
+    padding-top: 20px;
     font-size: 14pt;
 }
 

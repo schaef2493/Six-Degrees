@@ -133,6 +133,7 @@ $(document).ready(function() {
 
 		$('#name').val('');
 		$('#taskList').prepend('<div class="task">' + activeTask + '</div>');
+		$('#beginRecording').html('Please Wait');
 
 		$('.screen').addClass('hidden');
 		$('#home').removeClass('hidden');
@@ -148,7 +149,7 @@ $(document).ready(function() {
 	  if (e.target.innerText != '+ New Task') {
 	  	pressTimer = Date.now();
 	  	deletePending = e.target.innerText;
-	  	setTimeout(performDelete, 2000);
+	  	setTimeout(performDelete, 3500);
 	  }
 	});
 
