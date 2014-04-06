@@ -1,7 +1,7 @@
-// connect socket
+// Connect socket
 var socket = io.connect(window.location.hostname);
 
-// connect to ROS
+// Connect to ROS
 var ros = new ROSLIB.Ros();
 
 ros.on('error', function(error) {
@@ -12,10 +12,10 @@ ros.on('connection', function() {
   console.log('Connection made!');
 });
 
-// create a connection to rosbridge 
+// Create a connection to rosbridge 
 ros.connect('ws://localhost:9090');
 
-// configure the joystick topic
+// Configure the joystick topic
 var joystick = new ROSLIB.Topic({
   ros: ros,
   name: '/joy',
@@ -25,10 +25,20 @@ var joystick = new ROSLIB.Topic({
 var recordingActive = false;
 var playbackActive = false;
 var movements = null;
+var stashedMovements = null;
+var stashedLastStep = null;
 var lastStepPerformed = 0;
 var sampleRate = 10; // ms
 var lastMessage = null;
 var homeMovement = []; // path to go home
+
+function setArmAutoExecution() {
+  if (playbackActive) {
+    // TODO: Make arm NOT auto execute movements
+  } else {
+    // TODO: Make arm execute movements
+  }
+}
 
 function arraysEqual(a, b) {
   if (a === b) return true;
@@ -41,6 +51,7 @@ function arraysEqual(a, b) {
   return true;
 }
 
+// Generates home movement
 function generateHomeMovement() {
   var homeCommand = "[0,0,0,[1,1]]";
   var homeMovementWait = "[0,0,0,[0,0]]";
@@ -56,7 +67,7 @@ function generateHomeMovement() {
   }
 
   // Wait
-  for (var i=0; i<150; i++) {
+  for (var i=0; i<50; i++) {
     homeMovement.push(homeMovementWait);
   }
 
@@ -77,21 +88,24 @@ function generateHomeMovement() {
 
 }
 
-function sendMovement(data) {
-  //console.log('Recording arm at ' + data.axes + ' - ' + data.buttons);
+// Send movement to server
+function logMovement(data) {
+  // console.log('Logging arm at ' + data.axes + ' - ' + data.buttons);
   socket.emit('movement', { axes: data.axes, buttons: data.buttons });
 }
 
+// Subscribe to joystick movements
 joystick.subscribe(function(data) {
-  if (recordingActive) {
+  if (recordingActive || (lastStepPerformed > 0)) {
     lastMessage = data;
   }
 });
 
+// Update movements every 10 ms
 function updateMovements() {
-  if (recordingActive) {
+  if (recordingActive || (lastStepPerformed > 0)) {
     if (lastMessage != null) {
-      sendMovement(lastMessage);
+      logMovement(lastMessage);
     }
   }
 
@@ -101,9 +115,10 @@ function updateMovements() {
 // Start update loop
 updateMovements();
 
+// Move arm to a position
 function moveArm(axes, buttons) {
   if ((playbackActive == true) || (arraysEqual(axes,[0,0,0]) && arraysEqual(buttons,[0,0]))) {
-    console.log('Moving arm to ' + axes + ' - ' + buttons);
+    //console.log('Moving arm to ' + axes + ' - ' + buttons);
 
     var message = new ROSLIB.Message({
       axes: axes,
@@ -116,7 +131,10 @@ function moveArm(axes, buttons) {
   }
 }
 
+// Begin movement playback
 function playbackMovement(step) {
+  setArmAutoExecution();
+
   if (typeof step == 'undefined') {
     step = 0;
   }
@@ -135,22 +153,30 @@ function playbackMovement(step) {
   if (step < movements.length-1) {
     setTimeout(playbackMovement, sampleRate, step+1);
   } else {
-    lastStepPerformed = -1;
+    lastStepPerformed = 0;
     moveArm([0,0,0], [0,0]);
+
+    if (stashedMovements.length > 0) {
+      movements = stashedMovements;
+      lastStepPerformed = stashedLastStep;
+      
+      stashedMovements = [];
+      stashedLastStep = 0;
+    }
 
     if (arraysEqual(movements, homeMovement)) {
       playbackActive = false;
       socket.emit('movedHome');
       movements = [];
-    } else {
-      console.log("Finishing playback!!!");
-      socket.emit('playbackEnded');
     }
   }
 }
 
 socket.on('recordingStarted', function (data) {
+  playbackActive = false;
   recordingActive = true;
+  lastStepPerformed = 0;
+  setArmAutoExecution()
 });
 
 socket.on('recordingEnded', function (data) {
@@ -160,23 +186,73 @@ socket.on('recordingEnded', function (data) {
 
 socket.on('playbackStarted', function (data) {
   playbackActive = true;
-  movements = homeMovement.concat(data.movements);
-  playbackMovement();
-});
+  lastStepPerformed = 0;
+  var newMovements = homeMovement.concat(data.movements);
+  
+  if (arraysEqual(movements, newMovements)) {
+    playbackMovement(lastStepPerformed + 1);
+  } else {
+    movements = newMovements;
+    playbackMovement();
+  }
 
-socket.on('playbackResumed', function (data) {
-  playbackActive = true;
-  playbackMovement(lastStepPerformed + 1);
+  setArmAutoExecution()
 });
 
 socket.on('playbackPaused', function (data) {
   playbackActive = false;
   moveArm([0,0,0], [0,0]);
+  setArmAutoExecution();
 });
 
 socket.on('moveToHomePosition', function (data) {
   playbackActive = true;
   movements = homeMovement;
+  playbackMovement();
+});
+
+socket.on('activateCartesian', function (data) {
+  playbackActive = false;
+  setArmAutoExecution();
+  
+  stashedMovements = movements;
+  stashedLastStep = lastStepPerformed;
+  movements = [];
+
+  for (var i=0; i<50; i++) {
+    movements.push("[0,0,0,[1,0]]");
+  }
+
+  playbackMovement();
+});
+
+socket.on('activateGripper', function (data) {
+  playbackActive = false;
+  setArmAutoExecution();
+  
+  stashedMovements = movements;
+  stashedLastStep = lastStepPerformed;
+  movements = [];
+
+  for (var i=0; i<50; i++) {
+    movements.push("[0,0,0,[1,1]]");
+  }
+
+  playbackMovement();
+});
+
+socket.on('activateWrist', function (data) {
+  playbackActive = false;
+  setArmAutoExecution();
+  
+  stashedMovements = movements;
+  stashedLastStep = lastStepPerformed;
+  movements = [];
+
+  for (var i=0; i<50; i++) {
+    movements.push("[0,0,0,[0,1]]");
+  }
+
   playbackMovement();
 });
 

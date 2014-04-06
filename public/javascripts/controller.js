@@ -1,19 +1,10 @@
 var socket = io.connect(window.location.hostname);
 
 var activeTask = null;
-var playbackPaused = false;
-var playbackEnded = false;
 var deletePending = null;
 var tap = new Audio('../sounds/tap.mp3');
 var beep = new Audio('../sounds/playback.mp3');
 var movingHome = false;
-
-socket.on('playbackFinished', function (data) {
-	beep.play();
-	playbackEnded = true;
-	playbackPaused = true;
-	$('#playbackButton .bottomInner').removeClass('active');
-});
 
 socket.on('finishedMovingHome', function(data) {
 	movingHome = false;
@@ -44,7 +35,15 @@ $(document).ready(function() {
 		$("#buttonGrid .button").removeClass('active');
 		$('#normal').addClass('active');
 		tap.play();
-		// TODO: SEND MODE MESSAGE
+		socket.emit('cartesianMode');
+	});
+
+	$('#normalRec').hammer().on('tap', function() {
+		$('.task').removeClass('active');
+		$("#buttonGrid .button").removeClass('active');
+		$('#normalRec').addClass('active');
+		tap.play();
+		socket.emit('cartesianMode');
 	});
 
 	$('#gripper').hammer().on('tap', function() {
@@ -52,7 +51,15 @@ $(document).ready(function() {
 		$("#buttonGrid .button").removeClass('active');
 		$('#gripper').addClass('active');
 		tap.play();
-		// TODO: SEND MODE MESSAGE
+		socket.emit('gripperMode');
+	});
+
+	$('#gripperRec').hammer().on('tap', function() {
+		$('.task').removeClass('active');
+		$("#buttonGrid .button").removeClass('active');
+		$('#gripperRec').addClass('active');
+		tap.play();
+		socket.emit('gripperMode');
 	});
 
 	$('#wrist').hammer().on('tap', function() {
@@ -60,7 +67,15 @@ $(document).ready(function() {
 		$("#buttonGrid .button").removeClass('active');
 		$('#wrist').addClass('active');
 		tap.play();
-		// TODO: SEND MODE MESSAGE
+		socket.emit('wristMode');
+	});
+
+	$('#wristRec').hammer().on('tap', function() {
+		$('.task').removeClass('active');
+		$("#buttonGrid .button").removeClass('active');
+		$('#wristRec').addClass('active');
+		tap.play();
+		socket.emit('wristMode');
 	});
 
 	// Handle taps on the task list
@@ -70,7 +85,7 @@ $(document).ready(function() {
 	  tap.play();
 
 	  if (e.target.innerText == '+ New Task') {
-	  	// record new task
+	  	// Record new task
 	  	$('#home').toggleClass('hidden');
 	  	$('#record_name').toggleClass('hidden');
 	  	$('#beginRecording').removeClass('active');
@@ -78,6 +93,10 @@ $(document).ready(function() {
 	  	movingHome = true;
 	  	socket.emit('moveHome');
 	  } else {
+	  	if (e.target.innerText != activeTask) {
+	  		socket.emit('startPlayback', { task: activeTask });
+	  	}
+
 	  	activeTask = e.target.innerText;
 	  	$('.task').removeClass('active');
 	  	$('#buttonGrid .button').removeClass('active');
@@ -86,14 +105,6 @@ $(document).ready(function() {
 	});
 
 	// Recording flow
-
-	$('#recordBack').hammer().on('tap', function(e) {
-		tap.play();
-
-		$('.screen').addClass('hidden');
-		$('#home').removeClass('hidden');
-		activeTask = null;
-	});
 
 	$('#beginRecording').hammer().on('tap', function(e) {
 		if (movingHome) {
@@ -111,7 +122,6 @@ $(document).ready(function() {
 
 		$('#name').blur();
 		$($('#record_movements .instructions')[0]).html('Use the joystick to demonstrate the task');
-
 		$('.screen').addClass('hidden');
 		$('#record_movements').removeClass('hidden');
 
