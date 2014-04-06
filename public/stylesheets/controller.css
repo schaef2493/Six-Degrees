@@ -91,13 +91,13 @@ div {
 }
 
 #taskList {
-    -webkit-box-shadow: inset 0px 1px 10px 0px rgba(0,0,0,.5);
     border-radius: 10px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
     height: 100%;
     width: 100%;
     border: 1px solid rgba(0,0,0,0.5);
+    border-bottom: 0px;
     overflow-y: scroll;
 }
 
