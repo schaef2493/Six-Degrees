@@ -216,7 +216,6 @@ socket.on('playbackStarted', function (data) {
 socket.on('playbackPaused', function (data) {
   playbackActive = false;
   moveArm([0,0,0], [0,0]);
-  setArmAutoExecution();
 });
 
 socket.on('moveToHomePosition', function (data) {
