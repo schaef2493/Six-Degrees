@@ -81,25 +81,27 @@ io.sockets.on('connection', function (socket) {
 
   // Capture joystick movements
   socket.on('movement', function(data) {
-    if (recordingActive) {
-      var movement = data.axes;
-      movement.push(data.buttons);
-      redis.rpush(activeTask, JSON.stringify(movement));
-    } else {
+    if (activeTask != null) {
+      if (recordingActive) {
+        var movement = data.axes;
+        movement.push(data.buttons);
+        redis.rpush(activeTask, JSON.stringify(movement));
+      } else {
 
-      // if joystick returned to 0
-      if (playbackActive && (data.axes[0] == 0) && (data.axes[1] == 0) && (data.axes[2] == 0)) {
-        playbackActive = false;
-        io.sockets.emit('playbackPaused');
+        // if joystick returned to 0
+        if (playbackActive && (data.axes[0] == 0) && (data.axes[1] == 0) && (data.axes[2] == 0)) {
+          playbackActive = false;
+          io.sockets.emit('playbackPaused');
 
-      // if joystick moved after being at 0
-      } else if (!playbackActive && ((data.axes[0] != 0) || (data.axes[1] != 0) || (data.axes[2] != 0))) {
-        playbackActive = true;
-        redis.lrange(activeTask, 0, -1, function (err, reply) {
-          io.sockets.emit('playbackStarted', { movements: reply });
-        });
+        // if joystick moved after being at 0
+        } else if (!playbackActive && ((data.axes[0] != 0) || (data.axes[1] != 0) || (data.axes[2] != 0))) {
+          playbackActive = true;
+          redis.lrange(activeTask, 0, -1, function (err, reply) {
+            io.sockets.emit('playbackStarted', { movements: reply });
+          });
+        }
+
       }
-
     }
   });
 
@@ -132,6 +134,7 @@ io.sockets.on('connection', function (socket) {
   // Switch to cartesian mode
   socket.on('cartesianMode', function(data) {
     playbackActive = false;
+    activeTask = null;
     io.sockets.emit('playbackPaused');
     io.sockets.emit('activateCartesian');
   });
@@ -139,6 +142,7 @@ io.sockets.on('connection', function (socket) {
    // Switch to gripper mode
   socket.on('gripperMode', function(data) {
     playbackActive = false;
+    activeTask = null;
     io.sockets.emit('playbackPaused');
     io.sockets.emit('activateGripper');
   });
@@ -146,6 +150,7 @@ io.sockets.on('connection', function (socket) {
    // Switch to wrist mode
   socket.on('wristMode', function(data) {
     playbackActive = false;
+    activeTask = null;
     io.sockets.emit('playbackPaused');
     io.sockets.emit('activateWrist');
   });
