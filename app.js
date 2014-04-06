@@ -99,7 +99,7 @@ io.sockets.on('connection', function (socket) {
           io.sockets.emit('playbackStarted', { movements: reply });
         });
       }
-      
+
     }
   });
 
@@ -131,18 +131,21 @@ io.sockets.on('connection', function (socket) {
 
   // Switch to cartesian mode
   socket.on('cartesianMode', function(data) {
+    playbackActive = false;
     io.sockets.emit('playbackPaused');
     io.sockets.emit('activateCartesian');
   });
 
    // Switch to gripper mode
   socket.on('gripperMode', function(data) {
+    playbackActive = false;
     io.sockets.emit('playbackPaused');
     io.sockets.emit('activateGripper');
   });
 
    // Switch to wrist mode
   socket.on('wristMode', function(data) {
+    playbackActive = false;
     io.sockets.emit('playbackPaused');
     io.sockets.emit('activateWrist');
   });

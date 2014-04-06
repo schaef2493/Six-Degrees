@@ -30,6 +30,7 @@ var lastStepPerformed = 0;
 var modeTransitionActive = false;
 var transitionMovement = null;
 var lastTransitionStepPerformed = 0;
+var manualModeActive = true;
 
 var sampleRate = 10; // ms
 var lastMessage = null;
@@ -104,8 +105,8 @@ joystick.subscribe(function(data) {
 
 // Update movements every 10 ms
 function updateMovements() {
-  // we want this to run when recording or playing back
-  if ((lastMessage != null) && !modeTransitionActive) {
+  // we want this to run when recording or playing back. not when in a control mode.
+  if ((lastMessage != null) && (!modeTransitionActive) && (!manualModeActive)) {
     logMovement(lastMessage);
   }
 
@@ -153,7 +154,7 @@ function playbackMovement(step) {
   if (step < movements.length-1) {
     setTimeout(playbackMovement, sampleRate, step+1);
   } else {
-    lastStepPerformed = 0;
+    lastStepPerformed = -1;
     moveArm([0,0,0], [0,0]);
     playbackActive = false;
 
@@ -199,6 +200,7 @@ socket.on('recordingEnded', function (data) {
 
 socket.on('playbackStarted', function (data) {
   playbackActive = true;
+  manualModeActive = false;
   var newMovements = homeMovement.concat(data.movements);
   
   // Continue playback
@@ -228,6 +230,7 @@ socket.on('moveToHomePosition', function (data) {
 
 socket.on('activateCartesian', function (data) {
   playbackActive = false;
+  manualModeActive = true;
   setArmAutoExecution();
   
   modeTransitionActive = true;
@@ -242,6 +245,7 @@ socket.on('activateCartesian', function (data) {
 
 socket.on('activateGripper', function (data) {
   playbackActive = false;
+  manualModeActive = true;
   setArmAutoExecution();
   
   modeTransitionActive = true;
@@ -256,6 +260,7 @@ socket.on('activateGripper', function (data) {
 
 socket.on('activateWrist', function (data) {
   playbackActive = false;
+  manualModeActive = true;
   setArmAutoExecution();
   
   modeTransitionActive = true;
