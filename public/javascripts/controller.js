@@ -138,6 +138,7 @@ $(document).ready(function() {
 		$('.screen').addClass('hidden');
 		$('#home').removeClass('hidden');
 		$('#normal').addClass('active');
+		$('#taskList').scrollTo(0,0);
 
 		activeTask = null;
 		socket.emit('endRecording');
