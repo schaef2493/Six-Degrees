@@ -86,15 +86,20 @@ io.sockets.on('connection', function (socket) {
       movement.push(data.buttons);
       redis.rpush(activeTask, JSON.stringify(movement));
     } else {
+
+      // if joystick returned to 0
       if (playbackActive && (data.axes[0] == 0) && (data.axes[1] == 0) && (data.axes[2] == 0)) {
-        //playbackActive = false;
+        playbackActive = false;
         io.sockets.emit('playbackPaused');
-      } else if (!playbackActive) {
+
+      // if joystick moved after being at 0
+      } else if (!playbackActive && ((data.axes[0] != 0) || (data.axes[1] != 0) || (data.axes[2] != 0))) {
         playbackActive = true;
         redis.lrange(activeTask, 0, -1, function (err, reply) {
           io.sockets.emit('playbackStarted', { movements: reply });
         });
       }
+      
     }
   });
 

@@ -139,6 +139,7 @@ $(document).ready(function() {
 
 		activeTask = null;
 		socket.emit('endRecording');
+		socket.emit('cartesianMode');
 	});
 
 	// Task deletions

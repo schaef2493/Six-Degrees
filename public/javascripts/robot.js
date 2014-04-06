@@ -25,9 +25,12 @@ var joystick = new ROSLIB.Topic({
 var recordingActive = false;
 var playbackActive = false;
 var movements = null;
-var stashedMovements = null;
-var stashedLastStep = null;
 var lastStepPerformed = 0;
+
+var modeTransitionActive = false;
+var transitionMovement = null;
+var lastTransitionStepPerformed = 0;
+
 var sampleRate = 10; // ms
 var lastMessage = null;
 var homeMovement = []; // path to go home
@@ -82,7 +85,7 @@ function generateHomeMovement() {
   }
 
   // Put into cartesian mode
-  for (var i=0; i<50; i++) {
+  for (var i=0; i<30; i++) {
     homeMovement.push("[0,0,0,[1,0]]");
   }
 
@@ -96,17 +99,14 @@ function logMovement(data) {
 
 // Subscribe to joystick movements
 joystick.subscribe(function(data) {
-  if (recordingActive || (lastStepPerformed > 0)) {
     lastMessage = data;
-  }
 });
 
 // Update movements every 10 ms
 function updateMovements() {
-  if (recordingActive || (lastStepPerformed > 0)) {
-    if (lastMessage != null) {
-      logMovement(lastMessage);
-    }
+  // we want this to run when recording or playing back
+  if ((lastMessage != null) && !modeTransitionActive) {
+    logMovement(lastMessage);
   }
 
   setTimeout(updateMovements, sampleRate);
@@ -117,7 +117,7 @@ updateMovements();
 
 // Move arm to a position
 function moveArm(axes, buttons) {
-  if ((playbackActive == true) || (arraysEqual(axes,[0,0,0]) && arraysEqual(buttons,[0,0]))) {
+  if (playbackActive || modeTransitionActive || (arraysEqual(axes,[0,0,0]) && arraysEqual(buttons,[0,0]))) {
     //console.log('Moving arm to ' + axes + ' - ' + buttons);
 
     var message = new ROSLIB.Message({
@@ -155,20 +155,33 @@ function playbackMovement(step) {
   } else {
     lastStepPerformed = 0;
     moveArm([0,0,0], [0,0]);
-
-    if (stashedMovements.length > 0) {
-      movements = stashedMovements;
-      lastStepPerformed = stashedLastStep;
-      
-      stashedMovements = [];
-      stashedLastStep = 0;
-    }
+    playbackActive = false;
 
     if (arraysEqual(movements, homeMovement)) {
-      playbackActive = false;
       socket.emit('movedHome');
       movements = [];
     }
+  }
+}
+
+function transitionMode(step) {
+  setArmAutoExecution();
+
+  if (typeof step == 'undefined') {
+    step = 0;
+  }
+
+  var axes = (JSON.parse(transitionMovement[step])).slice(0,3);
+  var buttons = JSON.parse(transitionMovement[step])[3];
+  moveArm(axes, buttons);
+  lastTransitionStepPerformed = step;
+
+  if (step < transitionMovement.length-1) {
+    setTimeout(transitionMode, sampleRate, step+1);
+  } else {
+    lastTransitionStepPerformed = 0;
+    moveArm([0,0,0], [0,0]);
+    modeTransitionActive = false;
   }
 }
 
@@ -176,7 +189,7 @@ socket.on('recordingStarted', function (data) {
   playbackActive = false;
   recordingActive = true;
   lastStepPerformed = 0;
-  setArmAutoExecution()
+  setArmAutoExecution();
 });
 
 socket.on('recordingEnded', function (data) {
@@ -186,17 +199,19 @@ socket.on('recordingEnded', function (data) {
 
 socket.on('playbackStarted', function (data) {
   playbackActive = true;
-  lastStepPerformed = 0;
   var newMovements = homeMovement.concat(data.movements);
   
+  // Continue playback
   if (arraysEqual(movements, newMovements)) {
     playbackMovement(lastStepPerformed + 1);
+
+  // Start playback 
   } else {
     movements = newMovements;
     playbackMovement();
   }
 
-  setArmAutoExecution()
+  setArmAutoExecution();
 });
 
 socket.on('playbackPaused', function (data) {
@@ -215,45 +230,42 @@ socket.on('activateCartesian', function (data) {
   playbackActive = false;
   setArmAutoExecution();
   
-  stashedMovements = movements;
-  stashedLastStep = lastStepPerformed;
-  movements = [];
+  modeTransitionActive = true;
+  transitionMovement = [];
 
-  for (var i=0; i<50; i++) {
-    movements.push("[0,0,0,[1,0]]");
+  for (var i=0; i<30; i++) {
+    transitionMovement.push("[0,0,0,[1,0]]");
   }
 
-  playbackMovement();
+  transitionMode();
 });
 
 socket.on('activateGripper', function (data) {
   playbackActive = false;
   setArmAutoExecution();
   
-  stashedMovements = movements;
-  stashedLastStep = lastStepPerformed;
-  movements = [];
+  modeTransitionActive = true;
+  transitionMovement = [];
 
-  for (var i=0; i<50; i++) {
-    movements.push("[0,0,0,[1,1]]");
+  for (var i=0; i<30; i++) {
+    transitionMovement.push("[0,0,0,[1,1]]");
   }
 
-  playbackMovement();
+  transitionMode();
 });
 
 socket.on('activateWrist', function (data) {
   playbackActive = false;
   setArmAutoExecution();
   
-  stashedMovements = movements;
-  stashedLastStep = lastStepPerformed;
-  movements = [];
+  modeTransitionActive = true;
+  transitionMovement = [];
 
-  for (var i=0; i<50; i++) {
-    movements.push("[0,0,0,[0,1]]");
+  for (var i=0; i<30; i++) {
+    transitionMovement.push("[0,0,0,[0,1]]");
   }
 
-  playbackMovement();
+  transitionMode();
 });
 
 generateHomeMovement();
