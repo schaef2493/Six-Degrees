@@ -15,7 +15,7 @@ html, body {
     line-height: 1.4;
     height: 100%;
     color: #FFF;
-    background: #262C31;
+    background: #21262A;;
     overflow: hidden;
 }
 
@@ -81,14 +81,22 @@ div {
     bottom: 0px;
 }
 
-#taskList {
+.taskListWrapper {
     position: absolute;
     left: 0px;
     top: 0px;
     right: 0px;
     height: 60%;
+    padding: 10px 10px 0px 10px;
+}
+
+#taskList {
+    -webkit-box-shadow: inset 0px 1px 10px 0px rgba(0,0,0,.5);
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    border: 1px solid rgba(0,0,0,0.5);
     overflow-y: scroll;
-    overflow-x: hidden;
 }
 
 .task {
@@ -100,7 +108,7 @@ div {
 }
 
 .task.active {
-    background: #2ecc71;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E8FFCA), color-stop(0.5%,#75DB00), color-stop(100%,#589F00));
 }
 
 #buttonGrid {
@@ -109,8 +117,16 @@ div {
     bottom: 0px;
     right: 0px;
     height: 40%;
-    -webkit-box-shadow: 0px -15px 43px 0px rgba(50, 50, 50, .7);
+    padding: 10px;
     z-index: 50000;
+}
+
+#buttonGrid .buttonGridInner {
+    -webkit-box-shadow: inset 0px 1px 10px 0px rgba(0,0,0,.5);
+    border-radius: 10px;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.5);
 }
 
 .button {
@@ -120,8 +136,9 @@ div {
     float: left;
     text-transform: uppercase;
     text-align: center;
-    padding-top: 60px;
+    padding-top: 40px;
     font-weight: bold;
+    text-shadow: 0px -1px 0px #374683;
 }
 
 .button.big {
@@ -129,12 +146,7 @@ div {
 }
 
 .button.active {
-    background: #2ecc71;
-}
-
-.button:nth-child(1),
-.button:nth-child(2) {
-    border-top: 1px solid #000;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E8FFCA), color-stop(0.5%,#75DB00), color-stop(100%,#589F00));
 }
 
 .button:nth-child(1),
@@ -160,6 +172,18 @@ div {
 
 #record_name .button:nth-child(1) {
     border-bottom: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+#record_name .button:nth-child(2) {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+#record_name .button {
+    border-radius: 10px;
+    border: 1px solid #000;
 }
 
 #buttonGridSmall {
