@@ -169,6 +169,7 @@ function playbackMovement(step) {
     playbackActive = false;
 
     if (arraysEqual(movements, homeMovement)) {
+      console.log('Finished moving home');
       socket.emit('movedHome');
       movements = [];
     }
@@ -231,12 +232,15 @@ socket.on('playbackPaused', function (data) {
 });
 
 socket.on('moveToHomePosition', function (data) {
+  console.log('Moving home');
   playbackActive = true;
   movements = homeMovement;
   playbackMovement();
 });
 
 socket.on('activateCartesian', function (data) {
+  console.log('Switching to CARTESIAN');
+
   playbackActive = false;
   setArmAutoExecution();
   
@@ -251,6 +255,8 @@ socket.on('activateCartesian', function (data) {
 });
 
 socket.on('activateGripper', function (data) {
+  console.log('Switching to GRIPPER');
+
   playbackActive = false;
   setArmAutoExecution();
   
@@ -265,6 +271,8 @@ socket.on('activateGripper', function (data) {
 });
 
 socket.on('activateWrist', function (data) {
+  console.log('Switching to WRIST');
+
   playbackActive = false;
   setArmAutoExecution();
   
