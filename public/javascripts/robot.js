@@ -18,13 +18,13 @@ ros.connect('ws://localhost:9090');
 // Configure the joystick topic
 var joystickWrite = new ROSLIB.Topic({
   ros: ros,
-  name: '/joy',
+  name: '/ada/joy_control',
   messageType: 'sensor_msgs/Joy'
 });
 
 var joystickRead = new ROSLIB.Topic({
   ros: ros,
-  name: '/ada/joy_control',
+  name: '/joy',
   messageType: 'sensor_msgs/Joy'
 });
 
