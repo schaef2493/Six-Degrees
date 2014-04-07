@@ -106,6 +106,14 @@ $(document).ready(function() {
 
 	// Recording flow
 
+	$('#cancelRecording').hammer().on('tap', function(e) {
+		tap.play();
+		$('#home').toggleClass('hidden');
+	  	$('#record_name').toggleClass('hidden');
+	  	$('#beginRecording').removeClass('active');
+	  	movingHome = false;
+	});
+
 	$('#beginRecording').hammer().on('tap', function(e) {
 		if (movingHome) {
 			alert('Please wait until arm has finished moving.');
@@ -126,6 +134,13 @@ $(document).ready(function() {
 		$('#record_movements').removeClass('hidden');
 
 		socket.emit('startRecording', { task: activeTask });
+	});
+
+	$('#clearRecording').hammer().on('tap', function(e) {
+		socket.emit('delete', { task: deletePending });
+		tap.play();
+		socket.emit('moveHome');
+		setTimeout("socket.emit('startRecording', { task: activeTask })", 7000);
 	});
 
 	$('#finishRecording').hammer().on('tap', function(e) {
