@@ -82,6 +82,7 @@ io.sockets.on('connection', function (socket) {
   // Capture joystick movements
   socket.on('movement', function(data) {
     if (activeTask != null) {
+      console.log('Movement');
       if (recordingActive) {
         var movement = data.axes;
         movement.push(data.buttons);
@@ -90,11 +91,13 @@ io.sockets.on('connection', function (socket) {
 
         // if joystick returned to 0
         if (playbackActive && (data.axes[0] == 0) && (data.axes[1] == 0) && (data.axes[2] == 0)) {
+          console.log('PAUSE PLAYBACK')
           playbackActive = false;
           io.sockets.emit('playbackPaused');
 
         // if joystick moved after being at 0
         } else if (!playbackActive && ((data.axes[0] != 0) || (data.axes[1] != 0) || (data.axes[2] != 0))) {
+          console.log('START PLAYBACK');
           playbackActive = true;
           redis.lrange(activeTask, 0, -1, function (err, reply) {
             io.sockets.emit('playbackStarted', { movements: reply });
@@ -102,6 +105,7 @@ io.sockets.on('connection', function (socket) {
         }
 
       }
+      console.log('---');
     }
   });
 
