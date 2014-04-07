@@ -44,11 +44,11 @@ var homeMovement = []; // path to go home
 function setArmAutoExecution() {
   if (playbackActive) {
     var message = new ROSLIB.Message({
-      data: 0
+      data: false
     });
   } else {
     var message = new ROSLIB.Message({
-      data: 1
+      data: true
     });
   }
 
