@@ -16,9 +16,15 @@ ros.on('connection', function() {
 ros.connect('ws://localhost:9090');
 
 // Configure the joystick topic
-var joystick = new ROSLIB.Topic({
+var joystickWrite = new ROSLIB.Topic({
   ros: ros,
   name: '/joy',
+  messageType: 'sensor_msgs/Joy'
+});
+
+var joystickRead = new ROSLIB.Topic({
+  ros: ros,
+  name: '/ada/joy_control',
   messageType: 'sensor_msgs/Joy'
 });
 
@@ -110,7 +116,7 @@ function logMovement(data) {
 }
 
 // Subscribe to joystick movements
-joystick.subscribe(function(data) {
+joystickRead.subscribe(function(data) {
     lastMessage = data;
 });
 
@@ -136,7 +142,7 @@ function moveArm(axes, buttons) {
       buttons: buttons
     });
 
-    joystick.publish(message);
+    joystickWrite.publish(message);
   } else {
     console.log("Cancelled movement");
   }
