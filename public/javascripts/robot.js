@@ -168,6 +168,7 @@ function playbackMovement(step) {
     moveArm([0,0,0], [0,0]);
     console.log('PLAYBACK FINISHED');
     playbackActive = false;
+    socket.emit('pausePlayback');
 
     if (arraysEqual(movements, homeMovement)) {
       console.log('Finished moving home');
