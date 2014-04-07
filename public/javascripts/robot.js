@@ -210,6 +210,7 @@ socket.on('recordingEnded', function (data) {
 });
 
 socket.on('playbackStarted', function (data) {
+  console.log('PLAYBACK STARTED');
   playbackActive = true;
   var newMovements = homeMovement.concat(data.movements);
   
