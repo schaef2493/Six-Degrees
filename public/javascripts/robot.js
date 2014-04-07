@@ -299,4 +299,5 @@ socket.on('activateWrist', function (data) {
   transitionMode();
 });
 
+setArmAutoExecution();
 generateHomeMovement();

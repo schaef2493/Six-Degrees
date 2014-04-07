@@ -163,7 +163,6 @@ $(document).ready(function() {
 		$('.task').removeClass('active');
 		$("#buttonGrid .button").removeClass('active');
 		$('#normal').addClass('active');
-		$('#taskList').scrollTo(0,0);
 
 		activeTask = null;
 		socket.emit('endRecording');
