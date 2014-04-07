@@ -50,7 +50,7 @@ var homeMovement = []; // path to go home
 function setArmAutoExecution() {
   if (playbackActive) {
     var message = new ROSLIB.Message({
-      data: false
+      data: true
     });
   } else {
     var message = new ROSLIB.Message({
@@ -172,8 +172,6 @@ function playbackMovement(step) {
   } else {
     lastStepPerformed = -1;
     moveArm([0,0,0], [0,0]);
-    console.log('PLAYBACK FINISHED');
-    playbackActive = false;
     socket.emit('pausePlayback');
 
     if (arraysEqual(movements, homeMovement)) {
@@ -222,8 +220,9 @@ socket.on('recordingEnded', function (data) {
 socket.on('playbackStarted', function (data) {
   console.log('PLAYBACK STARTED');
   playbackActive = true;
-  console.log(playbackActive);
   var newMovements = homeMovement.concat(data.movements);
+
+  // TODO: THIS EXECUTES EVERYTHING? NOT JUST HOME MOVEMENT AND WAIT?
   
   // Continue playback
   if (arraysEqual(movements, newMovements)) {

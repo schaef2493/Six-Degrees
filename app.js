@@ -81,7 +81,6 @@ io.sockets.on('connection', function (socket) {
 
   // Capture joystick movements
   socket.on('movement', function(data) {
-    console.log(data);
     if (activeTask != null) {
       if (recordingActive) {
         var movement = data.axes;
