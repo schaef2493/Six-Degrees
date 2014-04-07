@@ -114,6 +114,7 @@ $(document).ready(function() {
 	  	$('.task').removeClass('active');
 		$("#buttonGrid .button").removeClass('active');
 		$('#normal').addClass('active');
+		$('#name').val('');
 	  	movingHome = false;
 	});
 
