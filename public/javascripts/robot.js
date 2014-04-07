@@ -86,7 +86,6 @@ function generateHomeMovement() {
     homeMovement.push(homeMovementWait);
   }
 
-  console.log('Switching to GRIPPER');
   // Put into gripper mode
   for (var i=0; i<50; i++) {
     homeMovement.push("[0,0,0,[1,1]]");
@@ -96,8 +95,6 @@ function generateHomeMovement() {
   for (var i=0; i<200; i++) {
     homeMovement.push("[-1,0,0,[0,0]]");
   }
-
-  console.log('Switching to CARTESIAN');
 
   // Put into cartesian mode
   for (var i=0; i<50; i++) {
@@ -132,7 +129,7 @@ updateMovements();
 // Move arm to a position
 function moveArm(axes, buttons) {
   if (playbackActive || modeTransitionActive || (arraysEqual(axes,[0,0,0]) && arraysEqual(buttons,[0,0]))) {
-    //console.log('Moving arm to ' + axes + ' - ' + buttons);
+    console.log('Moving arm to ' + axes + ' - ' + buttons);
 
     var message = new ROSLIB.Message({
       axes: axes,

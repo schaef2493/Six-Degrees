@@ -111,6 +111,9 @@ $(document).ready(function() {
 		$('#home').toggleClass('hidden');
 	  	$('#record_name').toggleClass('hidden');
 	  	$('#beginRecording').removeClass('active');
+	  	$('.task').removeClass('active');
+		$("#buttonGrid .button").removeClass('active');
+		$('#normal').addClass('active');
 	  	movingHome = false;
 	});
 
@@ -152,6 +155,9 @@ $(document).ready(function() {
 
 		$('.screen').addClass('hidden');
 		$('#home').removeClass('hidden');
+
+		$('.task').removeClass('active');
+		$("#buttonGrid .button").removeClass('active');
 		$('#normal').addClass('active');
 		$('#taskList').scrollTo(0,0);
 
