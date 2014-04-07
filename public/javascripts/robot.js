@@ -212,6 +212,7 @@ socket.on('recordingEnded', function (data) {
 socket.on('playbackStarted', function (data) {
   console.log('PLAYBACK STARTED');
   playbackActive = true;
+  console.log(playbackActive);
   var newMovements = homeMovement.concat(data.movements);
   
   // Continue playback
@@ -228,6 +229,7 @@ socket.on('playbackStarted', function (data) {
 });
 
 socket.on('playbackPaused', function (data) {
+  console.log('PLAYBACK PAUSED');
   playbackActive = false;
   moveArm([0,0,0], [0,0]);
 });
