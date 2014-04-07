@@ -77,12 +77,12 @@ function generateHomeMovement() {
   }
 
   // Move to home
-  for (var i=0; i<300; i++) {
+  for (var i=0; i<100; i++) {
     homeMovement.push(homeCommand);
   }
 
   // Wait
-  for (var i=0; i<50; i++) {
+  for (var i=0; i<30; i++) {
     homeMovement.push(homeMovementWait);
   }
 
