@@ -166,6 +166,7 @@ function playbackMovement(step) {
   } else {
     lastStepPerformed = -1;
     moveArm([0,0,0], [0,0]);
+    console.log('PLAYBACK FINISHED');
     playbackActive = false;
 
     if (arraysEqual(movements, homeMovement)) {
@@ -198,6 +199,7 @@ function transitionMode(step) {
 }
 
 socket.on('recordingStarted', function (data) {
+  console.log('RECORDING STARTED');
   playbackActive = false;
   recordingActive = true;
   lastStepPerformed = 0;
@@ -205,6 +207,7 @@ socket.on('recordingStarted', function (data) {
 });
 
 socket.on('recordingEnded', function (data) {
+  console.log('RECORDING ENDED');
   recordingActive = false;
   lastMessage = null;
 });
