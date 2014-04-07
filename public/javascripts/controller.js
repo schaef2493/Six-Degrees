@@ -147,7 +147,7 @@ $(document).ready(function() {
 		tap.play();
 
 		$('#name').val('');
-		$('#taskList').prepend('<div class="task">' + activeTask + '</div>');
+		//$('#taskList').prepend('<div class="task">' + activeTask + '</div>');
 		$('#beginRecording').html('Please Wait');
 
 		$('.screen').addClass('hidden');
