@@ -22,6 +22,12 @@ var joystick = new ROSLIB.Topic({
   messageType: 'sensor_msgs/Joy'
 });
 
+var setArmAutoExecution = new ROSLIB.Topic({
+  ros: ros,
+  name: '/ada/enableTeleop',
+  messageType: 'std_msgs/Bool'
+}); 
+
 var recordingActive = false;
 var playbackActive = false;
 var movements = null;
@@ -37,10 +43,16 @@ var homeMovement = []; // path to go home
 
 function setArmAutoExecution() {
   if (playbackActive) {
-    // TODO: Make arm NOT auto execute movements
+    var message = new ROSLIB.Message({
+      data: 0
+    });
   } else {
-    // TODO: Make arm execute movements
+    var message = new ROSLIB.Message({
+      data: 1
+    });
   }
+
+  joystick.publish(message);
 }
 
 function arraysEqual(a, b) {
