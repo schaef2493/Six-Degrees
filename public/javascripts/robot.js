@@ -86,6 +86,7 @@ function generateHomeMovement() {
     homeMovement.push(homeMovementWait);
   }
 
+  console.log('Switching to GRIPPER');
   // Put into gripper mode
   for (var i=0; i<50; i++) {
     homeMovement.push("[0,0,0,[1,1]]");
@@ -96,8 +97,10 @@ function generateHomeMovement() {
     homeMovement.push("[-1,0,0,[0,0]]");
   }
 
+  console.log('Switching to CARTESIAN');
+
   // Put into cartesian mode
-  for (var i=0; i<30; i++) {
+  for (var i=0; i<50; i++) {
     homeMovement.push("[0,0,0,[1,0]]");
   }
 
@@ -247,7 +250,7 @@ socket.on('activateCartesian', function (data) {
   modeTransitionActive = true;
   transitionMovement = [];
 
-  for (var i=0; i<30; i++) {
+  for (var i=0; i<50; i++) {
     transitionMovement.push("[0,0,0,[1,0]]");
   }
 
@@ -263,7 +266,7 @@ socket.on('activateGripper', function (data) {
   modeTransitionActive = true;
   transitionMovement = [];
 
-  for (var i=0; i<30; i++) {
+  for (var i=0; i<50; i++) {
     transitionMovement.push("[0,0,0,[1,1]]");
   }
 
@@ -279,7 +282,7 @@ socket.on('activateWrist', function (data) {
   modeTransitionActive = true;
   transitionMovement = [];
 
-  for (var i=0; i<30; i++) {
+  for (var i=0; i<50; i++) {
     transitionMovement.push("[0,0,0,[0,1]]");
   }
 
