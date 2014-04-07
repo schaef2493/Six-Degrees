@@ -94,6 +94,7 @@ $(document).ready(function() {
 	  	socket.emit('moveHome');
 	  } else {
 	  	activeTask = e.target.innerText;
+	  	socket.emit('moveHome');
 	  	socket.emit('startPlayback', { task: activeTask });
 
 	  	$('.task').removeClass('active');

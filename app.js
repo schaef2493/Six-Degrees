@@ -108,11 +108,6 @@ io.sockets.on('connection', function (socket) {
   // Start playback of recorded task
   socket.on('startPlayback', function (data) {
     activeTask = data.task;
-    // playbackActive = true;
-    
-    // redis.lrange(activeTask, 0, -1, function (err, reply) {
-    //   io.sockets.emit('playbackStarted', { movements: reply });
-    // });
   });
 
   // Pause playback of recorded task
