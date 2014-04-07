@@ -135,6 +135,8 @@ $(document).ready(function() {
 		$($('#record_movements .instructions')[0]).html('Use the joystick to demonstrate the task');
 		$('.screen').addClass('hidden');
 		$('#record_movements').removeClass('hidden');
+		$("#record_movements #buttonGrid .button").removeClass('active');
+		$('#normalRec').addClass('active');
 
 		socket.emit('startRecording', { task: activeTask });
 	});
