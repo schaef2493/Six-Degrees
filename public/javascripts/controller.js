@@ -113,6 +113,7 @@ $(document).ready(function() {
 	  	$('#beginRecording').removeClass('active');
 	  	$('.task').removeClass('active');
 		$("#buttonGrid .button").removeClass('active');
+		$('#beginRecording').html('Please Wait');
 		$('#normal').addClass('active');
 		$('#name').val('');
 	  	movingHome = false;
