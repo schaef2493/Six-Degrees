@@ -220,10 +220,10 @@ socket.on('recordingEnded', function (data) {
 socket.on('playbackStarted', function (data) {
   console.log('PLAYBACK STARTED');
   playbackActive = true;
-  var newMovements = data.movements;
+  var newMovements = homeMovement.concat(data.movements);
 
   // TODO: THIS EXECUTES EVERYTHING? NOT JUST HOME MOVEMENT AND WAIT?
-  // So. You tap on the task. It goes home (as per . Then you give joystick movements, and it goes home again, then begins playback?
+  // So. You tap on the task. It goes home. Then you give joystick movements, and it goes home again, then begins playback?
 
   // Continue playback
   if (arraysEqual(movements, newMovements)) {
