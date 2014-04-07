@@ -22,7 +22,7 @@ var joystick = new ROSLIB.Topic({
   messageType: 'sensor_msgs/Joy'
 });
 
-var setArmAutoExecution = new ROSLIB.Topic({
+var setArmAutoExecutionTopic = new ROSLIB.Topic({
   ros: ros,
   name: '/ada/enableTeleop',
   messageType: 'std_msgs/Bool'
@@ -52,7 +52,7 @@ function setArmAutoExecution() {
     });
   }
 
-  joystick.publish(message);
+  setArmAutoExecutionTopic.publish(message);
 }
 
 function arraysEqual(a, b) {
