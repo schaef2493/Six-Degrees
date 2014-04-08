@@ -245,6 +245,7 @@ socket.on('playbackStarted', function (data) {
     if (!atHome) {
       playbackActive = false;
       movements = [];
+      moveArm([0,0,0], [0,0]);
       console.log('MOVEMENT FINISHED');
     } else {
       console.log('NEW MOVEMENT');
