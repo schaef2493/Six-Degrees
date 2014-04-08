@@ -38,6 +38,7 @@ var recordingActive = false;
 var playbackActive = false;
 var movements = null;
 var lastStepPerformed = 0;
+var autoExecution = false;
 
 var modeTransitionActive = false;
 var transitionMovement = null;
@@ -48,14 +49,16 @@ var lastMessage = null;
 var homeMovement = []; // path to go home
 
 function setArmAutoExecution() {
-  if (playbackActive) {
+  if (playbackActive && autoExecution) {
     var message = new ROSLIB.Message({
       data: false
     });
-  } else {
+    autoExecution = false;
+  } elseif (!autoExecution) {
     var message = new ROSLIB.Message({
       data: true
     });
+    autoExecution = true;
   }
 
   setArmAutoExecutionTopic.publish(message);
