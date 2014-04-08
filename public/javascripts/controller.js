@@ -93,7 +93,7 @@ $(document).ready(function() {
 	  	movingHome = true;
 	  	socket.emit('moveHome');
 	  } else {
-	  	if (activeTask == e.target.innerText) {
+	  	if (activeTask != e.target.innerText) {
 	  		socket.emit('moveHome');
 	  	}
 
