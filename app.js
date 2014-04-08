@@ -83,6 +83,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('movement', function(data) {
     if (activeTask != null) {
       if (recordingActive) {
+
         // Remove pauses from recording
         if ((data.axes[0] != 0) || (data.axes[1] != 0) || (data.axes[2] != 0) || (data.buttons[0] != 0) || (data.buttons[1] != 0)) {
           var movement = data.axes;
@@ -145,6 +146,10 @@ io.sockets.on('connection', function (socket) {
     
     if (!recordingActive) {
       activeTask = null;
+    } else {
+      for (var i=0; i<20; i++) {
+        redis.rpush(activeTask, JSON.stringify([0,0,0,[1,0]]));
+      }
     }
 
     io.sockets.emit('playbackPaused');
@@ -157,6 +162,10 @@ io.sockets.on('connection', function (socket) {
     
     if (!recordingActive) {
       activeTask = null;
+    } else {
+      for (var i=0; i<20; i++) {
+        redis.rpush(activeTask, JSON.stringify([0,0,0,[1,1]]));
+      }
     }
 
     io.sockets.emit('playbackPaused');
@@ -169,6 +178,10 @@ io.sockets.on('connection', function (socket) {
     
     if (!recordingActive) {
       activeTask = null;
+    } else {
+      for (var i=0; i<20; i++) {
+        redis.rpush(activeTask, JSON.stringify([0,0,0,[0,1]]));
+      }
     }
 
     io.sockets.emit('playbackPaused');
