@@ -173,12 +173,13 @@ function playbackMovement(step) {
     lastStepPerformed = -1;
     moveArm([0,0,0], [0,0]);
     socket.emit('pausePlayback');
-    movements = [];
 
     if (arraysEqual(movements, homeMovement)) {
       console.log('Finished moving home');
       socket.emit('movedHome');
     }
+
+    movements = [];
   }
 }
 
