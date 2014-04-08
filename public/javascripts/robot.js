@@ -158,7 +158,7 @@ function moveArm(axes, buttons) {
 function playbackMovement(step) {
   setArmAutoExecution();
 
-  console.log('playing back yall!');
+  console.log('playing back step: ' + step);
 
   if (typeof step == 'undefined') {
     step = 0;
@@ -177,8 +177,10 @@ function playbackMovement(step) {
   atHome = false;
 
   if (step < movements.length-1) {
+    console.log('calling again');
     setTimeout(playbackMovement, sampleRate, step+1);
   } else {
+    console.log('we are done here');
     lastStepPerformed = -1;
     moveArm([0,0,0], [0,0]);
     socket.emit('pausePlayback');
@@ -253,6 +255,7 @@ socket.on('playbackStarted', function (data) {
 });
 
 socket.on('playbackPaused', function (data) {
+  console.log('Paused yall!');
   playbackActive = false;
   moveArm([0,0,0], [0,0]);
 });
