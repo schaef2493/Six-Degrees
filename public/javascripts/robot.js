@@ -166,6 +166,7 @@ function playbackMovement(step) {
 
   // break if playback was paused
   if (playbackActive == false) {
+    console.log('well here is your problem');
     moveArm([0,0,0], [0,0]);
     return;
   }

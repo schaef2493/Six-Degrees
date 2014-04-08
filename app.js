@@ -91,6 +91,7 @@ io.sockets.on('connection', function (socket) {
         // if joystick returned to 0
         if (playbackActive && (data.axes[0] == 0) && (data.axes[1] == 0) && (data.axes[2] == 0)) {
           playbackActive = false;
+          console.log('PAUSED FROM SERVER');
           io.sockets.emit('playbackPaused');
 
         // if joystick moved after being at 0
@@ -121,6 +122,7 @@ io.sockets.on('connection', function (socket) {
     if (activeTask) {
       io.sockets.emit('playbackFinished');
     }
+    playbackActive = false;
     activeTask = null;
   });
 
