@@ -93,8 +93,11 @@ $(document).ready(function() {
 	  	movingHome = true;
 	  	socket.emit('moveHome');
 	  } else {
+	  	if (activeTask == e.target.innerText) {
+	  		socket.emit('moveHome');
+	  	}
+
 	  	activeTask = e.target.innerText;
-	  	socket.emit('moveHome');
 	  	socket.emit('startPlayback', { task: activeTask });
 
 	  	$('.task').removeClass('active');

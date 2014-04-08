@@ -39,6 +39,7 @@ var playbackActive = false;
 var movements = null;
 var lastStepPerformed = 0;
 var autoExecution = false;
+var atHome = false;
 
 var modeTransitionActive = false;
 var transitionMovement = null;
@@ -183,6 +184,7 @@ function playbackMovement(step) {
     if (arraysEqual(movements, homeMovement)) {
       console.log('Finished moving home');
       socket.emit('movedHome');
+      atHome = true;
     }
 
     movements = [];
@@ -250,9 +252,11 @@ socket.on('playbackPaused', function (data) {
 
 socket.on('moveToHomePosition', function (data) {
   console.log('Moving home');
-  playbackActive = true;
-  movements = homeMovement;
-  playbackMovement();
+  if (!atHome) {
+    playbackActive = true;
+    movements = homeMovement;
+    playbackMovement();
+  }
 });
 
 socket.on('activateCartesian', function (data) {
