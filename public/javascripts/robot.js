@@ -54,7 +54,7 @@ function setArmAutoExecution() {
       data: false
     });
     autoExecution = false;
-  } elseif (!autoExecution) {
+  } else if (!autoExecution) {
     var message = new ROSLIB.Message({
       data: true
     });
