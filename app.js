@@ -143,7 +143,11 @@ io.sockets.on('connection', function (socket) {
   // Switch to cartesian mode
   socket.on('cartesianMode', function(data) {
     playbackActive = false;
-    activeTask = null;
+    
+    if (!recordingActive) {
+      activeTask = null;
+    }
+
     io.sockets.emit('playbackPaused');
     io.sockets.emit('activateCartesian');
   });
@@ -151,7 +155,11 @@ io.sockets.on('connection', function (socket) {
    // Switch to gripper mode
   socket.on('gripperMode', function(data) {
     playbackActive = false;
-    activeTask = null;
+    
+    if (!recordingActive) {
+      activeTask = null;
+    }
+
     io.sockets.emit('playbackPaused');
     io.sockets.emit('activateGripper');
   });
@@ -159,7 +167,11 @@ io.sockets.on('connection', function (socket) {
    // Switch to wrist mode
   socket.on('wristMode', function(data) {
     playbackActive = false;
-    activeTask = null;
+    
+    if (!recordingActive) {
+      activeTask = null;
+    }
+
     io.sockets.emit('playbackPaused');
     io.sockets.emit('activateWrist');
   });
