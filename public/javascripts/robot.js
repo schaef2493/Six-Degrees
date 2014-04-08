@@ -49,19 +49,22 @@ var lastMessage = null;
 var homeMovement = []; // path to go home
 
 function setArmAutoExecution() {
-  if ((playbackActive == true) && (autoExecution == true)) {
+  if (playbackActive && autoExecution) {
     var message = new ROSLIB.Message({
       data: false
     });
+
     autoExecution = false;
-  } else if ((playbackActive == false) && (autoExecution != true)) {
+    setArmAutoExecutionTopic.publish(message);
+
+  } else if (!playbackActive && !autoExecution) {
     var message = new ROSLIB.Message({
       data: true
     });
-    autoExecution = true;
-  }
 
-  setArmAutoExecutionTopic.publish(message);
+    autoExecution = true;
+    setArmAutoExecutionTopic.publish(message);
+  }
 }
 
 function arraysEqual(a, b) {
