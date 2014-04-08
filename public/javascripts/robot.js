@@ -143,7 +143,7 @@ updateMovements();
 // Move arm to a position
 function moveArm(axes, buttons) {
   if (playbackActive || modeTransitionActive || (arraysEqual(axes,[0,0,0]) && arraysEqual(buttons,[0,0]))) {
-    console.log('Moving arm to ' + axes + ' - ' + buttons);
+    //console.log('Moving arm to ' + axes + ' - ' + buttons);
 
     var message = new ROSLIB.Message({
       axes: axes,
@@ -151,8 +151,6 @@ function moveArm(axes, buttons) {
     });
 
     joystickWrite.publish(message);
-  } else {
-    console.log("Cancelled movement");
   }
 }
 
@@ -223,19 +221,16 @@ socket.on('recordingStarted', function (data) {
 });
 
 socket.on('recordingEnded', function (data) {
-  console.log('RECORDING ENDED');
   recordingActive = false;
   lastMessage = null;
 });
 
 socket.on('playbackStarted', function (data) {
-  console.log('PLAYBACK STARTED');
   playbackActive = true;
   newMovements = data.movements;
 
   // Continue playback
   if (arraysEqual(movements, newMovements)) {
-    console.log('CONTINUING PLAYBACK');
     playbackMovement(lastStepPerformed + 1);
 
   // Start playback 
@@ -245,10 +240,8 @@ socket.on('playbackStarted', function (data) {
     if (!atHome) {
       playbackActive = false;
       movements = [];
-      moveArm([0,0,0], [0,0]);
-      console.log('MOVEMENT FINISHED');
+      socket.emit('finishPlayback');
     } else {
-      console.log('NEW MOVEMENT');
       movements = newMovements;
       playbackMovement();
     }
@@ -258,7 +251,6 @@ socket.on('playbackStarted', function (data) {
 });
 
 socket.on('playbackPaused', function (data) {
-  console.log('PLAYBACK PAUSED');
   playbackActive = false;
   moveArm([0,0,0], [0,0]);
 });

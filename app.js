@@ -116,6 +116,11 @@ io.sockets.on('connection', function (socket) {
     io.sockets.emit('playbackPaused');
   });
 
+  // Recording has finished executing
+  socket.on('finishPlayback', function (data) {
+    io.sockets.emit('playbackFinished');
+  });
+
   // Move arm to home position
   socket.on('moveHome', function (data) {
     io.sockets.emit('moveToHomePosition');

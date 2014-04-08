@@ -28,6 +28,13 @@ $(document).ready(function() {
 		$('#taskList').append('<div class="task">+ New Task</div>');
 	});
 
+	socket.on('playbackFinished', function (data) {
+		$('.task').removeClass('active');
+		$("#buttonGrid .button").removeClass('active');
+		$('#normal').addClass('active');
+		beep.play();
+	});
+
 	// Control mode toggling
 
 	$('#normal').hammer().on('tap', function() {
