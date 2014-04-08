@@ -242,12 +242,9 @@ socket.on('playbackStarted', function (data) {
 
     // Only occurs if playback finished and restarted
     if (!atHome) {
-      socket.emit('moveHome');
-      setTimeout(function() {
-        movements = newMovements;
-        playbackMovement();
-        console.log('RESTARTING PLAYBACK');
-      }, 7500);
+      playbackActive = false;
+      movements = [];
+      console.log('MOVEMENT FINISHED');
     } else {
       movements = newMovements;
       playbackMovement();
