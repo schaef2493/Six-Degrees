@@ -118,7 +118,10 @@ io.sockets.on('connection', function (socket) {
 
   // Recording has finished executing
   socket.on('finishPlayback', function (data) {
-    io.sockets.emit('playbackFinished');
+    if (activeTask) {
+      io.sockets.emit('playbackFinished');
+    }
+    activeTask = null;
   });
 
   // Move arm to home position
