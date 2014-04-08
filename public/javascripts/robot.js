@@ -37,6 +37,7 @@ var setArmAutoExecutionTopic = new ROSLIB.Topic({
 var recordingActive = false;
 var playbackActive = false;
 var movements = null;
+var newMovements = null;
 var lastStepPerformed = 0;
 var autoExecution = false;
 var atHome = false;
@@ -230,7 +231,7 @@ socket.on('recordingEnded', function (data) {
 socket.on('playbackStarted', function (data) {
   console.log('PLAYBACK STARTED');
   playbackActive = true;
-  var newMovements = data.movements;
+  newMovements = data.movements;
 
   // Continue playback
   if (arraysEqual(movements, newMovements)) {
@@ -238,8 +239,19 @@ socket.on('playbackStarted', function (data) {
 
   // Start playback 
   } else {
-    movements = newMovements;
-    playbackMovement();
+
+    // Only occurs if playback finished and restarted
+    if (!atHome) {
+      socket.emit('moveHome');
+      setTimeout(function() {
+        movements = newMovements;
+        playbackMovement();
+        console.log('RESTARTING PLAYBACK');
+      }, 7500);
+    } else {
+      movements = newMovements;
+      playbackMovement();
+    }
   }
 
   setArmAutoExecution();
