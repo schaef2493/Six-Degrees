@@ -158,6 +158,8 @@ function moveArm(axes, buttons) {
 function playbackMovement(step) {
   setArmAutoExecution();
 
+  console.log('playing back yall!');
+
   if (typeof step == 'undefined') {
     step = 0;
   }
@@ -260,6 +262,7 @@ socket.on('moveToHomePosition', function (data) {
   if (!atHome) {
     playbackActive = true;
     movements = homeMovement;
+    newMovements = homeMovement;
     playbackMovement();
   }
 });
