@@ -173,6 +173,7 @@ function playbackMovement(step) {
   var buttons = JSON.parse(movements[step])[3];
   moveArm(axes, buttons);
   lastStepPerformed = step;
+  atHome = false;
 
   if (step < movements.length-1) {
     setTimeout(playbackMovement, sampleRate, step+1);
@@ -280,6 +281,7 @@ socket.on('activateGripper', function (data) {
 
   playbackActive = false;
   setArmAutoExecution();
+  atHome = false;
   
   modeTransitionActive = true;
   transitionMovement = [];
@@ -296,6 +298,7 @@ socket.on('activateWrist', function (data) {
 
   playbackActive = false;
   setArmAutoExecution();
+  atHome = false;
   
   modeTransitionActive = true;
   transitionMovement = [];
