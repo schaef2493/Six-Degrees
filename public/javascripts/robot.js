@@ -235,6 +235,7 @@ socket.on('playbackStarted', function (data) {
 
   // Continue playback
   if (arraysEqual(movements, newMovements)) {
+    console.log('CONTINUING PLAYBACK');
     playbackMovement(lastStepPerformed + 1);
 
   // Start playback 
@@ -246,6 +247,7 @@ socket.on('playbackStarted', function (data) {
       movements = [];
       console.log('MOVEMENT FINISHED');
     } else {
+      console.log('NEW MOVEMENT');
       movements = newMovements;
       playbackMovement();
     }
