@@ -49,12 +49,12 @@ var lastMessage = null;
 var homeMovement = []; // path to go home
 
 function setArmAutoExecution() {
-  if (playbackActive && autoExecution) {
+  if ((playbackActive == true) && (autoExecution == true)) {
     var message = new ROSLIB.Message({
       data: false
     });
     autoExecution = false;
-  } else if (!autoExecution) {
+  } else if ((playbackActive == false) && (autoExecution != true)) {
     var message = new ROSLIB.Message({
       data: true
     });
