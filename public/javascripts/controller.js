@@ -30,6 +30,7 @@ $(document).ready(function() {
 
 	socket.on('playbackFinished', function (data) {
 		$('.task').removeClass('active');
+		activeTask = null;
 		$("#buttonGrid .button").removeClass('active');
 		$('#normal').addClass('active');
 		beep.play();
