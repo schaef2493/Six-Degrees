@@ -45,11 +45,12 @@ var atHome = false;
 // the current mode that the arm is in, so we can tell when to switch
 // modes during playback
 var currentMode = 0;
+var necessaryMode = 0;
 
 // Globals for commands to set modes
-var setCartesian = "[0,0,0,[1,0]]";
-var setGripper = "[0,0,0,[1,1]]";
-var setWrist = "[0,0,0,[0,1]]";
+var setCartesian = "[0,0,0,[1,0], 0]";
+var setGripper = "[0,0,0,[1,1], 2]";
+var setWrist = "[0,0,0,[0,1]], 1]";
 
 var modeTransitionActive = false;
 var transitionMovement = null;
@@ -91,13 +92,13 @@ function arraysEqual(a, b) {
 
 // Generates home movement
 function generateHomeMovement() {
-  var homeCommand = "[0,0,0,[1,1]]";
-  var homeMovementWait = "[0,0,0,[0,0]]";
+  var homeCommand = "[0,0,0,[1,1], 0]";
+  var homeMovementWait = "[0,0,0,[0,0], 0]";
 
   // Put into cartesian mode
-  for (var i=0; i<50; i++) {
-    homeMovement.push(setCartesian);
-  }
+  //for (var i=0; i<50; i++) {
+  //  homeMovement.push(setCartesian);
+  //}
 
   // Move to home
   for (var i=0; i<100; i++) {
@@ -110,13 +111,13 @@ function generateHomeMovement() {
   }
 
   // Put into gripper mode
-  for (var i=0; i<30; i++) {
-    homeMovement.push(setGripper);
-  }
+  //for (var i=0; i<30; i++) {
+  //  homeMovement.push(setGripper);
+  //}
 
   // Open gripper
   for (var i=0; i<200; i++) {
-    homeMovement.push("[-1,0,0,[0,0]]");
+    homeMovement.push("[-1,0,0,[0,0], 2]");
   }
 
   // Put into cartesian mode
@@ -181,7 +182,8 @@ function playbackMovement(step) {
   var buttons = JSON.parse(movements[step])[3];
 
   // get the mode that the arm should be in for the next movement
-  var necessaryMode = JSON.parse(movements[step])[4];
+  necessaryMode = JSON.parse(movements[step])[4];
+  console.log("necessaryMode: " + necessaryMode);
 
   if(necessaryMode !== currentMode) {
     switch(necessaryMode) {
