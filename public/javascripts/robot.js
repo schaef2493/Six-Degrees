@@ -245,7 +245,7 @@ function transitionMode(step) {
     modeTransitionActive = false;
 
     // after transitioning, if still in middle of playback, we resume playback
-    if(movements.length === 0) {
+    if (movements.length != 0) {
       playbackActive = true;
       playbackMovement(lastStepPerformed);
     }
