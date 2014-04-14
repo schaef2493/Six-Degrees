@@ -273,6 +273,7 @@ socket.on('activateCartesian', function (data) {
 
   playbackActive = false;
   setArmAutoExecution();
+  atHome = false;
   
   modeTransitionActive = true;
   transitionMovement = [];
