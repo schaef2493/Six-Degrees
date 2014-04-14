@@ -135,6 +135,11 @@ io.sockets.on('connection', function (socket) {
     io.sockets.emit('moveToHomePosition');
   });
 
+  // Arm already at home position
+  socket.on('alreadyAtHome', function (data) {
+    io.sockets.emit('alreadyFinishedMovingHome');
+  });
+
   // Finished moving arm to home position
   socket.on('movedHome', function (data) {
     io.sockets.emit('finishedMovingHome');

@@ -11,6 +11,17 @@ socket.on('finishedMovingHome', function(data) {
 	movingHome = false;
 	if (activeTask) {
 		$('#loading').addClass('hidden');
+		beep.play();
+	} else {
+		$('#beginRecording').html('Begin Recording');
+		$('#beginRecording').addClass('active');
+	}
+});
+
+socket.on('alreadyFinishedMovingHome', function(data) {
+	movingHome = false;
+	if (activeTask) {
+		$('#loading').addClass('hidden');
 	} else {
 		$('#beginRecording').html('Begin Recording');
 		$('#beginRecording').addClass('active');
@@ -103,14 +114,13 @@ $(document).ready(function() {
 	  	$('#record_name').toggleClass('hidden');
 	  	$('#beginRecording').removeClass('active');
 	  	$('#name').focus();
+	  	activeTask = null;
 	  	movingHome = true;
-	  	setTimeout(playResetNoise, 500);
 	  	socket.emit('moveHome');
 	  } else {
 	  	if (activeTask != e.target.innerText) {
 	  		socket.emit('moveHome');
 	  		movingHome = true;
-	  		setTimeout(playResetNoise, 500);
 	  		$('#loading').removeClass('hidden');
 	  	}
 
@@ -167,7 +177,6 @@ $(document).ready(function() {
 		tap.play();
 		socket.emit('moveHome');
 		movingHome = true;
-		setTimeout(playResetNoise, 500);
 		setTimeout("socket.emit('startRecording', { task: activeTask })", 7200);
 	});
 
@@ -214,18 +223,5 @@ $(document).ready(function() {
 	$('#taskList').scroll(function() {
 	  deletePending = null;
 	});
-
-	// Moving home noise
-
-	function playResetNoise() {
-		console.log('play?')
-		if (movingHome) {
-			console.log('play!');
-			reset.play();
-			setTimeout(playResetNoise, 1000);
-		} else {
-			console.log('cancel');
-		}
-	}
 
 });

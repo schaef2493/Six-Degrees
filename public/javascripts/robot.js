@@ -263,7 +263,8 @@ socket.on('moveToHomePosition', function (data) {
     newMovements = homeMovement;
     playbackMovement();
   } else {
-    socket.emit('movedHome');
+    console.log('Already at home');
+    socket.emit('alreadyAtHome');
   }
 });
 
