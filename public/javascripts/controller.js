@@ -4,12 +4,17 @@ var activeTask = null;
 var deletePending = null;
 var tap = new Audio('../sounds/tap.mp3');
 var beep = new Audio('../sounds/playback.mp3');
+var reset = new Audio('../sounds/reset.mp3');
 var movingHome = false;
 
 socket.on('finishedMovingHome', function(data) {
 	movingHome = false;
-	$('#beginRecording').html('Begin Recording');
-	$('#beginRecording').addClass('active');
+	if (activeTask) {
+		$('#loading').addClass('hidden');
+	} else {
+		$('#beginRecording').html('Begin Recording');
+		$('#beginRecording').addClass('active');
+	}
 });
 
 $(document).ready(function() {
@@ -25,7 +30,7 @@ $(document).ready(function() {
 			$('#taskList').append('<div class="task">' + tasks[i] + '</div>');
 		}
 
-		$('#taskList').append('<div class="task">+ New Task</div>');
+		$('#taskList').prepend('<div class="task">+ New Task</div>');
 	});
 
 	socket.on('playbackFinished', function (data) {
@@ -99,10 +104,14 @@ $(document).ready(function() {
 	  	$('#beginRecording').removeClass('active');
 	  	$('#name').focus();
 	  	movingHome = true;
+	  	setTimeout(playResetNoise, 500);
 	  	socket.emit('moveHome');
 	  } else {
 	  	if (activeTask != e.target.innerText) {
 	  		socket.emit('moveHome');
+	  		movingHome = true;
+	  		setTimeout(playResetNoise, 500);
+	  		$('#loading').removeClass('hidden');
 	  	}
 
 	  	activeTask = e.target.innerText;
@@ -157,14 +166,16 @@ $(document).ready(function() {
 		socket.emit('delete', { task: deletePending });
 		tap.play();
 		socket.emit('moveHome');
-		setTimeout("socket.emit('startRecording', { task: activeTask })", 7000);
+		movingHome = true;
+		setTimeout(playResetNoise, 500);
+		setTimeout("socket.emit('startRecording', { task: activeTask })", 7200);
 	});
 
 	$('#finishRecording').hammer().on('tap', function(e) {
 		tap.play();
 
 		$('#name').val('');
-		$('#taskList').prepend('<div class="task">' + activeTask + '</div>');
+		$('#taskList').append('<div class="task">' + activeTask + '</div>');
 		$('#beginRecording').html('Please Wait');
 
 		$('.screen').addClass('hidden');
@@ -203,5 +214,18 @@ $(document).ready(function() {
 	$('#taskList').scroll(function() {
 	  deletePending = null;
 	});
+
+	// Moving home noise
+
+	function playResetNoise() {
+		console.log('play?')
+		if (movingHome) {
+			console.log('play!');
+			reset.play();
+			setTimeout(playResetNoise, 1000);
+		} else {
+			console.log('cancel');
+		}
+	}
 
 });

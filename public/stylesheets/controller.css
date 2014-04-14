@@ -81,6 +81,15 @@ div {
     bottom: 0px;
 }
 
+#loading {
+    z-index: 1000000;
+    background: rgba(0,0,0,0.85);
+    text-align: center;
+    font-size: 22pt;
+    font-weight: bold;
+    padding-top: 240px;
+}
+
 .taskListWrapper {
     position: absolute;
     left: 0px;

@@ -262,6 +262,8 @@ socket.on('moveToHomePosition', function (data) {
     movements = homeMovement;
     newMovements = homeMovement;
     playbackMovement();
+  } else {
+    socket.emit('movedHome');
   }
 });
 
