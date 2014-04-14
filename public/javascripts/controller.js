@@ -181,7 +181,7 @@ $(document).ready(function() {
 		tap.play();
 		socket.emit('moveHome');
 		movingHome = true;
-		setTimeout("socket.emit('startRecording', { task: activeTask })", 7200);
+		setTimeout("socket.emit('startRecording', { task: activeTask })", 8000);
 	});
 
 	$('#finishRecording').hammer().on('tap', function(e) {
