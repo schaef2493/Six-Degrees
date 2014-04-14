@@ -200,7 +200,7 @@ function playbackMovement(step) {
     }
 
     currentMode = necessaryMode;
-    break;
+    return;
   }
 
   moveArm(axes, buttons);
