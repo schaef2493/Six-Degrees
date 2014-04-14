@@ -185,6 +185,7 @@ function playbackMovement(step) {
   necessaryMode = JSON.parse(movements[step])[4];
 
   if(necessaryMode !== currentMode) {
+    currentMode = necessaryMode;
     switch(necessaryMode) {
       case 0:
         activateMode(null, setCartesian);
@@ -199,8 +200,7 @@ function playbackMovement(step) {
         console.log("Error: necessaryMode = " + necessaryMode);
         break;   
     }
-
-    currentMode = necessaryMode;
+    
     return;
   }
 
