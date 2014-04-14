@@ -60,7 +60,7 @@ $(document).ready(function() {
 		$('#normal').addClass('active');
 		tap.play();
 		socket.emit('cartesianMode');
-		activeTask = null;
+		//activeTask = null;
 	});
 
 	$('#normalRec').hammer().on('tap', function() {
@@ -77,7 +77,7 @@ $(document).ready(function() {
 		$('#gripper').addClass('active');
 		tap.play();
 		socket.emit('gripperMode');
-		activeTask = null;
+		//activeTask = null;
 	});
 
 	$('#gripperRec').hammer().on('tap', function() {
@@ -94,7 +94,7 @@ $(document).ready(function() {
 		$('#wrist').addClass('active');
 		tap.play();
 		socket.emit('wristMode');
-		activeTask = null;
+		//activeTask = null;
 	});
 
 	$('#wristRec').hammer().on('tap', function() {
