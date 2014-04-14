@@ -42,6 +42,15 @@ var lastStepPerformed = 0;
 var autoExecution = false;
 var atHome = false;
 
+// the current mode that the arm is in, so we can tell when to switch
+// modes during playback
+var currentMode = 0;
+
+// Globals for commands to set modes
+var setCartesian = "[0,0,0,[1,0]]";
+var setGripper = "[0,0,0,[1,1]]";
+var setWrist = "[0,0,0,[0,1]]";
+
 var modeTransitionActive = false;
 var transitionMovement = null;
 var lastTransitionStepPerformed = 0;
@@ -87,7 +96,7 @@ function generateHomeMovement() {
 
   // Put into cartesian mode
   for (var i=0; i<50; i++) {
-    homeMovement.push("[0,0,0,[1,0]]");
+    homeMovement.push(setCartesian);
   }
 
   // Move to home
@@ -102,7 +111,7 @@ function generateHomeMovement() {
 
   // Put into gripper mode
   for (var i=0; i<30; i++) {
-    homeMovement.push("[0,0,0,[1,1]]");
+    homeMovement.push(setGripper);
   }
 
   // Open gripper
@@ -112,7 +121,7 @@ function generateHomeMovement() {
 
   // Put into cartesian mode
   for (var i=0; i<30; i++) {
-    homeMovement.push("[0,0,0,[1,0]]");
+    homeMovement.push(setCartesian);
   }
 
 }
@@ -170,6 +179,30 @@ function playbackMovement(step) {
 
   var axes = (JSON.parse(movements[step])).slice(0,3);
   var buttons = JSON.parse(movements[step])[3];
+
+  // get the mode that the arm should be in for the next movement
+  var necessaryMode = JSON.parse(movements[step])[4];
+
+  if(necessaryMode !== currentMode) {
+    switch(necessaryMode) {
+      case 0:
+        activateMode(null, setCartesian);
+        break;
+      case 1:
+        activateMode(null, setWrist);
+        break;
+      case 2:
+        activateMode(null, setGripper);
+        break;
+      default:
+        console.log("Error: necessaryMode = " + necessaryMode);
+        break;   
+    }
+
+    currentMode = necessaryMode;
+    break;
+  }
+
   moveArm(axes, buttons);
   lastStepPerformed = step;
   atHome = false;
@@ -209,7 +242,15 @@ function transitionMode(step) {
     lastTransitionStepPerformed = 0;
     moveArm([0,0,0], [0,0]);
     modeTransitionActive = false;
+
+    // after transitioning, if still in middle of playback, we resume playback
+    if(movements.length === 0) {
+      playbackActive = true;
+      playbackMovement(lastStepPerformed);
+    }
+
   }
+
 }
 
 socket.on('recordingStarted', function (data) {
@@ -265,54 +306,40 @@ socket.on('moveToHomePosition', function (data) {
   }
 });
 
-socket.on('activateCartesian', function (data) {
-  console.log('Switching to CARTESIAN');
-
+// perform the task of switching modes
+function activateMode(data, movementInfo) {
   playbackActive = false;
   setArmAutoExecution();
+  atHome = false;
   
   modeTransitionActive = true;
   transitionMovement = [];
 
   for (var i=0; i<20; i++) {
-    transitionMovement.push("[0,0,0,[1,0]]");
+    transitionMovement.push(movementInfo);
   }
 
   transitionMode();
+}
+
+socket.on('activateCartesian', function (data) {
+  console.log('Switching to CARTESIAN');
+
+  activateMode(data, setCartesian);
 });
 
 socket.on('activateGripper', function (data) {
   console.log('Switching to GRIPPER');
 
-  playbackActive = false;
-  setArmAutoExecution();
-  atHome = false;
-  
-  modeTransitionActive = true;
-  transitionMovement = [];
+  activateMode(data, setGripper);
 
-  for (var i=0; i<20; i++) {
-    transitionMovement.push("[0,0,0,[1,1]]");
-  }
-
-  transitionMode();
 });
 
 socket.on('activateWrist', function (data) {
   console.log('Switching to WRIST');
 
-  playbackActive = false;
-  setArmAutoExecution();
-  atHome = false;
-  
-  modeTransitionActive = true;
-  transitionMovement = [];
+  activateMode(data, setWrist);
 
-  for (var i=0; i<20; i++) {
-    transitionMovement.push("[0,0,0,[0,1]]");
-  }
-
-  transitionMode();
 });
 
 setArmAutoExecution();
