@@ -50,7 +50,7 @@ var necessaryMode = 0;
 // Globals for commands to set modes
 var setCartesian = "[0,0,0,[1,0], 0]";
 var setGripper = "[0,0,0,[1,1], 2]";
-var setWrist = "[0,0,0,[0,1]], 1]";
+var setWrist = "[0,0,0,[0,1], 1]";
 
 var modeTransitionActive = false;
 var transitionMovement = null;
@@ -245,7 +245,7 @@ function transitionMode(step) {
     modeTransitionActive = false;
 
     // after transitioning, if still in middle of playback, we resume playback
-    if (movements.length != 0) {
+    if (movements && movements.length != 0) {
       playbackActive = true;
       playbackMovement(lastStepPerformed);
     }
