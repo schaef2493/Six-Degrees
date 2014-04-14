@@ -49,6 +49,9 @@ if (process.env.REDISTOGO_URL) {
 var recordingActive = false;
 var playbackActive = false;
 var activeTask = null;
+var armMode = 0;
+// 0 = cartesian, 1 = wrist, 2 = gripper
+
 
 io.sockets.on('connection', function (socket) {
 
@@ -88,6 +91,7 @@ io.sockets.on('connection', function (socket) {
         if ((data.axes[0] != 0) || (data.axes[1] != 0) || (data.axes[2] != 0) || (data.buttons[0] != 0) || (data.buttons[1] != 0)) {
           var movement = data.axes;
           movement.push(data.buttons);
+          movement.push(armMode);
           redis.rpush(activeTask, JSON.stringify(movement));
         }
 
@@ -153,7 +157,8 @@ io.sockets.on('connection', function (socket) {
       activeTask = null;
     } else {
       for (var i=0; i<20; i++) {
-        redis.rpush(activeTask, JSON.stringify([0,0,0,[1,0]]));
+        armMode = 0;
+        //redis.rpush(activeTask, JSON.stringify([0,0,0,[1,0]]));
       }
     }
 
@@ -169,7 +174,8 @@ io.sockets.on('connection', function (socket) {
       activeTask = null;
     } else {
       for (var i=0; i<20; i++) {
-        redis.rpush(activeTask, JSON.stringify([0,0,0,[1,1]]));
+        armMode = 2;
+        //redis.rpush(activeTask, JSON.stringify([0,0,0,[1,1]]));
       }
     }
 
@@ -185,7 +191,8 @@ io.sockets.on('connection', function (socket) {
       activeTask = null;
     } else {
       for (var i=0; i<20; i++) {
-        redis.rpush(activeTask, JSON.stringify([0,0,0,[0,1]]));
+        armMode = 1;
+        //redis.rpush(activeTask, JSON.stringify([0,0,0,[0,1]]));
       }
     }
 
