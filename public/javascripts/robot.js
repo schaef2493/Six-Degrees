@@ -184,7 +184,8 @@ function playbackMovement(step) {
   // get the mode that the arm should be in for the next movement
   necessaryMode = JSON.parse(movements[step])[4];
 
-  if(necessaryMode !== currentMode) {
+  console.log('Current: ' + currentMode + ' Necessary: ' + necessaryMode);
+  if (necessaryMode != currentMode) {
     currentMode = necessaryMode;
     switch(necessaryMode) {
       case 0:
