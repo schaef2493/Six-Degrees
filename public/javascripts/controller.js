@@ -60,6 +60,7 @@ $(document).ready(function() {
 		$('#normal').addClass('active');
 		tap.play();
 		socket.emit('cartesianMode');
+		activeTask = null;
 	});
 
 	$('#normalRec').hammer().on('tap', function() {
@@ -76,6 +77,7 @@ $(document).ready(function() {
 		$('#gripper').addClass('active');
 		tap.play();
 		socket.emit('gripperMode');
+		activeTask = null;
 	});
 
 	$('#gripperRec').hammer().on('tap', function() {
@@ -92,6 +94,7 @@ $(document).ready(function() {
 		$('#wrist').addClass('active');
 		tap.play();
 		socket.emit('wristMode');
+		activeTask = null;
 	});
 
 	$('#wristRec').hammer().on('tap', function() {
@@ -144,6 +147,7 @@ $(document).ready(function() {
 		$("#buttonGrid .button").removeClass('active');
 		$('#beginRecording').html('Please Wait');
 		$('#normal').addClass('active');
+		socket.emit('cartesianMode');
 		$('#name').val('');
 	  	movingHome = false;
 	});
