@@ -1,12 +1,3 @@
-// install redis
-// install node
-// run in Six-Degrees directory: $ npm install
-// install heroku toolbelt (from heroku.com) and log in with my heroku account
-// run" $ git remote add heroku git@heroku.com:cryptic-caverns-6516.git
-// in another terminal window" $ redis-server
-// should be able to run: $ foreman start
-//   will start the deployment for me to mess with
-
 /**
  * Module dependencies.
  */
@@ -162,8 +153,7 @@ io.sockets.on('connection', function (socket) {
     } else {
       for (var i=0; i<20; i++) {
         armMode = 0;
-        // DELETE ONCE THE CODE USES THE MODE DATA FROM THE DATABASE TO CONTROL MODE
-        redis.rpush(activeTask, JSON.stringify([0,0,0,[1,0]]));
+        //redis.rpush(activeTask, JSON.stringify([0,0,0,[1,0]]));
       }
     }
 
@@ -180,8 +170,7 @@ io.sockets.on('connection', function (socket) {
     } else {
       for (var i=0; i<20; i++) {
         armMode = 2;
-        // DELETE ONCE THE CODE USES THE MODE DATA FROM THE DATABASE TO CONTROL MODE
-        redis.rpush(activeTask, JSON.stringify([0,0,0,[1,1]]));
+        //redis.rpush(activeTask, JSON.stringify([0,0,0,[1,1]]));
       }
     }
 
@@ -198,8 +187,7 @@ io.sockets.on('connection', function (socket) {
     } else {
       for (var i=0; i<20; i++) {
         armMode = 1;
-        // DELETE ONCE THE CODE USES THE MODE DATA FROM THE DATABASE TO CONTROL MODE
-        redis.rpush(activeTask, JSON.stringify([0,0,0,[0,1]]));
+        //redis.rpush(activeTask, JSON.stringify([0,0,0,[0,1]]));
       }
     }
 
