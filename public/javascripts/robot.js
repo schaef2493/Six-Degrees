@@ -41,6 +41,7 @@ var newMovements = null;
 var lastStepPerformed = 0;
 var autoExecution = false;
 var atHome = false;
+var rewindActive = false;
 
 // the current mode that the arm is in, so we can tell when to switch
 // modes during playback
@@ -201,8 +202,12 @@ function playbackMovement(step) {
   lastStepPerformed = step;
   atHome = false;
 
-  if (step < movements.length-1) {
-    setTimeout(playbackMovement, sampleRate, step+1);
+  if ((!rewindActive && (step < movements.length-1)) || (rewindActive && (step > 0))) {
+    if (rewindActive) {
+      setTimeout(playbackMovement, sampleRate, step-1);
+    } else {
+      setTimeout(playbackMovement, sampleRate, step+1);
+    }
   } else {
     lastStepPerformed = -1;
     moveArm([0,0,0], [0,0]);
@@ -261,6 +266,7 @@ socket.on('recordingEnded', function (data) {
 
 socket.on('playbackStarted', function (data) {
   playbackActive = true;
+  rewindActive = false;
   newMovements = data.movements;
 
   // Continue playback
@@ -284,8 +290,25 @@ socket.on('playbackStarted', function (data) {
   setArmAutoExecution();
 });
 
+socket.on('rewindStarted', function (data) {
+  playbackActive = true;
+  rewindActive = true;
+  newMovements = data.movements;
+
+  // Continue playback
+  if (arraysEqual(movements, newMovements)) {
+    if (lastStepPerformed > 0) {
+      console.log("Starting rewind");
+      playbackMovement(lastStepPerformed - 1);
+    }
+  }
+
+  setArmAutoExecution();
+});
+
 socket.on('playbackPaused', function (data) {
   playbackActive = false;
+  rewindActive = false;
   moveArm([0,0,0], [0,0]);
 });
 
