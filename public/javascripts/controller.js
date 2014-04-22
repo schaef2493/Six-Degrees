@@ -33,6 +33,8 @@ socket.on('alreadyFinishedMovingHome', function(data) {
 
 $(document).ready(function() {
 
+	setTimeout("$('#loading').addClass('hidden')", 8000);
+
 	// Generate task list
 
 	socket.on('tasks', function (data) {

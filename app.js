@@ -103,18 +103,20 @@ io.sockets.on('connection', function (socket) {
           io.sockets.emit('playbackPaused');
 
         // if joystick moved forward after being at 0
-        } else if (!playbackActive && (data.axes[1] > 0)) {
+        } else if (!playbackActive && (data.axes[1] > 0.3)) {
           playbackActive = true;
           redis.lrange(activeTask, 0, -1, function (err, reply) {
             io.sockets.emit('playbackStarted', { movements: reply });
           });
         // if joystick moved backwards after being at 0
-        } else if (!playbackActive && (data.axes[1] < 0)) {
+        }
+
+        /*else if (!playbackActive && (data.axes[1] < -0.3)) {
           playbackActive = true;
           redis.lrange(activeTask, 0, -1, function (err, reply) {
             io.sockets.emit('rewindStarted', { movements: reply });
           });
-        } 
+        }*/
 
       }
     }
@@ -140,6 +142,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('finishPlayback', function (data) {
     if (activeTask) {
       io.sockets.emit('playbackFinished');
+      io.sockets.emit('activateCartesian');
     }
     playbackActive = false;
     activeTask = null;
@@ -169,7 +172,6 @@ io.sockets.on('connection', function (socket) {
     } else {
       for (var i=0; i<20; i++) {
         armMode = 0;
-        //redis.rpush(activeTask, JSON.stringify([0,0,0,[1,0]]));
       }
     }
 
@@ -186,7 +188,6 @@ io.sockets.on('connection', function (socket) {
     } else {
       for (var i=0; i<20; i++) {
         armMode = 2;
-        //redis.rpush(activeTask, JSON.stringify([0,0,0,[1,1]]));
       }
     }
 
@@ -203,7 +204,6 @@ io.sockets.on('connection', function (socket) {
     } else {
       for (var i=0; i<20; i++) {
         armMode = 1;
-        //redis.rpush(activeTask, JSON.stringify([0,0,0,[0,1]]));
       }
     }
 

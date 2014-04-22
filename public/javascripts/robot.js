@@ -137,7 +137,6 @@ function logMovement(data) {
 // Subscribe to joystick movements
 joystickRead.subscribe(function(data) {
     lastMessage = data;
-    console.log(data);
 });
 
 // Update movements every 10 ms
@@ -155,7 +154,7 @@ updateMovements();
 // Move arm to a position
 function moveArm(axes, buttons) {
   if (playbackActive || modeTransitionActive || (arraysEqual(axes,[0,0,0]) && arraysEqual(buttons,[0,0]))) {
-    console.log('Moving arm to ' + axes + ' - ' + buttons);
+    //console.log('Moving arm to ' + axes + ' - ' + buttons);
 
     var message = new ROSLIB.Message({
       axes: axes,
@@ -224,6 +223,7 @@ function playbackMovement(step) {
     moveArm([0,0,0], [0,0]);
     socket.emit('pausePlayback');
     setArmAutoExecution();
+    socket.emit('finishPlayback');
 
     if (arraysEqual(movements, homeMovement)) {
       console.log('Finished moving home');
@@ -283,6 +283,7 @@ socket.on('recordingEnded', function (data) {
 });
 
 socket.on('playbackStarted', function (data) {
+  console.log('Playback started');
   playbackActive = true;
   rewindActive = false;
   newMovements = data.movements;
@@ -293,13 +294,7 @@ socket.on('playbackStarted', function (data) {
 
   // Start playback 
   } else {
-
-    // Only occurs if playback finished and restarted
-    if (!atHome) {
-      playbackActive = false;
-      movements = [];
-      socket.emit('finishPlayback');
-    } else {
+    if (atHome) {
       movements = newMovements;
       playbackMovement();
     }
@@ -309,6 +304,7 @@ socket.on('playbackStarted', function (data) {
 });
 
 socket.on('rewindStarted', function (data) {
+  console.log('Rewind started');
   playbackActive = true;
   rewindActive = true;
   newMovements = data.movements;
@@ -325,6 +321,7 @@ socket.on('rewindStarted', function (data) {
 });
 
 socket.on('playbackPaused', function (data) {
+  console.log('Playback paused');
   playbackActive = false;
   rewindActive = false;
   moveArm([0,0,0], [0,0]);
@@ -380,3 +377,9 @@ socket.on('activateWrist', function (data) {
 
 setArmAutoExecution();
 generateHomeMovement();
+
+// Move arm to home position onload
+playbackActive = true;
+movements = homeMovement;
+newMovements = homeMovement;
+playbackMovement();
