@@ -222,6 +222,7 @@ function playbackMovement(step) {
     lastStepPerformed = -1;
     moveArm([0,0,0], [0,0]);
     socket.emit('pausePlayback');
+    setArmAutoExecution();
 
     if (arraysEqual(movements, homeMovement)) {
       console.log('Finished moving home');
