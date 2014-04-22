@@ -251,6 +251,7 @@ function transitionMode(step) {
     lastTransitionStepPerformed = 0;
     moveArm([0,0,0], [0,0]);
     modeTransitionActive = false;
+    setArmAutoExecution();
 
     // after transitioning, if still in middle of playback, we resume playback
     if (movements && movements.length != 0) {
