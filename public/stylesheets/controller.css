@@ -107,7 +107,24 @@ div {
     -webkit-overflow-scrolling: touch;
 }
 
+#restartTaskPlayback {
+    z-index: 100;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 80px;
+    background: blue;
+    margin: 0px 0px 0px 0px;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E8FFCA), color-stop(0.5%,#DB0000), color-stop(100%,#9F0300));
+    background-image: url(../images/restart.png), -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E8FFCA), color-stop(0.5%,#DB0000), color-stop(100%,#9F0300));
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 23px, cover;
+}
+
 .task {
+    position: relative;
     height: 80px;
     padding: 25px;
     font-size: 18pt;
@@ -115,7 +132,20 @@ div {
     font-weight: lighter;
 }
 
-.task.active {
+.task span {
+    position: absolute;
+    z-index: 100;
+}
+
+.task .progressBar {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+.task.active .progressBar {
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E8FFCA), color-stop(0.5%,#75DB00), color-stop(100%,#589F00));
 }
 

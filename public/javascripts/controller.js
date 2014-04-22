@@ -6,8 +6,10 @@ var tap = new Audio('../sounds/tap.mp3');
 var beep = new Audio('../sounds/playback.mp3');
 var reset = new Audio('../sounds/reset.mp3');
 var movingHome = false;
+var restartInProgress = false;
 
 socket.on('finishedMovingHome', function(data) {
+	console.log('FINISHED MOVING HOME');
 	movingHome = false;
 	if (activeTask) {
 		$('#loading').addClass('hidden');
@@ -19,6 +21,7 @@ socket.on('finishedMovingHome', function(data) {
 });
 
 socket.on('alreadyFinishedMovingHome', function(data) {
+	console.log('FINISHED MOVING HOME');
 	movingHome = false;
 	if (activeTask) {
 		$('#loading').addClass('hidden');
@@ -38,7 +41,7 @@ $(document).ready(function() {
 		$('#taskList').html('');
 
 		for (var i=0; i<tasks.length; i++) {
-			$('#taskList').append('<div class="task">' + tasks[i] + '</div>');
+			$('#taskList').append('<div class="task"><span>' + tasks[i] + '</span><div class="progressBar"></div></div>');
 		}
 
 		$('#taskList').prepend('<div class="task">+ New Task</div>');
@@ -46,6 +49,7 @@ $(document).ready(function() {
 
 	socket.on('playbackFinished', function (data) {
 		$('.task').removeClass('active');
+		$('#restartTaskPlayback').remove();
 		activeTask = null;
 		$("#buttonGrid .button").removeClass('active');
 		$('#normal').addClass('active');
@@ -56,6 +60,7 @@ $(document).ready(function() {
 
 	$('#normal').hammer().on('tap', function() {
 		$('.task').removeClass('active');
+		$('#restartTaskPlayback').remove();
 		$("#buttonGrid .button").removeClass('active');
 		$('#normal').addClass('active');
 		tap.play();
@@ -73,6 +78,7 @@ $(document).ready(function() {
 
 	$('#gripper').hammer().on('tap', function() {
 		$('.task').removeClass('active');
+		$('#restartTaskPlayback').remove();
 		$("#buttonGrid .button").removeClass('active');
 		$('#gripper').addClass('active');
 		tap.play();
@@ -90,6 +96,7 @@ $(document).ready(function() {
 
 	$('#wrist').hammer().on('tap', function() {
 		$('.task').removeClass('active');
+		$('#restartTaskPlayback').remove();
 		$("#buttonGrid .button").removeClass('active');
 		$('#wrist').addClass('active');
 		tap.play();
@@ -105,9 +112,21 @@ $(document).ready(function() {
 		socket.emit('wristMode');
 	});
 
+	$('body').hammer().on('tap', '#restartTaskPlayback', function(e) {
+		tap.play();
+		movingHome = true;
+		socket.emit('restartTaskPlayback');
+		socket.emit('moveHome');
+		$('#loading').removeClass('hidden');
+	});
+
 	// Handle taps on the task list
 
 	$('body').hammer().on('tap', '.task', function(e) {
+		if (movingHome) {
+			return;
+		}
+
 	  deletePending = null;
 	  tap.play();
 
@@ -121,18 +140,36 @@ $(document).ready(function() {
 	  	movingHome = true;
 	  	socket.emit('moveHome');
 	  } else {
-	  	if (activeTask != e.target.innerText) {
-	  		socket.emit('moveHome');
-	  		movingHome = true;
-	  		$('#loading').removeClass('hidden');
-	  	}
-
-	  	activeTask = e.target.innerText;
-	  	socket.emit('startPlayback', { task: activeTask });
-
 	  	$('.task').removeClass('active');
-	  	$('#buttonGrid .button').removeClass('active');
-	 	$(e.target).addClass('active');
+	  	$('#restartTaskPlayback').remove();
+
+	  	if (e.target.innerText != '') {
+	  		if (activeTask != e.target.innerText) {
+		  		socket.emit('moveHome');
+		  		movingHome = true;
+		  		$('#loading').removeClass('hidden');
+		  	}
+
+	 		$(e.target).addClass('active');
+	 		activeTask = e.target.innerText;
+	 		$(e.target).append('<div id="restartTaskPlayback"></div>');
+
+	 	} else {
+	 		
+	 		if (activeTask != $(e.target).parent()[0].innerText) {
+	  			socket.emit('moveHome');
+	  			movingHome = true;
+	  			$('#loading').removeClass('hidden');
+	  		}
+
+	 		$($(e.target).parent()[0]).addClass('active');
+	 		debug = $($(e.target).parent()[0]);
+	 		activeTask = $(e.target).parent()[0].innerText;
+	 		$($(e.target).parent()[0]).append('<div id="restartTaskPlayback"></div>');
+	 	}
+
+	  	socket.emit('startPlayback', { task: activeTask });
+	  	$('#buttonGrid .button').removeClass('active');	
 	  }
 	});
 
@@ -143,8 +180,9 @@ $(document).ready(function() {
 		$('#home').toggleClass('hidden');
 	  	$('#record_name').toggleClass('hidden');
 	  	$('#beginRecording').removeClass('active');
+	  	$('#restartTaskPlayback').remove();
 	  	$('.task').removeClass('active');
-		$("#buttonGrid .button").removeClass('active');
+		$('#buttonGrid .button').removeClass('active');
 		$('#beginRecording').html('Please Wait');
 		$('#normal').addClass('active');
 		socket.emit('cartesianMode');
@@ -195,6 +233,7 @@ $(document).ready(function() {
 		$('#home').removeClass('hidden');
 
 		$('.task').removeClass('active');
+		$('#restartTaskPlayback').remove();
 		$("#buttonGrid .button").removeClass('active');
 		$('#normal').addClass('active');
 

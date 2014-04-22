@@ -251,6 +251,11 @@ function transitionMode(step) {
   }
 }
 
+socket.on('restartPlayback', function (data) {
+  console.log('RESTARTING PLAYBACK');
+  lastStepPerformed = 0;
+});
+
 socket.on('recordingStarted', function (data) {
   console.log('RECORDING STARTED');
   playbackActive = false;

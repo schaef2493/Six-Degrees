@@ -125,6 +125,11 @@ io.sockets.on('connection', function (socket) {
     activeTask = data.task;
   });
 
+  // Playback was restarted
+  socket.on('restartTaskPlayback', function (data) {
+    socket.emit('restartPlayback');
+  });
+
   // Pause playback of recorded task
   socket.on('pausePlayback', function (data) {
     playbackActive = false;
