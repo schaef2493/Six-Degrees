@@ -137,7 +137,6 @@ function logMovement(data) {
 // Subscribe to joystick movements
 joystickRead.subscribe(function(data) {
     lastMessage = data;
-    console.log(data);
 });
 
 // Update movements every 10 ms
