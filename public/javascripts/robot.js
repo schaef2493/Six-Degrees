@@ -76,6 +76,7 @@ function setArmAutoExecution() {
     });
 
     autoExecution = false;
+    console.log('Setting autoExecution to false');
     setArmAutoExecutionTopic.publish(message);
 
   } else if (!playbackActive && !modeTransitionActive && !autoExecution) {
@@ -84,6 +85,7 @@ function setArmAutoExecution() {
     });
 
     autoExecution = true;
+    console.log('Setting autoExecution to true');
     setArmAutoExecutionTopic.publish(message);
   }
 }
