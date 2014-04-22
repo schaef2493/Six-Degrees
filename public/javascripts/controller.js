@@ -118,6 +118,7 @@ $(document).ready(function() {
 		socket.emit('restartTaskPlayback');
 		socket.emit('moveHome');
 		$('#loading').removeClass('hidden');
+		deletePending = null;
 	});
 
 	// Handle taps on the task list
