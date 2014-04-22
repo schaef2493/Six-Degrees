@@ -22,6 +22,14 @@ var joystickWrite = new ROSLIB.Topic({
   messageType: 'sensor_msgs/Joy'
 });
 
+// var controlState = new ROSLIB.Topic({
+//   ros: ros,
+//   name: '/ada/control_state',
+//   messageType: 'std_msgs/UInt16'
+// });
+// 3 = home
+// only watch this during home transition. 3 = home, then a bunch of 0 = cartesian
+
 var joystickRead = new ROSLIB.Topic({
   ros: ros,
   name: '/joy',
@@ -144,7 +152,7 @@ updateMovements();
 // Move arm to a position
 function moveArm(axes, buttons) {
   if (playbackActive || modeTransitionActive || (arraysEqual(axes,[0,0,0]) && arraysEqual(buttons,[0,0]))) {
-    //console.log('Moving arm to ' + axes + ' - ' + buttons);
+    console.log('Moving arm to ' + axes + ' - ' + buttons);
 
     var message = new ROSLIB.Message({
       axes: axes,
