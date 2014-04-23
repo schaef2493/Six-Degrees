@@ -46,6 +46,7 @@ var recordingActive = false;
 var playbackActive = false;
 var movements = null;
 var newMovements = null;
+var movementsOld = null;
 var lastStepPerformed = 0;
 var autoExecution = true;
 var atHome = false;
@@ -179,8 +180,6 @@ function playbackMovement(step) {
     return;
   }
 
-  console.log(step);
-
   var axes = (JSON.parse(movements[step])).slice(0,3);
   var buttons = JSON.parse(movements[step])[3];
 
@@ -298,7 +297,8 @@ socket.on('playbackStarted', function (data) {
   newMovements = data.movements;
 
   // Continue playback
-  if (arraysEqual(movements, newMovements)) {
+  if (arraysEqual(movementsOld, newMovements)) {
+    movements = movementsOld;
     playbackMovement(lastStepPerformed + 1);
 
   // Start playback 
@@ -319,9 +319,9 @@ socket.on('rewindStarted', function (data) {
   newMovements = data.movements;
 
   // Continue playback
-  if (arraysEqual(movements, newMovements)) {
+  if (arraysEqual(movementsOld, newMovements)) {
     if (lastStepPerformed > 0) {
-      console.log("Starting rewind");
+      movements = movementsOld;
       playbackMovement(lastStepPerformed - 1);
     }
   }
@@ -332,6 +332,7 @@ socket.on('rewindStarted', function (data) {
 socket.on('playbackPaused', function (data) {
   console.log('Playback paused');
   playbackActive = false;
+  movementsOld = movements;
   movements = [];
   //setArmAutoExecution();
   rewindActive = false;
