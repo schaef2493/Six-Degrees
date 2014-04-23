@@ -237,7 +237,7 @@ function playbackMovement(step) {
       console.log('Finished moving home');
       socket.emit('movedHome');
       atHome = true;
-    } else {
+    } else if (!rewindActive) {
       socket.emit('finishPlayback');
     }
 
