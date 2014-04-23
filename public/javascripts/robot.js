@@ -377,9 +377,3 @@ socket.on('activateWrist', function (data) {
 
 setArmAutoExecution();
 generateHomeMovement();
-
-// Move arm to home position onload
-playbackActive = true;
-movements = homeMovement;
-newMovements = homeMovement;
-playbackMovement();
