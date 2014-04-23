@@ -297,12 +297,14 @@ socket.on('playbackStarted', function (data) {
   newMovements = data.movements;
 
   // Continue playback
-  if (arraysEqual(movementsOld, newMovements)) {
+  if (movementsOld && arraysEqual(movementsOld, newMovements)) {
+    console.log('RESUMING PLAYBACK');
     movements = movementsOld;
     playbackMovement(lastStepPerformed + 1);
 
   // Start playback 
   } else {
+    console.log("STARTING NEW PLAYBACK");
     if (atHome) {
       movements = newMovements;
       playbackMovement();
@@ -319,7 +321,7 @@ socket.on('rewindStarted', function (data) {
   newMovements = data.movements;
 
   // Continue playback
-  if (arraysEqual(movementsOld, newMovements)) {
+  if (movementsOld && arraysEqual(movementsOld, newMovements)) {
     if (lastStepPerformed > 0) {
       movements = movementsOld;
       playbackMovement(lastStepPerformed - 1);
