@@ -223,12 +223,13 @@ function playbackMovement(step) {
     moveArm([0,0,0], [0,0]);
     socket.emit('pausePlayback');
     setArmAutoExecution();
-    socket.emit('finishPlayback');
 
     if (arraysEqual(movements, homeMovement)) {
       console.log('Finished moving home');
       socket.emit('movedHome');
       atHome = true;
+    } else {
+      socket.emit('finishPlayback');
     }
 
     movements = [];
