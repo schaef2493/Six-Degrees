@@ -331,6 +331,7 @@ socket.on('moveToHomePosition', function (data) {
   console.log('Moving home');
   if (!atHome) {
     playbackActive = true;
+    setArmAutoExecution();
     movements = homeMovement;
     newMovements = homeMovement;
     playbackMovement();
