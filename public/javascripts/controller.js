@@ -146,6 +146,8 @@ $(document).ready(function() {
 	  	$('.task').removeClass('active');
 	  	$('#restartTaskPlayback').remove();
 
+	  	console.log(e.target.innerText);
+
 	  	if (e.target.innerText != '') {
 	  		if (activeTask != e.target.innerText) {
 		  		socket.emit('moveHome');
@@ -153,9 +155,9 @@ $(document).ready(function() {
 		  		$('#loading').removeClass('hidden');
 		  	}
 
-	 		$(e.target).addClass('active');
+	 		$(e.target).parent().addClass('active');
 	 		activeTask = e.target.innerText;
-	 		$(e.target).append('<div id="restartTaskPlayback"></div>');
+	 		$(e.target).parent().append('<div id="restartTaskPlayback"></div>');
 
 	 	} else {
 	 		

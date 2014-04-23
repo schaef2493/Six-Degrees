@@ -168,8 +168,6 @@ function moveArm(axes, buttons) {
 
 // Begin movement playback
 function playbackMovement(step) {
-  //setArmAutoExecution();
-
   if (typeof step == 'undefined') {
     step = 0;
   }
@@ -338,7 +336,6 @@ socket.on('playbackPaused', function (data) {
     movementsOld = movements;
   }
   movements = [];
-  //setArmAutoExecution();
   rewindActive = false;
   moveArm([0,0,0], [0,0]);
 });
