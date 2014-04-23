@@ -142,7 +142,11 @@ joystickRead.subscribe(function(data) {
 // Update movements every 10 ms
 function updateMovements() {
   if ((lastMessage != null) && !modeTransitionActive) {
-    logMovement(lastMessage);
+    if (playbackActive && (lastMessage[0] == 0) && (lastMessage[2] == 0) && (lastMessage[1] >= 0)) {
+      logMovement(lastMessage);
+    } else {
+      console.log("Canceled left/right/back movement");
+    }
   }
 
   setTimeout(updateMovements, sampleRate);
