@@ -107,12 +107,12 @@ function generateHomeMovement() {
   var homeMovementWait = "[0,0,0,[0,0], 0]";
 
   // Move to home
-  for (var i=0; i<100; i++) {
+  for (var i=0; i<80; i++) {
     homeMovement.push(homeCommand);
   }
 
   // Wait
-  for (var i=0; i<300; i++) {
+  for (var i=0; i<250; i++) {
     homeMovement.push(homeMovementWait);
   }
 
@@ -178,6 +178,8 @@ function playbackMovement(step) {
     moveArm([0,0,0], [0,0]);
     return;
   }
+
+  console.log(step);
 
   var axes = (JSON.parse(movements[step])).slice(0,3);
   var buttons = JSON.parse(movements[step])[3];
