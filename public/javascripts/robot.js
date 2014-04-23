@@ -208,6 +208,13 @@ function playbackMovement(step) {
     return;
   }
 
+  // Flip axes values in rewind mode
+  if (rewindActive) {
+    axes[0] = axes[0] * -1;
+    axes[1] = axes[1] * -1;
+    axes[2] = axes[2] * -1;
+  }
+
   moveArm(axes, buttons);
   lastStepPerformed = step;
   atHome = false;
