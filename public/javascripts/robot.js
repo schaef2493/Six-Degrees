@@ -167,7 +167,7 @@ function moveArm(axes, buttons) {
 
 // Begin movement playback
 function playbackMovement(step) {
-  setArmAutoExecution();
+  //setArmAutoExecution();
 
   if (typeof step == 'undefined') {
     step = 0;
