@@ -179,6 +179,8 @@ function playbackMovement(step) {
     return;
   }
 
+  console.log(step);
+
   var axes = (JSON.parse(movements[step])).slice(0,3);
   var buttons = JSON.parse(movements[step])[3];
 
