@@ -33,9 +33,7 @@ socket.on('alreadyFinishedMovingHome', function(data) {
 
 $(document).ready(function() {
 
-	// Initial move home command
-	socket.emit('moveHome');
-	setTimeout("$('#loading').addClass('hidden')", 8000);
+	//alert('Remember to home the robot');
 
 	// Generate task list
 
