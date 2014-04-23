@@ -146,7 +146,7 @@ $(document).ready(function() {
 	  	$('.task').removeClass('active');
 	  	$('#restartTaskPlayback').remove();
 
-	  	console.log(e.target.innerText);
+	  	console.log(e);
 
 	  	if (e.target.innerText != '') {
 	  		if (activeTask != e.target.innerText) {
