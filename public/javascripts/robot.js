@@ -145,7 +145,8 @@ function updateMovements() {
     if ((playbackActive && (lastMessage[0] == 0) && (lastMessage[2] == 0) && (lastMessage[1] >= 0)) || recordingActive) {
       logMovement(lastMessage);
     } else if (playbackActive) {
-      console.log('Cancelled left/right/back movement: ' + lastMessage);
+      console.log('Cancelled left/right/back movement:');
+      console.log(lastMessage);
     }
   }
 
