@@ -168,9 +168,7 @@ io.sockets.on('connection', function (socket) {
     if (!recordingActive) {
       activeTask = null;
     } else {
-      for (var i=0; i<20; i++) {
-        armMode = 0;
-      }
+      armMode = 0;
     }
 
     io.sockets.emit('playbackPaused');
@@ -184,9 +182,7 @@ io.sockets.on('connection', function (socket) {
     if (!recordingActive) {
       activeTask = null;
     } else {
-      for (var i=0; i<20; i++) {
-        armMode = 2;
-      }
+      armMode = 2;
     }
 
     io.sockets.emit('playbackPaused');
@@ -200,9 +196,7 @@ io.sockets.on('connection', function (socket) {
     if (!recordingActive) {
       activeTask = null;
     } else {
-      for (var i=0; i<20; i++) {
-        armMode = 1;
-      }
+      armMode = 1;
     }
 
     io.sockets.emit('playbackPaused');
