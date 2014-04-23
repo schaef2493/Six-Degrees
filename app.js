@@ -109,14 +109,12 @@ io.sockets.on('connection', function (socket) {
             io.sockets.emit('playbackStarted', { movements: reply });
           });
         // if joystick moved backwards after being at 0
-        }
-
-        /*else if (!playbackActive && (data.axes[1] < -0.3)) {
+        } else if (!playbackActive && (data.axes[1] < -0.3)) {
           playbackActive = true;
           redis.lrange(activeTask, 0, -1, function (err, reply) {
             io.sockets.emit('rewindStarted', { movements: reply });
           });
-        }*/
+        }
 
       }
     }
