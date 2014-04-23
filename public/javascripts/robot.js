@@ -108,7 +108,7 @@ function generateHomeMovement() {
   var homeMovementWait = "[0,0,0,[0,0], 0]";
 
   // Move to home
-  for (var i=0; i<80; i++) {
+  for (var i=0; i<100; i++) {
     homeMovement.push(homeCommand);
   }
 
@@ -334,7 +334,9 @@ socket.on('rewindStarted', function (data) {
 socket.on('playbackPaused', function (data) {
   console.log('Playback paused');
   playbackActive = false;
-  movementsOld = movements;
+  if (movements.length > 0) {
+    movementsOld = movements;
+  }
   movements = [];
   //setArmAutoExecution();
   rewindActive = false;
