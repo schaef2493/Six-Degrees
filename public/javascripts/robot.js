@@ -324,7 +324,7 @@ socket.on('rewindStarted', function (data) {
 socket.on('playbackPaused', function (data) {
   console.log('Playback paused');
   playbackActive = false;
-  setArmAutoExecution();
+  //setArmAutoExecution();
   rewindActive = false;
   moveArm([0,0,0], [0,0]);
 });
