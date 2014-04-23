@@ -47,7 +47,7 @@ var playbackActive = false;
 var movements = null;
 var newMovements = null;
 var lastStepPerformed = 0;
-var autoExecution = false;
+var autoExecution = true;
 var atHome = false;
 var rewindActive = false;
 
