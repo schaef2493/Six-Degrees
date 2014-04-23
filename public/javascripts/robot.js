@@ -179,8 +179,6 @@ function playbackMovement(step) {
     return;
   }
 
-  console.log(step);
-
   var axes = (JSON.parse(movements[step])).slice(0,3);
   var buttons = JSON.parse(movements[step])[3];
 
@@ -239,9 +237,8 @@ function playbackMovement(step) {
       atHome = true;
     } else if (!rewindActive) {
       socket.emit('finishPlayback');
+      movements = [];
     }
-
-    movements = [];
   }
 }
 
