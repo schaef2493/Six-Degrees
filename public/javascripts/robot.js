@@ -77,7 +77,7 @@ function setArmAutoExecution() {
     });
 
     autoExecution = false;
-    //console.log('Setting autoExecution to false');
+    console.log('Setting autoExecution to false');
     setArmAutoExecutionTopic.publish(message);
 
   } else if (!playbackActive && !modeTransitionActive && !autoExecution) {
@@ -86,7 +86,7 @@ function setArmAutoExecution() {
     });
 
     autoExecution = true;
-    //console.log('Setting autoExecution to true');
+    console.log('Setting autoExecution to true');
     setArmAutoExecutionTopic.publish(message);
   }
 }
@@ -113,7 +113,7 @@ function generateHomeMovement() {
   }
 
   // Wait
-  for (var i=0; i<250; i++) {
+  for (var i=0; i<230; i++) {
     homeMovement.push(homeMovementWait);
   }
 
@@ -177,8 +177,6 @@ function playbackMovement(step) {
     moveArm([0,0,0], [0,0]);
     return;
   }
-
-  //console.log('Playing back ' + step);
 
   var axes = (JSON.parse(movements[step])).slice(0,3);
   var buttons = JSON.parse(movements[step])[3];
