@@ -77,7 +77,7 @@ function setArmAutoExecution() {
     });
 
     autoExecution = false;
-    console.log('Setting autoExecution to false');
+    //console.log('Setting autoExecution to false');
     setArmAutoExecutionTopic.publish(message);
 
   } else if (!playbackActive && !modeTransitionActive && !autoExecution) {
@@ -86,7 +86,7 @@ function setArmAutoExecution() {
     });
 
     autoExecution = true;
-    console.log('Setting autoExecution to true');
+    //console.log('Setting autoExecution to true');
     setArmAutoExecutionTopic.publish(message);
   }
 }
@@ -155,7 +155,7 @@ updateMovements();
 // Move arm to a position
 function moveArm(axes, buttons) {
   if (playbackActive || modeTransitionActive || (arraysEqual(axes,[0,0,0]) && arraysEqual(buttons,[0,0]))) {
-    //console.log('Moving arm to ' + axes + ' - ' + buttons);
+    console.log('Moving arm to ' + axes + ' - ' + buttons);
 
     var message = new ROSLIB.Message({
       axes: axes,
@@ -177,6 +177,8 @@ function playbackMovement(step) {
     moveArm([0,0,0], [0,0]);
     return;
   }
+
+  console.log('Playing back ' + step);
 
   var axes = (JSON.parse(movements[step])).slice(0,3);
   var buttons = JSON.parse(movements[step])[3];

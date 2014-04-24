@@ -33,7 +33,7 @@ socket.on('alreadyFinishedMovingHome', function(data) {
 
 $(document).ready(function() {
 
-	//alert('Remember to home the robot');
+	alert('Remember to home the robot');
 
 	// Generate task list
 
