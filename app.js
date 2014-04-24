@@ -88,12 +88,12 @@ io.sockets.on('connection', function (socket) {
       if (recordingActive) {
 
         // Remove pauses from recording
-        if ((data.axes[0] != 0) || (data.axes[1] != 0) || (data.axes[2] != 0) || (data.buttons[0] != 0) || (data.buttons[1] != 0)) {
+        //if ((data.axes[0] != 0) || (data.axes[1] != 0) || (data.axes[2] != 0) || (data.buttons[0] != 0) || (data.buttons[1] != 0)) {
           var movement = data.axes;
           movement.push(data.buttons);
           movement.push(armMode);
           redis.rpush(activeTask, JSON.stringify(movement));
-        }
+        //}
 
       } else {
 
