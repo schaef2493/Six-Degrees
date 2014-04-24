@@ -113,12 +113,12 @@ function generateHomeMovement() {
   }
 
   // Wait
-  for (var i=0; i<230; i++) {
+  for (var i=0; i<250; i++) {
     homeMovement.push(homeMovementWait);
   }
 
   // Open gripper
-  for (var i=0; i<150; i++) {
+  for (var i=0; i<200; i++) {
     homeMovement.push("[-1,0,0,[0,0], 2]");
   }
 
@@ -332,7 +332,7 @@ socket.on('rewindStarted', function (data) {
 socket.on('playbackPaused', function (data) {
   console.log('Playback paused');
   playbackActive = false;
-  if (movements && (movements.length > 0)) {
+  if (movements.length > 0) {
     movementsOld = movements;
   }
   movements = [];

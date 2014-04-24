@@ -146,6 +146,8 @@ $(document).ready(function() {
 	  	$('.task').removeClass('active');
 	  	$('#restartTaskPlayback').remove();
 
+	  	console.log(e.target.innerText);
+
 	  	if (e.target.innerText != '') {
 	  		if (activeTask != e.target.innerText) {
 		  		socket.emit('moveHome');
