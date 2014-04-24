@@ -74,6 +74,7 @@ $(document).ready(function() {
 		beep.play();
 		rewindActive = false;
 		playbackActive = false;
+		resetProgressMeters();
 	});
 
 	socket.on('playbackStarted', function(data) {
@@ -108,34 +109,31 @@ $(document).ready(function() {
 		});
 	}
 
-	function animateProgress(progress) {
-
+	function animateProgress(step) {
 		// Stop animating if paused
 		if (!playbackActive) {
 			return;
 		}
 
-		if (!rewindActive) {
-		// Animate forward
-
-		// animate here
-
-		} else {
-		// Animate backwards
-
-		// animate here
-
+		if (typeof step == 'undefined') {
+			step = 0;
 		}
 
-		movementProgress = progress;
+		var progress = step/(movements.length-1);
+		progress = progress * 80;
+		$($('.task.active .progressBar')[0]).width(progress + '%');
 
-		if (!rewindActive) {
-		  // Continue animating forwards
-	      setTimeout(animateProgress, 10, movementProgress+1);
-	    } else {
-	      // Continue animating backwards
-	      setTimeout(animateProgress, 10, movementProgress-1);
-	    }
+		movementProgress = step;
+
+		if ((!rewindActive && (step < movements.length-1)) || (rewindActive && (step > 0))) {
+			if (!rewindActive) {
+			  // Continue animating forwards
+		      setTimeout(animateProgress, 10, movementProgress+1);
+		    } else {
+		      // Continue animating backwards
+		      setTimeout(animateProgress, 10, movementProgress-1);
+		    }
+		}
 	}
 
 	// Control mode toggling
@@ -226,10 +224,9 @@ $(document).ready(function() {
 	  	$('.task').removeClass('active');
 	  	$('#restartTaskPlayback').remove();
 
-	  	console.log(e);
-
 	  	if (e.target.innerText != '') {
 	  		if (activeTask != e.target.innerText) {
+	  			resetProgressMeters();
 		  		socket.emit('moveHome');
 		  		movements = [];
 		  		movingHome = true;
@@ -243,6 +240,7 @@ $(document).ready(function() {
 	 	} else {
 	 		
 	 		if (activeTask != $(e.target).parent()[0].innerText) {
+	 			resetProgressMeters();
 	  			socket.emit('moveHome');
 	  			movements = [];
 	  			movingHome = true;

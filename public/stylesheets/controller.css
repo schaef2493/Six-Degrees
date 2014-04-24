@@ -113,7 +113,7 @@ div {
     right: 0px;
     top: 0px;
     bottom: 0px;
-    width: 80px;
+    width: 20%;
     background: blue;
     margin: 0px 0px 0px 0px;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E8FFCA), color-stop(0.5%,#DB0000), color-stop(100%,#9F0300));
