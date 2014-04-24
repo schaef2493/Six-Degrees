@@ -113,7 +113,7 @@ function generateHomeMovement() {
   }
 
   // Wait
-  for (var i=0; i<230; i++) {
+  for (var i=0; i<250; i++) {
     homeMovement.push(homeMovementWait);
   }
 
