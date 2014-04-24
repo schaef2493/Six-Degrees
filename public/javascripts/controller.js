@@ -7,33 +7,49 @@ var beep = new Audio('../sounds/playback.mp3');
 var reset = new Audio('../sounds/reset.mp3');
 var movingHome = false;
 var restartInProgress = false;
+var movementDuration = 0; // ms
+var movementProgress = 0; // ms
+var playbackActive = true;
+var rewindActive = false;
+var movements = [];
 
-socket.on('finishedMovingHome', function(data) {
-	console.log('FINISHED MOVING HOME');
-	movingHome = false;
-	if (activeTask) {
-		$('#loading').addClass('hidden');
-		beep.play();
-	} else {
-		$('#beginRecording').html('Begin Recording');
-		$('#beginRecording').addClass('active');
-	}
-});
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length != b.length) return false;
 
-socket.on('alreadyFinishedMovingHome', function(data) {
-	console.log('FINISHED MOVING HOME');
-	movingHome = false;
-	if (activeTask) {
-		$('#loading').addClass('hidden');
-	} else {
-		$('#beginRecording').html('Begin Recording');
-		$('#beginRecording').addClass('active');
-	}
-});
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
 
 $(document).ready(function() {
 
-	//alert('Remember to home the robot');
+	alert('Remember to home the robot');
+
+	socket.on('finishedMovingHome', function(data) {
+		console.log('FINISHED MOVING HOME');
+		movingHome = false;
+		if (activeTask) {
+			$('#loading').addClass('hidden');
+			beep.play();
+		} else {
+			$('#beginRecording').html('Begin Recording');
+			$('#beginRecording').addClass('active');
+		}
+	});
+
+	socket.on('alreadyFinishedMovingHome', function(data) {
+		console.log('FINISHED MOVING HOME');
+		movingHome = false;
+		if (activeTask) {
+			$('#loading').addClass('hidden');
+		} else {
+			$('#beginRecording').html('Begin Recording');
+			$('#beginRecording').addClass('active');
+		}
+	});
 
 	// Generate task list
 
@@ -56,7 +72,71 @@ $(document).ready(function() {
 		$("#buttonGrid .button").removeClass('active');
 		$('#normal').addClass('active');
 		beep.play();
+		rewindActive = false;
+		playbackActive = false;
 	});
+
+	socket.on('playbackStarted', function(data) {
+		playbackActive = true;
+		rewindActive = false;
+
+		if (arraysEqual(movements, data.movements)) {
+			// Continue animation
+			movements = data.movements;
+			animateProgress(movementProgress+1);
+		} else {
+			// Restart animation
+			movements = data.movements;
+			animateProgress(0);
+		}
+
+	});
+
+	socket.on('rewindStarted', function(data) {
+		rewindActive = true;
+		playbackActive = true;
+	});
+
+	socket.on('playbackPaused', function(data) {
+		rewindActive = false;
+		playbackActive = false;
+	});
+
+	function resetProgressMeters() {
+		$(".progressBar").each(function(i, bar) {
+		  $(bar).width('0%');
+		});
+	}
+
+	function animateProgress(progress) {
+
+		// Stop animating if paused
+		if (!playbackActive) {
+			return;
+		}
+
+		if (!rewindActive) {
+		// Animate forward
+
+		// animate here
+
+		} else {
+		// Animate backwards
+
+		// animate here
+
+		}
+
+		movementProgress = progress;
+
+		if (!rewindActive) {
+		  // Continue animating forwards
+	      setTimeout(animateProgress, 10, movementProgress+1);
+	    } else {
+	      // Continue animating backwards
+	      setTimeout(animateProgress, 10, movementProgress-1);
+	    }
+	}
 
 	// Control mode toggling
 
@@ -151,6 +231,7 @@ $(document).ready(function() {
 	  	if (e.target.innerText != '') {
 	  		if (activeTask != e.target.innerText) {
 		  		socket.emit('moveHome');
+		  		movements = [];
 		  		movingHome = true;
 		  		$('#loading').removeClass('hidden');
 		  	}
@@ -163,6 +244,7 @@ $(document).ready(function() {
 	 		
 	 		if (activeTask != $(e.target).parent()[0].innerText) {
 	  			socket.emit('moveHome');
+	  			movements = [];
 	  			movingHome = true;
 	  			$('#loading').removeClass('hidden');
 	  		}

@@ -52,7 +52,6 @@ var activeTask = null;
 var armMode = 0;
 // 0 = cartesian, 1 = wrist, 2 = gripper
 
-
 io.sockets.on('connection', function (socket) {
 
 	// Send list of recorded tasks on connection

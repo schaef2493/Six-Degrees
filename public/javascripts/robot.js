@@ -126,7 +126,6 @@ function generateHomeMovement() {
   for (var i=0; i<20; i++) {
     homeMovement.push(setCartesian);
   }
-
 }
 
 // Send movement to server
