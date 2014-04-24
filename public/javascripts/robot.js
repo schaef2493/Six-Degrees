@@ -332,7 +332,7 @@ socket.on('rewindStarted', function (data) {
 socket.on('playbackPaused', function (data) {
   console.log('Playback paused');
   playbackActive = false;
-  if (movements.length > 0) {
+  if (movements && (movements.length > 0)) {
     movementsOld = movements;
   }
   movements = [];
