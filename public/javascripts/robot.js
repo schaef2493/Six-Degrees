@@ -155,7 +155,7 @@ updateMovements();
 // Move arm to a position
 function moveArm(axes, buttons) {
   if (playbackActive || modeTransitionActive || (arraysEqual(axes,[0,0,0]) && arraysEqual(buttons,[0,0]))) {
-    console.log('Moving arm to ' + axes + ' - ' + buttons);
+    //console.log('Moving arm to ' + axes + ' - ' + buttons);
 
     var message = new ROSLIB.Message({
       axes: axes,
@@ -178,7 +178,7 @@ function playbackMovement(step) {
     return;
   }
 
-  console.log('Playing back ' + step);
+  //console.log('Playing back ' + step);
 
   var axes = (JSON.parse(movements[step])).slice(0,3);
   var buttons = JSON.parse(movements[step])[3];
