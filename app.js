@@ -147,7 +147,7 @@ io.sockets.on('connection', function (socket) {
 
   // Move arm to home position
   socket.on('moveHome', function (data) {
-    io.sockets.emit('moveToHomePosition');
+    //io.sockets.emit('moveToHomePosition');
   });
 
   // Arm already at home position
