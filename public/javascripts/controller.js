@@ -245,12 +245,16 @@ $(document).ready(function() {
 		  		$('#loading').removeClass('hidden');
 		  	}
 
-	 		$(e.target).parent().addClass('active');
-	 		activeTask = e.target.innerText;
-	 		$(e.target).parent().append('<div id="restartTaskPlayback"></div>');
-
+		  	if ($(e.target.className == 'task')) {
+		  		$(e.target).addClass('active');
+		 		activeTask = e.target.innerText;
+		 		$(e.target).append('<div id="restartTaskPlayback"></div>');
+		  	} else {
+		 		$(e.target).parent().addClass('active');
+		 		activeTask = e.target.innerText;
+		 		$(e.target).parent().append('<div id="restartTaskPlayback"></div>');
+		 	}
 	 	} else {
-	 		
 	 		if (activeTask != $(e.target).parent()[0].innerText) {
 	 			resetProgressMeters();
 	  			socket.emit('moveHome');
