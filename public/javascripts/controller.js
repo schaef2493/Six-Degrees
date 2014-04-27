@@ -205,6 +205,7 @@ $(document).ready(function() {
 	$('body').hammer().on('tap', '#restartTaskPlayback', function(e) {
 		tap.play();
 		movingHome = true;
+		resetProgressMeters();
 		socket.emit('restartTaskPlayback');
 		socket.emit('moveHome');
 		$('#loading').removeClass('hidden');
@@ -246,12 +247,10 @@ $(document).ready(function() {
 		  	}
 
 		  	if (e.target.className == 'task') {
-		  		console.log('option 1');
 		  		$(e.target).addClass('active');
 		 		activeTask = e.target.innerText;
 		 		$(e.target).append('<div id="restartTaskPlayback"></div>');
 		  	} else {
-		  		console.log('option 2');
 		 		$(e.target).parent().addClass('active');
 		 		activeTask = e.target.innerText;
 		 		$(e.target).parent().append('<div id="restartTaskPlayback"></div>');
@@ -265,7 +264,6 @@ $(document).ready(function() {
 	  			$('#loading').removeClass('hidden');
 	  		}
 
-	  		console.log('option 3');
 	 		$($(e.target).parent()[0]).addClass('active');
 	 		debug = $($(e.target).parent()[0]);
 	 		activeTask = $(e.target).parent()[0].innerText;
