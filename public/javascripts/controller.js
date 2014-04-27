@@ -318,7 +318,6 @@ $(document).ready(function() {
 	});
 
 	$('#clearRecording').hammer().on('tap', function(e) {
-		socket.emit('delete', { task: deletePending });
 		tap.play();
 		socket.emit('moveHome');
 		movingHome = true;

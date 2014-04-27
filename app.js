@@ -65,11 +65,11 @@ io.sockets.on('connection', function (socket) {
     playbackActive = false;
     activeTask = data.task;
 
-    redis.del(data.task, function(err, reply) {
-      redis.lrem('tasks', 0, data.task, function(err, reply) {
+    redis.del(activeTask, function(err, reply) {
+      redis.lrem('tasks', 0, activeTask, function(err, reply) {
         // Add task to task list
         redis.lrange('tasks', 0, -1, function (err, reply) {
-          redis.rpush('tasks', data.task);
+          redis.rpush('tasks', activeTask);
         });
 
         io.sockets.emit('recordingStarted');
