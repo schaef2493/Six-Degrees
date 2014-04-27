@@ -114,6 +114,7 @@ $(document).ready(function() {
 	});
 
 	function resetProgressMeters() {
+		movementProgress = 0;
 		$(".progressBar").each(function(i, bar) {
 		  $(bar).width('0%');
 		});
