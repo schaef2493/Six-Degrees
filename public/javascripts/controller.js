@@ -245,7 +245,7 @@ $(document).ready(function() {
 		  		$('#loading').removeClass('hidden');
 		  	}
 
-		  	if ($(e.target.className == 'task')) {
+		  	if (e.target.className == 'task') {
 		  		console.log('option 1');
 		  		$(e.target).addClass('active');
 		 		activeTask = e.target.innerText;
