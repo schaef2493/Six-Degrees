@@ -94,6 +94,7 @@ $(document).ready(function() {
 	});
 
 	socket.on('rewindStarted', function(data) {
+		console.log('rewinding!!!');
 		rewindActive = true;
 		playbackActive = true;
 	});
