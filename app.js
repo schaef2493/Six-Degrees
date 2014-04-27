@@ -83,6 +83,11 @@ io.sockets.on('connection', function (socket) {
     recordingActive = false;
     activeTask = null;
 
+    // Send list of recorded tasks on connection
+    redis.lrange('tasks', 0, -1, function (err, reply) {
+      io.sockets.emit('tasks', { tasks: reply });
+    });
+
     io.sockets.emit('recordingEnded');
   });
 

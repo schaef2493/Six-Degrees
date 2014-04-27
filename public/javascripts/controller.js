@@ -329,7 +329,7 @@ $(document).ready(function() {
 		tap.play();
 
 		$('#name').val('');
-		$('#taskList').append('<div class="task">' + activeTask + '</div>');
+		//$('#taskList').append('<div class="task">' + activeTask + '</div>');
 		$('#beginRecording').html('Please Wait');
 
 		$('.screen').addClass('hidden');
