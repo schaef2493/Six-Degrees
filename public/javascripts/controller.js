@@ -94,9 +94,18 @@ $(document).ready(function() {
 	});
 
 	socket.on('rewindStarted', function(data) {
-		console.log('rewinding!!!');
 		rewindActive = true;
 		playbackActive = true;
+
+		if (arraysEqual(movements, data.movements)) {
+			// Continue animation
+			movements = data.movements;
+			animateProgress(movementProgress+1);
+		} else {
+			// Restart animation
+			movements = data.movements;
+			animateProgress(0);
+		}
 	});
 
 	socket.on('playbackPaused', function(data) {
