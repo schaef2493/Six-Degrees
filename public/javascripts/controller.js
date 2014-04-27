@@ -325,7 +325,7 @@ $(document).ready(function() {
 			$("#buttonGrid .button").removeClass('active');
 			$('#normalRec').addClass('active');
 			socket.emit('cartesianMode');
-		}), 8000);
+		}, 8000);
 	});
 
 	$('#finishRecording').hammer().on('tap', function(e) {
