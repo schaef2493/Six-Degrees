@@ -318,7 +318,7 @@ $(document).ready(function() {
 	$('#clearRecording').hammer().on('tap', function(e) {
 		tap.play();
 		socket.emit('moveHome');
-		movingHome = true;
+		//movingHome = true;
 		setTimeout(function() {
 			socket.emit('startRecording', { task: activeTask });
 			$('.task').removeClass('active');
@@ -354,7 +354,7 @@ $(document).ready(function() {
 	  if (e.target.innerText != '+ New Task') {
 	  	pressTimer = Date.now();
 	  	deletePending = e.target.innerText;
-	  	setTimeout(performDelete, 3500);
+	  	setTimeout(performDelete, 2500);
 	  }
 	});
 
