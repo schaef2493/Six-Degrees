@@ -108,7 +108,7 @@ function generateHomeMovement() {
   var homeMovementWait = "[0,0,0,[0,0], 0]";
 
   // Move to home
-  for (var i=0; i<70; i++) {
+  for (var i=0; i<100; i++) {
     homeMovement.push(homeCommand);
   }
 
