@@ -26,7 +26,7 @@ function arraysEqual(a, b) {
 
 $(document).ready(function() {
 
-	alert('Remember to home the robot');
+	//alert('Remember to home the robot');
 
 	socket.on('finishedMovingHome', function(data) {
 		console.log('FINISHED MOVING HOME');
@@ -236,8 +236,6 @@ $(document).ready(function() {
 	  	$('.task').removeClass('active');
 	  	$('#restartTaskPlayback').remove();
 
-	  	console.log(e);
-
 	  	if (e.target.innerText != '') {
 	  		if (activeTask != e.target.innerText) {
 	  			resetProgressMeters();
@@ -321,7 +319,13 @@ $(document).ready(function() {
 		tap.play();
 		socket.emit('moveHome');
 		movingHome = true;
-		setTimeout("socket.emit('startRecording', { task: activeTask })", 8000);
+		setTimeout(function() {
+			socket.emit('startRecording', { task: activeTask });
+			$('.task').removeClass('active');
+			$("#buttonGrid .button").removeClass('active');
+			$('#normalRec').addClass('active');
+			socket.emit('cartesianMode');
+		}), 8000);
 	});
 
 	$('#finishRecording').hammer().on('tap', function(e) {
