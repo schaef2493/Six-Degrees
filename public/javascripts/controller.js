@@ -54,10 +54,6 @@ $(document).ready(function() {
 	// Generate task list
 
 	socket.on('tasks', function (data) {
-		if ($('.task').length > 0) {
-			return;
-		}
-
 		var tasks = data.tasks;
 
 		$('#taskList').html('');
