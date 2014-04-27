@@ -161,8 +161,6 @@ function moveArm(axes, buttons) {
       buttons: buttons
     });
 
-    atHome = false;
-
     joystickWrite.publish(message);
   }
 }
