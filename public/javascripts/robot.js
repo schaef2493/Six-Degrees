@@ -77,7 +77,7 @@ function setArmAutoExecution() {
     });
 
     autoExecution = false;
-    console.log('Setting autoExecution to false');
+    //console.log('Setting autoExecution to false');
     setArmAutoExecutionTopic.publish(message);
 
   } else if (!playbackActive && !modeTransitionActive && !autoExecution) {
@@ -86,7 +86,7 @@ function setArmAutoExecution() {
     });
 
     autoExecution = true;
-    console.log('Setting autoExecution to true');
+    //console.log('Setting autoExecution to true');
     setArmAutoExecutionTopic.publish(message);
   }
 }
@@ -108,7 +108,7 @@ function generateHomeMovement() {
   var homeMovementWait = "[0,0,0,[0,0], 0]";
 
   // Move to home
-  for (var i=0; i<100; i++) {
+  for (var i=0; i<70; i++) {
     homeMovement.push(homeCommand);
   }
 
