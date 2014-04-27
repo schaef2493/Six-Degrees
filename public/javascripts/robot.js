@@ -277,6 +277,7 @@ socket.on('restartPlayback', function (data) {
 socket.on('recordingStarted', function (data) {
   console.log('RECORDING STARTED');
   playbackActive = false;
+  atHome = false;
   recordingActive = true;
   lastStepPerformed = 0;
   setArmAutoExecution();
