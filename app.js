@@ -70,6 +70,7 @@ io.sockets.on('connection', function (socket) {
         // Add task to task list
         redis.lrange('tasks', 0, -1, function (err, reply) {
           redis.rpush('tasks', activeTask);
+          redis.rpush(activeTask, '[0,0,0,[0,0],0]');
         });
 
         io.sockets.emit('recordingStarted');
