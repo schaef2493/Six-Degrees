@@ -102,6 +102,7 @@ io.sockets.on('connection', function (socket) {
           var movement = data.axes;
           movement.push(data.buttons);
           movement.push(armMode);
+          console.log(armMode);
           redis.rpush(activeTask, JSON.stringify(movement));
         }
 
@@ -177,9 +178,9 @@ io.sockets.on('connection', function (socket) {
     
     if (!recordingActive) {
       activeTask = null;
-    } else {
-      armMode = 0;
     }
+      armMode = 0;
+    
 
     io.sockets.emit('playbackPaused');
     io.sockets.emit('activateCartesian');
@@ -191,9 +192,9 @@ io.sockets.on('connection', function (socket) {
     
     if (!recordingActive) {
       activeTask = null;
-    } else {
-      armMode = 2;
     }
+      armMode = 2;
+    
 
     io.sockets.emit('playbackPaused');
     io.sockets.emit('activateGripper');
@@ -205,9 +206,9 @@ io.sockets.on('connection', function (socket) {
     
     if (!recordingActive) {
       activeTask = null;
-    } else {
-      armMode = 1;
     }
+      armMode = 1;
+    
 
     io.sockets.emit('playbackPaused');
     io.sockets.emit('activateWrist');
