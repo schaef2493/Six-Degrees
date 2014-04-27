@@ -30,6 +30,7 @@ $(document).ready(function() {
 
 	socket.on('finishedMovingHome', function(data) {
 		console.log('FINISHED MOVING HOME');
+		alert("Moved home!");
 		movingHome = false;
 		if (activeTask) {
 			$('#loading').addClass('hidden');
@@ -42,6 +43,7 @@ $(document).ready(function() {
 
 	socket.on('alreadyFinishedMovingHome', function(data) {
 		console.log('FINISHED MOVING HOME');
+		alert('Moved home!');
 		movingHome = false;
 		if (activeTask) {
 			$('#loading').addClass('hidden');
@@ -54,6 +56,7 @@ $(document).ready(function() {
 	// Generate task list
 
 	socket.on('tasks', function (data) {
+		alert('Clearing tasks');
 		var tasks = data.tasks;
 
 		$('#taskList').html('');
@@ -131,7 +134,7 @@ $(document).ready(function() {
 
 		var progress = step/(movements.length-1);
 		progress = progress * 80;
-		$($('.task.active .progressBar')[0]).width(progress + '%');
+		//$($('.task.active .progressBar')[0]).width(progress + '%');
 
 		movementProgress = step;
 
