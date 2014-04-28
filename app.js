@@ -64,6 +64,7 @@ io.sockets.on('connection', function (socket) {
     recordingActive = true;
     playbackActive = false;
     activeTask = data.task;
+    armMode = 0;
 
     redis.del(activeTask, function(err, reply) {
       redis.lrem('tasks', 0, activeTask, function(err, reply) {
