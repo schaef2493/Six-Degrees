@@ -364,7 +364,7 @@ function activateMode(data, movementInfo) {
   modeTransitionActive = true;
   transitionMovement = [];
 
-  for (var i=0; i<50; i++) {
+  for (var i=0; i<20; i++) {
     transitionMovement.push(movementInfo);
   }
 
