@@ -4,7 +4,9 @@ MICO Redesigned Controller
 A prototype of a proposed controller design for the MICO robotic arm. Developed as part of our BHCI Capstone Project in partnership with Laura Herlant and Tekin Mericli of the Robotics Institute at Carnegie Mellon University.
 
 app.js: The server code
+
 public/javascripts/controller.js: The controller UI code
+
 public/javascripts/robot.js: The ROS interconnect codd
 
 ###Deploying the app to Heroku
