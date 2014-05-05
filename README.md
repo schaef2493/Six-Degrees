@@ -7,7 +7,7 @@ app.js: The server code
 
 public/javascripts/controller.js: The controller UI code
 
-public/javascripts/robot.js: The ROS interconnect codd
+public/javascripts/robot.js: The ROS interconnect code
 
 ###Deploying the app to Heroku
 
@@ -42,3 +42,5 @@ Ensure you have Node.js and Redis installed on your local machine.
 You can change the name of the app from the Heroku web console
 
 If you wish to run the app locally, start a redis server locally, then run `foreman start` from the root directory.
+
+The ROS code, in production, is available at /robot. The UI code, in production, is available at /controller.
