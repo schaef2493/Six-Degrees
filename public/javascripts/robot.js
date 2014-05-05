@@ -22,14 +22,6 @@ var joystickWrite = new ROSLIB.Topic({
   messageType: 'sensor_msgs/Joy'
 });
 
-// var controlState = new ROSLIB.Topic({
-//   ros: ros,
-//   name: '/ada/control_state',
-//   messageType: 'std_msgs/UInt16'
-// });
-// 3 = home
-// only watch this during home transition. 3 = home, then a bunch of 0 = cartesian
-
 var joystickRead = new ROSLIB.Topic({
   ros: ros,
   name: '/joy',
@@ -52,8 +44,7 @@ var autoExecution = true;
 var atHome = false;
 var rewindActive = false;
 
-// the current mode that the arm is in, so we can tell when to switch
-// modes during playback
+// Current mode that the arm is in
 var currentMode = 0;
 var necessaryMode = 0;
 
@@ -68,8 +59,9 @@ var lastTransitionStepPerformed = 0;
 
 var sampleRate = 10; // ms
 var lastMessage = null;
-var homeMovement = []; // path to go home
+var homeMovement = []; // movement path to go home
 
+// Toggles whether the joystick commands auto execute
 function setArmAutoExecution() {
   if ((playbackActive || modeTransitionActive) && autoExecution) {
     var message = new ROSLIB.Message({
@@ -91,6 +83,7 @@ function setArmAutoExecution() {
   }
 }
 
+// Helper function to check array equality
 function arraysEqual(a, b) {
   if (a === b) return true;
   if (a == null || b == null) return false;
@@ -130,7 +123,6 @@ function generateHomeMovement() {
 
 // Send movement to server
 function logMovement(data) {
-  // console.log('Logging arm at ' + data.axes + ' - ' + data.buttons);
   socket.emit('movement', { axes: data.axes, buttons: data.buttons });
 }
 
@@ -165,7 +157,7 @@ function moveArm(axes, buttons) {
   }
 }
 
-// Begin movement playback
+// Recorded movement playback loop
 function playbackMovement(step) {
   if (typeof step == 'undefined') {
     step = 0;
@@ -240,6 +232,7 @@ function playbackMovement(step) {
   }
 }
 
+// Mode transition playback loop
 function transitionMode(step) {
   setArmAutoExecution();
 

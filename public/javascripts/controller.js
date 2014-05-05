@@ -13,6 +13,7 @@ var playbackActive = true;
 var rewindActive = false;
 var movements = [];
 
+// Helper function to check array equality
 function arraysEqual(a, b) {
   if (a === b) return true;
   if (a == null || b == null) return false;
@@ -25,8 +26,6 @@ function arraysEqual(a, b) {
 }
 
 $(document).ready(function() {
-
-	//alert('Remember to home the robot');
 
 	socket.on('finishedMovingHome', function(data) {
 		console.log('FINISHED MOVING HOME');
@@ -120,6 +119,7 @@ $(document).ready(function() {
 		});
 	}
 
+	// Runs the progress meter animation
 	function animateProgress(step) {
 		// Stop animating if paused
 		if (!playbackActive) {
@@ -174,7 +174,6 @@ $(document).ready(function() {
 		$('#gripper').addClass('active');
 		tap.play();
 		socket.emit('gripperMode');
-		//activeTask = null;
 	});
 
 	$('#gripperRec').hammer().on('tap', function() {
@@ -192,7 +191,6 @@ $(document).ready(function() {
 		$('#wrist').addClass('active');
 		tap.play();
 		socket.emit('wristMode');
-		//activeTask = null;
 	});
 
 	$('#wristRec').hammer().on('tap', function() {
@@ -236,6 +234,8 @@ $(document).ready(function() {
 	  	$('.task').removeClass('active');
 	  	$('#restartTaskPlayback').remove();
 
+	  	// Absolutely disgusting code
+
 	  	if (e.target.innerText != '') {
 	  		if (activeTask != e.target.innerText) {
 	  			resetProgressMeters();
@@ -274,7 +274,7 @@ $(document).ready(function() {
 	  }
 	});
 
-	// Recording flow
+	// Recording UI actions
 
 	$('#cancelRecording').hammer().on('tap', function(e) {
 		tap.play();
